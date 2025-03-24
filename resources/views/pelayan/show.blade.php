@@ -40,13 +40,13 @@
                     </tr>
                     <tr>
                         <th>Foto</th>
-                        <th>
+                        <td>
                             @if (!empty($pelayan->foto) && Storage::url('dokumen/' . $pelayan->foto))
                                 <img src="{{ asset('storage/images/pelayan/'.$pelayan->foto) }}" class="" style="width: 20%">
                             @else
                                 <span class="text-danger">Tidak ada foto</span>
                             @endif   
-                        </th>
+                        </td>
                     </tr>
                     <!-- Tambahan: Informasi PHMJ -->
                     @if ($pelayan->phmj)

@@ -23,6 +23,29 @@
      <!-- Sidebar Menu --> 
     <nav class="mt-2"> 
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false"> 
+            {{-- <li class="nav-item has-treeview {{ ($activeMenu == 'pengguna')? 'menu-open' : '' }}">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>
+                        Pengelolaan Pengguna
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('level.index') }}" class="nav-link {{ ($activeMenu == 'level')? 'active' : '' }}">
+                            <i class="far fa-arrow nav-icon"></i>
+                            <p>Level Pengguna</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('user.index') }}" class="nav-link {{ ($activeMenu == 'user')? 'active' : '' }}">
+                            <i class="far fa-arrow nav-icon"></i>
+                            <p>Data Pengguna</p>
+                        </a>
+                    </li>
+                </ul>
+            </li> --}}
             
             <li class="nav-item"> 
                 <a href="{{ route('beranda.index') }}" class="nav-link  {{ ($activeMenu == 'dashboard')? 'active' : '' }} "> 
@@ -124,6 +147,12 @@
                 <a href="{{ route('pelkat.index') }}" class="nav-link {{ ($activeMenu == 'pelkat')? 'active' : '' }} "> 
                     <i class="nav-icon fas fa-object-group"></i> 
                     <p>Pelkat</p>
+                </a> 
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('persembahan.index') }}" class="nav-link {{ ($activeMenu == 'persembahan')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-object-group"></i> 
+                    <p>Persembahan</p>
                 </a> 
             </li>
             @endif

@@ -9,10 +9,12 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KategoriGaleriController;
 use App\Http\Controllers\KategoriIbadahController;
 use App\Http\Controllers\KategoriPelayanController;
+use App\Http\Controllers\KategoriPersembahan;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PelayanController;
 use App\Http\Controllers\PelkatController;
 use App\Http\Controllers\PelkatPengurusController;
+use App\Http\Controllers\PersembahanController;
 use App\Http\Controllers\PHMJController;
 use App\Http\Controllers\SektorController;
 use App\Http\Controllers\TataIbadahController;
@@ -188,6 +190,17 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit', [PelkatController::class, 'edit']);
             Route::put('/{id}', [PelkatController::class, 'update']);
             Route::delete('/{id}', [PelkatController::class, 'destroy']);
+        });
+        
+        Route::prefix('persembahan')->group(function () {
+            Route::get('/', [PersembahanController::class, 'index'])->name('persembahan.index');
+            Route::post('/list', [PersembahanController::class, 'list']);
+            Route::get('/create', [PersembahanController::class, 'create']);
+            Route::post('/', [PersembahanController::class, 'store']);
+            Route::get('/{id}', [PersembahanController::class, 'show']);
+            Route::get('/{id}/edit', [PersembahanController::class, 'edit']);
+            Route::put('/{id}', [PersembahanController::class, 'update']);
+            Route::delete('/{id}', [PersembahanController::class, 'destroy']);
         });
     });
 });
