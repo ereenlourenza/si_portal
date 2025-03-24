@@ -94,8 +94,9 @@
                                                     <thead>
                                                         <tr>
                                                             <th>ID</th>
-                                                            <th>Nama</th>
-                                                            <th>Periode Jabatan</th>`;
+                                                            <th>Periode Jabatan</th>
+                                                            <th>Nama</th>`;
+                                                            // ${kategori.startsWith('Pengurus') || kategori.startsWith('Pelayan') ? '<th>Pelkat</th>' : ''}
                                                             // Tambahkan kolom "Jabatan & Periode" jika kategori PHMJ
                                                             if (isPHMJ) {
                                                                 card += `<th>Jabatan</th>
@@ -113,8 +114,9 @@
                             let fotoUrl = pelayan.foto ? `{{ asset('storage/images/pelayan/') }}/${pelayan.foto}` : `{{ asset('storage/images/pelayan/avatar.png') }}`;
                             card += `<tr>
                                         <td>${index + 1}</td>
-                                        <td>${pelayan.nama}</td>
-                                        <td>${pelayan.masa_jabatan}</td>`;
+                                        <td>${pelayan.masa_jabatan}</td>
+                                        <td>${pelayan.nama}</td>`;
+                                        // ${kategori.startsWith('Pengurus') || kategori.startsWith('Pelayan') ? `<td>${pelayan.pelkat ? pelayan.pelkat.pelkat_nama : '-'}</td>` : ''}
                                         // Tambahkan data "Jabatan & Periode" jika kategori PHMJ
                                             if (isPHMJ) {
                                                 let jabatan = pelayan.phmj ? pelayan.phmj.jabatan : '-';
@@ -154,21 +156,26 @@
         }
 
         function loadFilterTahun() {
-            $.ajax({
-                url: "{{ url('pengelolaan-informasi/pelayan/list') }}",
-                type: "POST",
-                success: function(response) {
-                    let minYear = response.minYear ? parseInt(response.minYear) : new Date().getFullYear();
-                    let maxYear = response.maxYear ? parseInt(response.maxYear) : new Date().getFullYear();
-                    let dropdown = $('#filter-tahun');
-                    dropdown.empty();
-                    dropdown.append('<option value="">Semua Tahun</option>');
-                    for (let year = maxYear; year >= minYear; year--) {
-                        dropdown.append('<option value="' + year + '">' + year + '</option>');
-                    }
+        $.ajax({
+            url: "{{ url('pengelolaan-informasi/pelayan/list') }}",
+            type: "POST",
+            success: function(response) {
+                let minYear = response.minYear ? parseInt(response.minYear) : new Date().getFullYear();
+                let maxYear = response.maxYear ? parseInt(response.maxYear) : new Date().getFullYear();
+                let currentYear = new Date().getFullYear(); // Tahun saat ini
+                let futureYear = currentYear + 5; // Bisa diubah sesuai kebutuhan
+
+                let dropdown = $('#filter-tahun');
+                dropdown.empty();
+                dropdown.append('<option value="">Semua Tahun</option>');
+
+                for (let year = maxYear; year <= futureYear; year++) {
+                    dropdown.append('<option value="' + year + '">' + year + '</option>');
                 }
-            });
-        }
+            }
+        });
+    }
+
 
         $('#filter-tahun').on('change', function() {
             loadPelayan();

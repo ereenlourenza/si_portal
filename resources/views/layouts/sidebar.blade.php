@@ -121,7 +121,7 @@
                 </a> 
             </li>
             <li class="nav-item">
-                <a href="{{ route('galeri.index') }}" class="nav-link {{ ($activeMenu == 'galeri')? 'active' : '' }} "> 
+                <a href="{{ route('pelkat.index') }}" class="nav-link {{ ($activeMenu == 'pelkat')? 'active' : '' }} "> 
                     <i class="nav-icon fas fa-object-group"></i> 
                     <p>Pelkat</p>
                 </a> 

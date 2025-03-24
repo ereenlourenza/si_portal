@@ -18,6 +18,7 @@ class PelayanSeeder extends Seeder
             [
                 'pelayan_id' => 1, 
                 'kategoripelayan_id' => 1, // Pendeta
+                'pelkat_id' => null,
                 'nama' => 'Pdt. Yohanes Samosir',
                 'foto' => 'avatar-8.jpg',
                 'masa_jabatan_mulai' => 2020,
@@ -29,6 +30,7 @@ class PelayanSeeder extends Seeder
             [
                 'pelayan_id' => 2, 
                 'kategoripelayan_id' => 2, // Vikaris
+                'pelkat_id' => null,
                 'nama' => 'Vikaris Maria Hutagalung',
                 'foto' => 'avatar-5.jpg',
                 'masa_jabatan_mulai' => 2024,
@@ -40,6 +42,7 @@ class PelayanSeeder extends Seeder
             [
                 'pelayan_id' => 3, 
                 'kategoripelayan_id' => 3, // Diaken
+                'pelkat_id' => null,
                 'nama' => 'Diaken Samuel Tobing',
                 'foto' => 'avatar-6.jpg',
                 'masa_jabatan_mulai' => 2020,
@@ -51,6 +54,7 @@ class PelayanSeeder extends Seeder
             [
                 'pelayan_id' => 4, 
                 'kategoripelayan_id' => 4, // Penatua
+                'pelkat_id' => null,
                 'nama' => 'Penatua Lina Manurung',
                 'foto' => 'avatar-4.jpg',
                 'masa_jabatan_mulai' => 2020,
@@ -62,6 +66,7 @@ class PelayanSeeder extends Seeder
             [
                 'pelayan_id' => 6, 
                 'kategoripelayan_id' => 6, // Pengurus Pelkat
+                'pelkat_id' => 1,
                 'nama' => 'Sdr. Denny Sitompul',
                 'foto' => 'avatar-7.jpg',
                 'masa_jabatan_mulai' => 2023,
@@ -72,7 +77,8 @@ class PelayanSeeder extends Seeder
             ],
             [
                 'pelayan_id' => 7, 
-                'kategoripelayan_id' => 7, // Pelayan Pelkat PA & PT
+                'kategoripelayan_id' => 7, // Pelayan Pelkat PT
+                'pelkat_id' => 2,
                 'nama' => 'Sdr. Rina Siregar',
                 'foto' => 'avatar-9.jpg',
                 'masa_jabatan_mulai' => 2023,

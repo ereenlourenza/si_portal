@@ -15,10 +15,14 @@ class PelayanModel extends Model
      * 
      * @var array
      */
-    protected $fillable = ['kategoripelayan_id','nama', 'foto','masa_jabatan_mulai','masa_jabatan_selesai','keterangan'];
+    protected $fillable = ['kategoripelayan_id', 'pelkat_id', 'nama', 'foto','masa_jabatan_mulai','masa_jabatan_selesai','keterangan'];
 
     public function kategoripelayan(): BelongsTo{
         return $this->belongsTo(KategoriPelayanModel::class, 'kategoripelayan_id', 'kategoripelayan_id');
+    }
+
+    public function pelkat(): BelongsTo{
+        return $this->belongsTo(PelkatModel::class, 'pelkat_id', 'pelkat_id');
     }
 
     // Relasi ke PHMJ

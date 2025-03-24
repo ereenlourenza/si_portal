@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('t_pelayan', function (Blueprint $table) {
             $table->id('pelayan_id');
+            $table->unsignedBigInteger('pelkat_id')->index()->nullable();
             $table->unsignedBigInteger('kategoripelayan_id')->index(); // Foreign Key ke kategori pelayan
             $table->string('nama')->unique();
             $table->string('foto')->nullable(); // Nama file foto
@@ -21,7 +22,8 @@ return new class extends Migration
             $table->string('keterangan')->nullable(); 
             $table->timestamps();
             
-            // Relasi ke kategori pelayan
+            // Relasi ke kategori pelayan & pelkat
+            $table->foreign('pelkat_id')->references('pelkat_id')->on('t_pelkat')->onDelete('set null');
             $table->foreign('kategoripelayan_id')->references('kategoripelayan_id')->on('t_kategoripelayan')->onDelete('cascade');
         });
     }

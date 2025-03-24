@@ -11,6 +11,8 @@ use App\Http\Controllers\KategoriIbadahController;
 use App\Http\Controllers\KategoriPelayanController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PelayanController;
+use App\Http\Controllers\PelkatController;
+use App\Http\Controllers\PelkatPengurusController;
 use App\Http\Controllers\PHMJController;
 use App\Http\Controllers\SektorController;
 use App\Http\Controllers\TataIbadahController;
@@ -175,6 +177,17 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit', [SektorController::class, 'edit']);
             Route::put('/{id}', [SektorController::class, 'update']);
             Route::delete('/{id}', [SektorController::class, 'destroy']);
+        });
+        
+        Route::prefix('pelkat')->group(function () {
+            Route::get('/', [PelkatController::class, 'index'])->name('pelkat.index');
+            Route::post('/list', [PelkatController::class, 'list']);
+            Route::get('/create', [PelkatController::class, 'create']);
+            Route::post('/', [PelkatController::class, 'store']);
+            Route::get('/{id}', [PelkatController::class, 'show']);
+            Route::get('/{id}/edit', [PelkatController::class, 'edit']);
+            Route::put('/{id}', [PelkatController::class, 'update']);
+            Route::delete('/{id}', [PelkatController::class, 'destroy']);
         });
     });
 });

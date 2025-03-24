@@ -16,9 +16,22 @@
                     <div class="col-md-11">
                         <select class="form-control" id="kategoripelayan_id" name="kategoripelayan_id" required>
                             <option value="" disabled selected>Pilih Kategori</option>
-                            @foreach($kategoripelayan as $item)
+                            @foreach($kategoripelayan->where('kategoripelayan_id', '!=', 5) as $item)
                                 <option value="{{ $item->kategoripelayan_id }}">{{ $item->kategoripelayan_nama }}</option>
                             @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center" id="pelkat_container" style="display: none;">
+                    <label class="col-md-1 control-label col-form-label">Pelkat Nama<span class="text-danger">*</span></label>
+                    <div class="col-md-11">
+                        <select class="form-control" id="pelkat_id" name="pelkat_id" required disabled>
+                            <option value="" disabled selected>Pilih Pelkat</option>
+                            @foreach($pelkat as $item)
+                                <option value="{{ $item->pelkat_id }}">{{ $item->pelkat_nama }}</option>
+                            @endforeach
+                            <input type="hidden" name="pelkat_id" id="hidden_pelkat_id">
                         </select>
                     </div>
                 </div>
@@ -33,20 +46,26 @@
                         @enderror
                     </div>
                 </div>
-
+                @php
+                    $currentYear = date('Y');
+                    $futureYear = $currentYear + 5; // Bisa diganti sesuai kebutuhan
+                @endphp
                 <div class="form-group row align-items-center">
                     <label class="col-md-1 control-label col-form-label">Masa Jabatan Mulai<span class="text-danger">*</span></label>
                     <div class="col-md-11">
                         <select class="form-control" id="masa_jabatan_mulai" name="masa_jabatan_mulai" required>
                             <option value="" disabled selected>Pilih Tahun</option>
-                            @for ($year = date('Y'); $year >= 1900; $year--)
+                            @for ($year = $futureYear; $year >= 1900; $year--)
                                 <option value="{{ $year }}" {{ old('masa_jabatan_mulai') == $year ? 'selected' : '' }}>{{ $year }}</option>
                             @endfor
                         </select>
                                                 
-                        @error('masa_jabatan_mulai')
+                        {{-- @error('masa_jabatan_mulai')
                             <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
+                        @enderror --}}
+                        @if ($errors->has('masa_jabatan_mulai'))
+                            <div class="text-danger">{{ $errors->first('masa_jabatan_mulai') }}</div>
+                        @endif
                     </div>
                 </div>
                 <div class="form-group row align-items-center">
@@ -54,7 +73,7 @@
                     <div class="col-md-11">
                         <select class="form-control" id="masa_jabatan_selesai" name="masa_jabatan_selesai" required>
                             <option value="" disabled selected>Pilih Tahun</option>
-                            @for ($year = date('Y'); $year >= 1900; $year--)
+                            @for ($year = $futureYear; $year >= 1900; $year--)
                                 <option value="{{ $year }}" {{ old('masa_jabatan_selesai') == $year ? 'selected' : '' }}>{{ $year }}</option>
                             @endfor
                         </select>
@@ -104,6 +123,42 @@
 
 @push('js')
 <script>
+    document.getElementById("pelkat_id").addEventListener("change", function() {
+        document.getElementById("hidden_pelkat_id").value = this.value;
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    var kategoriSelect = document.getElementById("kategoripelayan_id");
+    var pelkatSelect = document.getElementById("pelkat_id");
+    var pelkatContainer = document.getElementById("pelkat_container"); // Kontainer dropdown pelkat
+
+    kategoriSelect.addEventListener("change", function() {
+        var selectedValue = kategoriSelect.value; // Ambil value kategori yang dipilih
+
+        // Mapping kategori ke pelkat
+        var kategoriPelkatMap = {
+            "6": "1", // Pengurus PA -> Pelkat PA
+            "7": "2", // Pengurus PT -> Pelkat PT
+            "8": "3", // Pengurus GP -> Pelkat GP
+            "9": "4", // Pengurus PKP -> Pelkat PKP
+            "10": "5", // Pengurus PKB -> Pelkat PKB
+            "11": "6",  // Pengurus PKLU -> Pelkat PKLU
+            "12": "1",  // Pelayan PA -> Pelkat PA
+            "13": "2",  // Pelayan PT -> Pelkat PT
+        };
+
+        if (kategoriPelkatMap[selectedValue]) {
+            pelkatSelect.value = kategoriPelkatMap[selectedValue]; // Atur pilihan otomatis
+            pelkatContainer.style.display = "flex";
+            pelkatSelect.setAttribute("required", "required");
+        } else {
+            pelkatContainer.style.display = "none";
+            pelkatSelect.value = ""; // Set nilai kosong
+            pelkatSelect.removeAttribute("required");
+        }
+    });
+});
+
 //     document.addEventListener("DOMContentLoaded", function() {
 //         var kategoriSelect = document.getElementById("kategoripelayan_id");
 //         var phmjSection = document.getElementById("phmj_section");

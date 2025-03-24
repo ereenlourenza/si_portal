@@ -20,7 +20,6 @@ return new class extends Migration
 
             // Foreign key ke tabel t_pelayan
             $table->foreign('pelayan_id')->references('pelayan_id')->on('t_pelayan')->onDelete('cascade');
-
         });
     }
 

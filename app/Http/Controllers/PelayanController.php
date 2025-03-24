@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\KategoriPelayanModel;
 use App\Models\PelayanModel;
+use App\Models\PelkatModel;
 use App\Models\PHMJModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class PelayanController extends Controller
@@ -32,13 +34,14 @@ class PelayanController extends Controller
         $activeMenu = 'pelayan'; //set menu yang sedang aktif
 
         $kategoripelayan = KategoriPelayanModel::all(); //ambil data level untuk filter level
+        $pelkat = PelkatModel::all(); //ambil data level untuk filter level
 
-        return view('pelayan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'kategoripelayan' => $kategoripelayan, 'activeMenu' => $activeMenu, 'notifUser' => UserModel::all()]);
+        return view('pelayan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'kategoripelayan' => $kategoripelayan, 'pelkat' => $pelkat, 'activeMenu' => $activeMenu, 'notifUser' => UserModel::all()]);
     }
 
     //Ambil data level dalam bentuk json untuk datatables
     public function list(Request $request){
-        $pelayans = PelayanModel::select('pelayan_id', 'kategoripelayan_id', 'nama', 'foto', 'masa_jabatan_mulai', 'masa_jabatan_selesai', 'keterangan') ->with('kategoripelayan','phmj');
+        $pelayans = PelayanModel::select('pelayan_id', 'kategoripelayan_id', 'pelkat_id', 'nama', 'foto', 'masa_jabatan_mulai', 'masa_jabatan_selesai', 'keterangan') ->with('kategoripelayan','pelkat','phmj');
 
         // Ambil tahun terkecil dan terbesar dari data pelayan
         $minYear = PelayanModel::min('masa_jabatan_mulai');
@@ -54,9 +57,6 @@ class PelayanController extends Controller
             ->addIndexColumn() // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
             ->addColumn('masa_jabatan', function ($pelayan) {
                 return $pelayan->masa_jabatan_mulai . ' - ' . $pelayan->masa_jabatan_selesai;
-            })
-            ->addColumn('phmj_data', function ($pelayan) { // Tambahkan kolom untuk t_phmj
-                return $pelayan->phmj ? $pelayan->phmj->jabatan : '-';
             })
             ->addColumn('aksi', function ($pelayan) { 
 
@@ -93,6 +93,7 @@ class PelayanController extends Controller
         ];
 
         $kategoripelayan = KategoriPelayanModel::all(); //ambil data pelayan untuk ditampilkan di form
+        $pelkat = PelkatModel::all();
         // $diakenPenatua = PelayanModel::whereIn('kategoripelayan_id', [3, 4])->get();
         // Ambil daftar pelayan yang termasuk kategori Diaken atau Penatua
         $diakenPenatua = DB::table('t_pelayan')
@@ -103,20 +104,43 @@ class PelayanController extends Controller
 
         $activeMenu = 'pelayan'; //set menu yang sedang aktif
 
-        return view('pelayan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'kategoripelayan' => $kategoripelayan, 'diakenPenatua' => $diakenPenatua, 'activeMenu' => $activeMenu, 'notifUser' => UserModel::all()]);
+        return view('pelayan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'kategoripelayan' => $kategoripelayan, 'pelkat' => $pelkat, 'diakenPenatua' => $diakenPenatua, 'activeMenu' => $activeMenu, 'notifUser' => UserModel::all()]);
     }
 
     // //Menyimpan data level baru
     public function store(Request $request){
         $validatedData = $request->validate([
             //judul harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom judul
-            'nama' => 'required|string|min:3|max:100|unique:t_pelayan,nama',
+            'nama' => ['required',
+                        Rule::unique('t_pelayan')->where(function ($query) use ($request) {
+                            return $query->where('masa_jabatan_mulai', $request->masa_jabatan_mulai)
+                                        ->where('masa_jabatan_selesai', $request->masa_jabatan_selesai);
+                        })
+            ],
+
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'masa_jabatan_mulai' => 'required|date_format:Y',
             'masa_jabatan_selesai' => 'required|date_format:Y|after_or_equal:masa_jabatan_mulai',
             'keterangan' => 'nullable|string|max:50',
             'kategoripelayan_id' => 'required|integer',
+            'pelkat_id' => 'nullable|integer',
         ]);
+
+        // Cari periode terakhir pelayan ini
+        $lastPeriod = PelayanModel::where('nama', $request->nama)
+        ->orderBy('masa_jabatan_selesai', 'desc')
+        ->first();
+
+        if ($lastPeriod) {
+            // Cek apakah periode mulai yang baru harus sesuai dengan periode selesai sebelumnya
+            if ($request->masa_jabatan_mulai != $lastPeriod->masa_jabatan_selesai) {
+                return back()->withErrors([
+                    'masa_jabatan_mulai' => 'Periode baru harus dimulai dari ' . $lastPeriod->masa_jabatan_selesai . '.'
+                ])->withInput();
+            }
+        }
+
+        // dd($request->all());
         
         try{
             if ($request->hasFile('foto')) {
@@ -132,6 +156,7 @@ class PelayanController extends Controller
             // Simpan data ke database
             PelayanModel::create([
                 'kategoripelayan_id'  => $validatedData['kategoripelayan_id'],
+                'pelkat_id'  => $validatedData['pelkat_id'],
                 'nama'  => $validatedData['nama'],
                 'foto' => $validatedData['foto'] ?? null, // Jika tidak ada file, simpan NULL
                 'masa_jabatan_mulai'  => $validatedData['masa_jabatan_mulai'],
@@ -187,12 +212,13 @@ class PelayanController extends Controller
         $request->validate([
             //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
             //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
-            'nama' => 'required|string|min:3|max:100|unique:t_pelayan,nama,'.$id.',pelayan_id',
+            'nama' => 'required|string|min:3|max:100',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'masa_jabatan_mulai' => 'required|date_format:Y',
             'masa_jabatan_selesai' => 'required|date_format:Y|after_or_equal:masa_jabatan_mulai',
             'keterangan' => 'nullable|string|max:50',
             'kategoripelayan_id' => 'required|integer',
+            'pelkat_id' => 'nullable|integer',
         ]);
 
         try{
@@ -217,6 +243,7 @@ class PelayanController extends Controller
             
             PelayanModel::find($id)->update([
                 'kategoripelayan_id'  => $request->kategoripelayan_id,
+                'pelkat_id'  => $request->pelkat_id,
                 'nama'  => $request->nama,
                 'foto'  => $fotoName,
                 'masa_jabatan_mulai'  => $request->masa_jabatan_mulai,
