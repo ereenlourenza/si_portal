@@ -13,19 +13,79 @@
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+
+  <style>
+    body {
+      background: url('/images/bg-login 3.jpg') ;
+      background-size: cover; /* Menyesuaikan gambar dengan layar */
+    }
+
+    .card {
+      border-radius: 15px; /* Sesuaikan dengan tingkat kelengkungan yang diinginkan */
+  overflow: hidden; /* Mencegah konten keluar dari border-radius */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Opsional: Tambahkan bayangan agar lebih elegan */
+  background: rgba(255, 255, 255, 0.8) !important; /* Opacity 80% */
+  backdrop-filter: blur(10px); /* Efek blur agar lebih menarik */
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center; /* Menjaga agar logo sejajar dengan teks */
+      gap: 10px; /* Jarak antara logo dan teks */
+    }
+
+    .brand-image {
+        width: 50px; /* Sesuaikan dengan ukuran logo */
+        height: auto;
+        align-items: center;
+    }
+
+    .gpib {
+        font-size: 24px; /* Sesuaikan dengan tinggi logo */
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
+
+    .immanuel {
+      margin-top: 0;
+        font-size: 20px;
+    }
+
+    @font-face {
+        font-family: 'Helvetica Custom';
+        src: url('/fonts/helvetica/Helvetica Condensed Oblique.otf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .brand-text {
+        font-family: 'Helvetica Custom', sans-serif;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Rata kiri */
+        text-align: left; /* Pastikan teks juga rata kiri */
+        margin-left: 20px;
+    }
+
+  </style>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-  <div class="input-group mb-2" style="justify-content: center">
-    <img src="/images/logo-gpib-sm.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
-  </div>
-  <div class="login-logo mb-4">
-    <a href="{{ route('login.authenticate') }}"><b>GPIB Immanuel Malang</b></a>
-  </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <div class="input-group mt-4 mb-4" style="justify-content: center">
+        <a href="{{ route('login.authenticate') }}">
+          <img src="/images/logo-gpib-sm.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
+        </a>
+        <div class="brand-text">
+          <h4 class="gpib text-secondary">GPIB</h4>
+          <h5 class="immanuel text-secondary">Immanuel Malang</h5>
+        </div>      
+      </div>
+      <hr>
+      <p class="login-box-msg mb-2 mt-4">Silahkan login untuk masuk sisem</p>
 
       @if ($errors->any())
         <div class="alert alert-danger">
@@ -64,7 +124,7 @@
         </div>
         <div class="row">
           <!-- /.col -->
-          <div class="col-4 mx-auto">
+          <div class="col-4 mx-auto mt-4 mb-4">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->

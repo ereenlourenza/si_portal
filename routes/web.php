@@ -14,8 +14,10 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PelayanController;
 use App\Http\Controllers\PelkatController;
 use App\Http\Controllers\PelkatPengurusController;
+use App\Http\Controllers\PeminjamanRuanganController;
 use App\Http\Controllers\PersembahanController;
 use App\Http\Controllers\PHMJController;
+use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\SektorController;
 use App\Http\Controllers\TataIbadahController;
 use App\Http\Controllers\UserController;
@@ -201,6 +203,30 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit', [PersembahanController::class, 'edit']);
             Route::put('/{id}', [PersembahanController::class, 'update']);
             Route::delete('/{id}', [PersembahanController::class, 'destroy']);
+        });
+        
+        Route::prefix('ruangan')->group(function () {
+            Route::get('/', [RuanganController::class, 'index'])->name('ruangan.index');
+            Route::post('/list', [RuanganController::class, 'list']);
+            Route::get('/create', [RuanganController::class, 'create']);
+            Route::post('/', [RuanganController::class, 'store']);
+            Route::get('/{id}', [RuanganController::class, 'show']);
+            Route::get('/{id}/edit', [RuanganController::class, 'edit']);
+            Route::put('/{id}', [RuanganController::class, 'update']);
+            Route::delete('/{id}', [RuanganController::class, 'destroy']);
+        });
+        
+        Route::prefix('peminjamanruangan')->group(function () {
+            Route::get('/', [PeminjamanRuanganController::class, 'index'])->name('peminjamanruangan.index');
+            Route::post('/list', [PeminjamanRuanganController::class, 'list']);
+            Route::get('/updateValidation/{id}', [PeminjamanRuanganController::class, 'updateValidation']);
+            Route::match(['get', 'post'],'/rejectPeminjaman/{id}', [PeminjamanRuanganController::class, 'rejectPeminjaman']);
+            Route::get('/create', [PeminjamanRuanganController::class, 'create']);
+            Route::post('/', [PeminjamanRuanganController::class, 'store']);
+            Route::get('/{id}', [PeminjamanRuanganController::class, 'show']);
+            Route::get('/{id}/edit', [PeminjamanRuanganController::class, 'edit']);
+            Route::put('/{id}', [PeminjamanRuanganController::class, 'update']);
+            Route::delete('/{id}', [PeminjamanRuanganController::class, 'destroy']);
         });
     });
 });

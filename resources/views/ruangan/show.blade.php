@@ -7,7 +7,7 @@
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
-            @empty($persembahan)
+            @empty($ruangan)
                 <div class="alert alert-danger alert-dismissible">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang Anda cari tidak ditemukan.
@@ -16,34 +16,30 @@
                 <table class="table table-bordered table-striped table-hover table-sm">
                     <tr>
                         <th>ID</th>
-                        <td>{{ $persembahan->persembahan_id }}</td>
+                        <td>{{ $ruangan->ruangan_id }}</td>
                     </tr>
                     <tr>
-                        <th>Persembahan Nama</th>
-                        <td>{{ $persembahan->persembahan_nama }}</td>
+                        <th>Ruangan Nama</th>
+                        <td>{{ $ruangan->ruangan_nama }}</td>
                     </tr>
                     <tr>
-                        <th>Nomor Rekening</th>
-                        <td>{{ $persembahan->nomor_rekening }}</td>
+                        <th>Deskripsi</th>
+                        <td>{{ $ruangan->deskripsi }}</td>
                     </tr>
                     <tr>
-                        <th>Atas Nama</th>
-                        <td>{{ $persembahan->atas_nama }}</td>
-                    </tr>
-                    <tr>
-                        <th>Barcode</th>
+                        <th>Foto</th>
                         <td>
-                            @if (!empty($persembahan->barcode) && Storage::url('images/' . $persembahan->barcode))
-                                <img src="{{ asset('storage/images/barcode/'.$persembahan->barcode) }}" class="" style="width: 20%">
+                            @if (!empty($ruangan->foto) && Storage::url('images/' . $ruangan->foto))
+                                <img src="{{ asset('storage/images/ruangan/'.$ruangan->foto) }}" class="" style="width: 20%">
                             @else
-                                <span class="text-danger">Tidak ada barcode</span>
+                                <span class="text-danger">Tidak ada foto</span>
                             @endif   
                         </td>
                     </tr>
                 </table>
             @endempty
             
-            <a href="{{ url('pengelolaan-informasi/persembahan') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+            <a href="{{ url('pengelolaan-informasi/ruangan') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
         </div>
     </div>
 @endsection

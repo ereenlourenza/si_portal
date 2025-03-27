@@ -152,9 +152,23 @@
             <li class="nav-item">
                 <a href="{{ route('persembahan.index') }}" class="nav-link {{ ($activeMenu == 'persembahan')? 'active' : '' }} "> 
                     <i class="nav-icon fas fa-object-group"></i> 
-                    <p>Persembahan</p>
+                    <p>QR Persembahan</p>
                 </a> 
             </li>
+            <li class="nav-header">Ruangan</li> 
+            <li class="nav-item">
+                <a href="{{ route('ruangan.index') }}" class="nav-link {{ ($activeMenu == 'ruangan')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-camera"></i> 
+                    <p>Data Ruangan</p>
+                </a> 
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('peminjamanruangan.index') }}" class="nav-link {{ ($activeMenu == 'peminjamanruangan')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-camera"></i> 
+                    <p>Peminjaman Ruangan</p>
+                </a> 
+            </li>
+
             @endif
             {{-- <li class="nav-item">
                 <a href="{{ route('logout') }}" class="nav-link">
