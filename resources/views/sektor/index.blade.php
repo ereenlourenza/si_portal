@@ -21,6 +21,7 @@
                         <th>ID</th>
                         <th>Sektor Nama</th>
                         <th>Deskripsi</th>
+                        <th>Jumlah Jemaat</th>
                         <th>Koordinator Sektor</th>
                         <th>Aksi</th>
                     </tr>
@@ -72,6 +73,12 @@
                                 .replace(/(Sebelah Timur|Sebelah Utara|Sebelah Barat|Sebelah Selatan|\/Selatan)/g, '<b><i>$1</i></b>') // Menjadikan bold
                                 .replace(/\n/g, '<br>'); // Mengubah newline ke <br> agar format tetap rapi
                         },
+                    },
+                    {
+                        data: "jumlah_jemaat", 
+                        className: "",
+                        orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                        searchable: true // searchable: true, jika ingin kolom ini bisa dicari
                     },
                     {
                         data: "pelayan.nama", 

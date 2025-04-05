@@ -16,6 +16,7 @@
             @else
                 <form method="POST" action="{{ url('pengelolaan-informasi/sektor/'.$sektor->sektor_id) }}" class="form-horizontal" enctype='multipart/form-data'>
                     @csrf {!! method_field('PUT') !!} <!-- tambahkan baris ini untuk proses edit yang butuh method PUT -->
+                    
                     <div class="form-group row">
                         <label class="col-md-1 control-label col-form-label">Sektor Nama<span class="text-danger">*</span></label>
                         <div class="col-md-11">
@@ -30,6 +31,15 @@
                         <div class="col-md-11">
                             <textarea type="text" class="form-control" id="deskripsi" name="deskripsi" required>{{ old('deskripsi', $sektor->deskripsi) }}</textarea>
                             @error('deskripsi')
+                                <small class="form-text text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-1 control-label col-form-label">Jumlah Jemaat<span class="text-danger">*</span></label>
+                        <div class="col-md-11">
+                            <input type="text" class="form-control" id="jumlah_jemaat" name="jumlah_jemaat" value="{{ old('jumlah_jemaat', $sektor->jumlah_jemaat) }}" required>
+                            @error('jumlah_jemaat')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>

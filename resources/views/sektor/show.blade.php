@@ -27,6 +27,10 @@
                         <td>{!! nl2br(e($sektor->deskripsi)) !!}</td>
                     </tr>
                     <tr>
+                        <th>Jumlah Jemaat</th>
+                        <td>{{ $sektor->jumlah_jemaat }}</td>
+                    </tr>
+                    <tr>
                         <th>Koordinator Sektor</th>
                         <td>{{ $sektor->pelayan->nama }}</td>
                     </tr>

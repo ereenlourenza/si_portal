@@ -6,6 +6,7 @@ use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\IbadahController;
 use App\Http\Controllers\IbadahMingguController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\JemaatController;
 use App\Http\Controllers\KategoriGaleriController;
 use App\Http\Controllers\KategoriIbadahController;
 use App\Http\Controllers\KategoriPelayanController;

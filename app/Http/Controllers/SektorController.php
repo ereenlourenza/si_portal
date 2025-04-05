@@ -36,7 +36,7 @@ class SektorController extends Controller
 
     //Ambil data user dalam bentuk json untuk datatables
     public function list(){
-        $sektors = SektorModel::select('sektor_id', 'sektor_nama', 'deskripsi', 'pelayan_id') ->with('pelayan');
+        $sektors = SektorModel::select('sektor_id', 'sektor_nama', 'deskripsi', 'jumlah_jemaat', 'pelayan_id') ->with('pelayan');
         
         return DataTables::of($sektors)
             ->addIndexColumn() // menambahkan kolom index / no urut (default name kolom: DT_RowIndex)
@@ -75,14 +75,16 @@ class SektorController extends Controller
         $request->validate([
             'sektor_nama'       => 'required|string|min:3|max:50|unique:t_sektor,sektor_nama',  
             'deskripsi'         => 'required|string',    
-            'pelayan_id'            => 'required|integer',                                 
+            'jumlah_jemaat'     => 'required|integer',                                 
+            'pelayan_id'        => 'required|integer',                                 
         ]);
 
 
         SektorModel::create([
             'sektor_nama'   => $request->sektor_nama,  
             'deskripsi'     => $request->deskripsi,    
-            'pelayan_id'        => $request->pelayan_id,   
+            'jumlah_jemaat' => $request->jumlah_jemaat,   
+            'pelayan_id'    => $request->pelayan_id,   
         ]);
 
         return redirect('/pengelolaan-informasi/sektor')->with('success', 'Data sektor berhasil disimpan');
@@ -130,12 +132,14 @@ class SektorController extends Controller
         $request->validate([
             'sektor_nama'       => 'required|string|min:3|max:50|unique:t_sektor,sektor_nama,'.$id.',sektor_id',  
             'deskripsi'         => 'required|string',    
+            'jumlah_jemaat'            => 'required|integer',  
             'pelayan_id'            => 'required|integer',  
         ]);
         
         SektorModel::find($id)->update([
             'sektor_nama'      => $request->sektor_nama,
             'deskripsi'          => $request->deskripsi,
+            'jumlah_jemaat'      => $request->jumlah_jemaat, 
             'pelayan_id'      => $request->korsek 
         ]);
 

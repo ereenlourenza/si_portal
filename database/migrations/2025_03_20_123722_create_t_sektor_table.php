@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('t_sektor', function (Blueprint $table) {
             $table->id('sektor_id');
             $table->string('sektor_nama',50)->unique(); 
-            $table->text('deskripsi')->nullable(); 
+            $table->text('deskripsi')->nullable();
+            $table->unsignedInteger('jumlah_jemaat')->default(0); 
             $table->unsignedBigInteger('pelayan_id')->index(); 
             $table->timestamps();
 
