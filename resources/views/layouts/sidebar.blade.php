@@ -151,21 +151,28 @@
             </li>
             <li class="nav-item">
                 <a href="{{ route('persembahan.index') }}" class="nav-link {{ ($activeMenu == 'persembahan')? 'active' : '' }} "> 
-                    <i class="nav-icon fas fa-object-group"></i> 
+                    <i class="nav-icon fas fa-qrcode"></i> 
                     <p>QR Persembahan</p>
                 </a> 
             </li>
             <li class="nav-header">Ruangan</li> 
             <li class="nav-item">
                 <a href="{{ route('ruangan.index') }}" class="nav-link {{ ($activeMenu == 'ruangan')? 'active' : '' }} "> 
-                    <i class="nav-icon fas fa-camera"></i> 
+                    <i class="nav-icon fas fa-building"></i> 
                     <p>Data Ruangan</p>
                 </a> 
             </li>
             <li class="nav-item">
                 <a href="{{ route('peminjamanruangan.index') }}" class="nav-link {{ ($activeMenu == 'peminjamanruangan')? 'active' : '' }} "> 
-                    <i class="nav-icon fas fa-camera"></i> 
+                    <i class="nav-icon fas fa-place-of-worship"></i> 
                     <p>Peminjaman Ruangan</p>
+                </a> 
+            </li>
+            <li class="nav-header">Sakramen</li> 
+            <li class="nav-item">
+                <a href="{{ route('pendaftaran.index') }}" class="nav-link {{ ($activeMenu == 'pendaftaran')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-receipt"></i> 
+                    <p>Pendaftaran Sakramen</p>
                 </a> 
             </li>
 

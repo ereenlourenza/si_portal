@@ -33,8 +33,8 @@
                     <tr>
                         <th>Foto</th>
                         <th>
-                            @if (!empty($galeri->foto) && Storage::url('dokumen/' . $galeri->foto))
-                                <img src="{{ asset('storage/images/galeri/'.$galeri->foto) }}" class="" style="width: 20%">
+                            @if (!empty($galeri->foto) && Storage::url('images/' . $galeri->foto))
+                                <img src="{{ asset('storage/images/galeri/'.$galeri->foto) }}" class="" style="width: 50%">
                             @else
                                 <span class="text-danger">Tidak ada foto</span>
                             @endif     

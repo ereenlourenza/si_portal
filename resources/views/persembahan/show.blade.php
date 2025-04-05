@@ -34,7 +34,7 @@
                         <th>Barcode</th>
                         <td>
                             @if (!empty($persembahan->barcode) && Storage::url('images/' . $persembahan->barcode))
-                                <img src="{{ asset('storage/images/barcode/'.$persembahan->barcode) }}" class="" style="width: 20%">
+                                <img src="{{ asset('storage/images/barcode/'.$persembahan->barcode) }}" class="" style="width: 50%">
                             @else
                                 <span class="text-danger">Tidak ada barcode</span>
                             @endif   

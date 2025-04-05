@@ -41,8 +41,8 @@
                     <tr>
                         <th>Foto</th>
                         <td>
-                            @if (!empty($pelayan->foto) && Storage::url('dokumen/' . $pelayan->foto))
-                                <img src="{{ asset('storage/images/pelayan/'.$pelayan->foto) }}" class="" style="width: 20%">
+                            @if (!empty($pelayan->foto) && Storage::url('images/' . $pelayan->foto))
+                                <img src="{{ asset('storage/images/pelayan/'.$pelayan->foto) }}" class="" style="width: 50%">
                             @else
                                 <span class="text-danger">Tidak ada foto</span>
                             @endif   

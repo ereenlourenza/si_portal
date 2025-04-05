@@ -30,7 +30,7 @@
                         <th>Foto</th>
                         <td>
                             @if (!empty($ruangan->foto) && Storage::url('images/' . $ruangan->foto))
-                                <img src="{{ asset('storage/images/ruangan/'.$ruangan->foto) }}" class="" style="width: 20%">
+                                <img src="{{ asset('storage/images/ruangan/'.$ruangan->foto) }}" class="" style="width: 50%">
                             @else
                                 <span class="text-danger">Tidak ada foto</span>
                             @endif   

@@ -15,6 +15,8 @@ use App\Http\Controllers\PelayanController;
 use App\Http\Controllers\PelkatController;
 use App\Http\Controllers\PelkatPengurusController;
 use App\Http\Controllers\PeminjamanRuanganController;
+use App\Http\Controllers\PendaftaranController;
+use App\Http\Controllers\PendaftaranSakramenController;
 use App\Http\Controllers\PersembahanController;
 use App\Http\Controllers\PHMJController;
 use App\Http\Controllers\RuanganController;
@@ -227,6 +229,20 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit', [PeminjamanRuanganController::class, 'edit']);
             Route::put('/{id}', [PeminjamanRuanganController::class, 'update']);
             Route::delete('/{id}', [PeminjamanRuanganController::class, 'destroy']);
+        });        
+
+        Route::prefix('pendaftaran')->group(function () {
+            Route::get('/', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
+            Route::post('/list', [PendaftaranController::class, 'list']);
+            Route::get('/create', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
+            Route::post('/', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
+            Route::get('/updateValidation/{id}', [PendaftaranController::class, 'updateValidation']);
+            Route::match(['get', 'post'],'/rejectPendaftaran/{id}', [PendaftaranController::class, 'rejectPendaftaran']);
+            Route::get('/{id}', [PendaftaranController::class, 'show']);
+            Route::get('/{id}/edit', [PendaftaranController::class, 'edit']);
+            Route::put('/{id}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
+            Route::delete('/{id}', [PendaftaranController::class, 'destroy']);
         });
+
     });
 });
