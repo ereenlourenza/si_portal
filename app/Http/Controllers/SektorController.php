@@ -110,7 +110,6 @@ class SektorController extends Controller
     public function edit(string $id){
         $sektor = SektorModel::find($id);
         $pelayan = PelayanModel::all();
-        // $pelayan = PelayanModel::whereIn('kategoripelayan_id', [3, 4])->get();
 
         $breadcrumb = (object)[
             'title' => 'Edit Sektor',

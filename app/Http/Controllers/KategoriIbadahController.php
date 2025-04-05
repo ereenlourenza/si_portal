@@ -75,7 +75,6 @@ class KategoriIbadahController extends Controller
     // //Menyimpan data level baru
     public function store(Request $request){
         $validatedData = $request->validate([
-            //judul harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom judul
             'kategoriibadah_kode' => 'required|string|min:3|max:10|unique:t_kategoriibadah,kategoriibadah_kode',
             'kategoriibadah_nama' => 'required|string|max:50'
         ]);

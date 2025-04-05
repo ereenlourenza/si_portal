@@ -134,8 +134,6 @@ class KategoriPelayanController extends Controller
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
         $request->validate([
-            //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
-            //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
             'kategoripelayan_kode' => 'required|string|min:3|max:10|unique:t_kategoripelayan,kategoripelayan_kode,'.$id.',kategoripelayan_id',
             'kategoripelayan_nama' => 'required|string|max:50'
         ]);

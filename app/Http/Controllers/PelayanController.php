@@ -94,7 +94,7 @@ class PelayanController extends Controller
 
         $kategoripelayan = KategoriPelayanModel::all(); //ambil data pelayan untuk ditampilkan di form
         $pelkat = PelkatModel::all();
-        // $diakenPenatua = PelayanModel::whereIn('kategoripelayan_id', [3, 4])->get();
+
         // Ambil daftar pelayan yang termasuk kategori Diaken atau Penatua
         $diakenPenatua = DB::table('t_pelayan')
             ->join('t_kategoripelayan', 't_pelayan.kategoripelayan_id', '=', 't_kategoripelayan.kategoripelayan_id')
@@ -210,8 +210,6 @@ class PelayanController extends Controller
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
         $request->validate([
-            //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
-            //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
             'nama' => 'required|string|min:3|max:100',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'masa_jabatan_mulai' => 'required|date_format:Y',
@@ -265,6 +263,11 @@ class PelayanController extends Controller
         }
 
         try{
+            // Hapus file foto jika ada
+            if ($check->foto && Storage::exists('public/images/pelayan/' . $check->foto)) {
+                Storage::delete('public/images/pelayan/' . $check->foto);
+            }
+
             PelayanModel::destroy($id); //Hapus data pelayan
 
             return redirect('pengelolaan-informasi/pelayan')->with('success_pelayan', 'Data pelayan berhasil dihapus');

@@ -78,7 +78,6 @@ class UserController extends Controller
     //Menyimpan data user baru
     public function store(Request $request){
         $newUser = $request->validate([
-            //username harus diisi, berupa string, minimal 4 karakter, dan bernilai unik di tabel t_user kolom username
             'level_id'      => 'required|integer',          //level_id harus diisi dan berupa angka
             'username'      => 'required|string|min:3|unique:t_user,username',  
             'name'          => 'required|string|max:100',   //name harus diisi, berupa string, dan maksimal 100 karakter                     
@@ -133,8 +132,6 @@ class UserController extends Controller
     //Menyimpan perubahan data user
     public function update(Request $request, string $id){
         $request->validate([
-            //username harus diisi, berupa string, minimal 3 karakter,
-            //dan bernilai unik di tabel t_user kolom username kecuali untuk user dengan id yang sedang diedit
             'level_id'      => 'required|integer',          //level_id harus diisi dan berupa angka
             'username'      => 'required|string|min:3|unique:t_user,username,'.$id.',user_id',
             'name'          => 'required|string|max:100',   //name harus diisi, berupa string, dan maksimal 100 karakter

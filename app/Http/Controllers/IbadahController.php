@@ -90,7 +90,6 @@ class IbadahController extends Controller
     // //Menyimpan data level baru
     public function store(Request $request){
         $request->validate([
-            //judul harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom judul
             'tanggal' => 'required|date_format:Y-m-d',
             'waktu' => 'required|date_format:H:i',
             'tempat' => 'required|string',
@@ -164,8 +163,6 @@ class IbadahController extends Controller
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
         $request->validate([
-            //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
-            //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
             'tanggal' => 'required|date_format:Y-m-d',
             'waktu' => 'required|date_format:H:i',
             'tempat' => 'required|string',

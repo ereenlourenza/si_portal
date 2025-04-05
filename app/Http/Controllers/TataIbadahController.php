@@ -74,7 +74,6 @@ class TataIbadahController extends Controller
     // //Menyimpan data level baru
     public function store(Request $request){
         $validatedData = $request->validate([
-            //judul harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom judul
             'tanggal' => 'required|date_format:Y-m-d',
             'judul' => 'required|string|min:3|max:50|unique:t_tataibadah,judul',
             'deskripsi' => 'nullable|string',
@@ -145,8 +144,6 @@ class TataIbadahController extends Controller
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
         $request->validate([
-            //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
-            //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
             'tanggal' => 'required|date_format:Y-m-d',
             'judul' => 'required|string|min:3|max:50|unique:t_tataibadah,judul,'.$id.',tataibadah_id',
             'deskripsi' => 'nullable|string',
@@ -194,6 +191,11 @@ class TataIbadahController extends Controller
         }
 
         try{
+            // Hapus file foto jika ada
+            if ($check->file && Storage::exists('public/dokumen/tataibadah/' . $check->file)) {
+                Storage::delete('public/dokumen/tataibadah/' . $check->file);
+            }
+
             TataIbadahModel::destroy($id); //Hapus data tata ibadah
 
             return redirect('pengelolaan-informasi/tataibadah')->with('success_tataibadah', 'Data tata ibadah berhasil dihapus');

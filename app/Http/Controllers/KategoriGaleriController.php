@@ -75,7 +75,6 @@ class KategoriGaleriController extends Controller
     // //Menyimpan data level baru
     public function store(Request $request){
         $validatedData = $request->validate([
-            //judul harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom judul
             'kategorigaleri_kode' => 'required|string|min:3|max:10|unique:t_kategorigaleri,kategorigaleri_kode',
             'kategorigaleri_nama' => 'required|string|max:50'
         ]);
@@ -133,8 +132,6 @@ class KategoriGaleriController extends Controller
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
         $request->validate([
-            //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
-            //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
             'kategorigaleri_kode' => 'required|string|min:3|max:10|unique:t_kategorigaleri,kategorigaleri_kode,'.$id.',kategorigaleri_id',
             'kategorigaleri_nama' => 'required|string|max:50'
         ]);

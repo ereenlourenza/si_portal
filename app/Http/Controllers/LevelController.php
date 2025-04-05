@@ -76,7 +76,6 @@ class LevelController extends Controller
     //Menyimpan data level baru
     public function store(Request $request){
         $request->validate([
-            //level_kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom level_kode
             'level_kode' => 'required|string|min:3|max:10|unique:t_level,level_kode',
             'level_nama' => 'required|string|max:50'
         ]);
@@ -128,8 +127,6 @@ class LevelController extends Controller
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
         $request->validate([
-            //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
-            //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
             'level_kode'  => 'required|string|min:3|max:10|unique:t_level,level_kode,'.$id.',level_id',
             'level_nama'  => 'required|string|max:50',   //nama harus diisi, berupa string, dan maksimal 50 karakter
         ]);

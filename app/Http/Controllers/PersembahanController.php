@@ -158,13 +158,13 @@ class PersembahanController extends Controller
             if ($request->hasFile('barcode')) {
                 // Hapus barcode lama jika ada
                 if ($persembahan->barcode) {
-                    Storage::delete('public/images/persembahan/' . $persembahan->barcode);
+                    Storage::delete('public/images/barcode/' . $persembahan->barcode);
                 }
 
                 // Simpan barcode baru
                 $barcode = $request->file('barcode');
                 $barcodeName = time() . '_' . $barcode->getClientOriginalName();
-                $barcode->storeAs('public/images/persembahan', $barcodeName); // Simpan ke storage
+                $barcode->storeAs('public/images/barcode', $barcodeName); // Simpan ke storage
             } else {
                 // Gunakan barcode lama jika tidak ada barcode baru yang diunggah
                 $barcodeName = $persembahan->barcode;
@@ -191,6 +191,11 @@ class PersembahanController extends Controller
         }
 
         try{
+            // Hapus file foto jika ada
+            if ($check->barcode && Storage::exists('public/images/barcode/' . $check->barcode)) {
+                Storage::delete('public/images/barcode/' . $check->barcode);
+            }
+
             PersembahanModel::destroy($id); //Hapus data persembahan
 
             return redirect('pengelolaan-informasi/persembahan')->with('success_persembahan', 'Data persembahan berhasil dihapus');

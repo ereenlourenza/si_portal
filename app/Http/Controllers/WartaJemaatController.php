@@ -73,7 +73,6 @@ class WartaJemaatController extends Controller
     // //Menyimpan data level baru
     public function store(Request $request){
         $validatedData = $request->validate([
-            //judul harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom judul
             'tanggal' => 'required|date_format:Y-m-d',
             'judul' => 'required|string|min:3|max:50|unique:t_wartajemaat,judul',
             'deskripsi' => 'nullable|string',
@@ -143,8 +142,6 @@ class WartaJemaatController extends Controller
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
         $request->validate([
-            //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
-            //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
             'tanggal' => 'required|date_format:Y-m-d',
             'judul' => 'required|string|min:3|max:50|unique:t_wartajemaat,judul,'.$id.',wartajemaat_id',
             'deskripsi' => 'nullable|string',
@@ -192,6 +189,11 @@ class WartaJemaatController extends Controller
         }
 
         try{
+            // Hapus file foto jika ada
+            if ($check->file && Storage::exists('public/dokumen/wartajemaat/' . $check->file)) {
+                Storage::delete('public/dokumen/wartajemaat/' . $check->file);
+            }
+
             WartaJemaatModel::destroy($id); //Hapus data warta jemaat
 
             return redirect('pengelolaan-informasi/wartajemaat')->with('success_wartajemaat', 'Data warta jemaat berhasil dihapus');

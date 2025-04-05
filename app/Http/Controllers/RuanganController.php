@@ -188,6 +188,11 @@ class RuanganController extends Controller
         }
 
         try{
+            // Hapus file foto jika ada
+            if ($check->foto && Storage::exists('public/images/ruangan/' . $check->foto)) {
+                Storage::delete('public/images/ruangan/' . $check->foto);
+            }
+
             RuanganModel::destroy($id); //Hapus data ruangan
 
             return redirect('pengelolaan-informasi/ruangan')->with('success_ruangan', 'Data ruangan berhasil dihapus');

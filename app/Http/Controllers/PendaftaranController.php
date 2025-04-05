@@ -167,8 +167,6 @@ class PendaftaranController extends Controller
 
             })
             ->addColumn('aksi', function ($pendaftaran) { // menambahkan kolom aksi
-                // $btn = '<a href="'.url('/pengelolaan-informasi/pendaftaran/' . $pendaftaran->pendaftaran_id).'" class="btn btn-success btn-sm">Lihat</a> ';
-                // $btn .= '<a href="'.url('/pengelolaan-informasi/pendaftaran/' . $pendaftaran->pendaftaran_id . '/edit').'" class="btn btn-warning btn-sm">Ubah</a> ';
                 $btn = '<a href="'.url('/pengelolaan-informasi/pendaftaran/updateValidation/' . $pendaftaran->pendaftaran_id . '?jenis='.$pendaftaran->jenis_pendaftaran).'" class="btn btn-dark btn-sm">'.($pendaftaran->status == 0 ? 'Setujui' : 'Batalkan' ).'</a> ';
 
                 // Hanya tampilkan tombol "Tolak" jika status belum ditolak (status != 2)

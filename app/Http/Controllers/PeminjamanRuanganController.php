@@ -64,8 +64,6 @@ class PeminjamanRuanganController extends Controller
             })
             
             ->addColumn('aksi', function ($peminjamanruangan) { // menambahkan kolom aksi
-                // $btn = '<a href="'.url('/pengelolaan-informasi/peminjamanruangan/' . $peminjamanruangan->peminjamanruangan_id).'" class="btn btn-success btn-sm">Lihat</a> ';
-                // $btn .= '<a href="'.url('/pengelolaan-informasi/peminjamanruangan/' . $peminjamanruangan->peminjamanruangan_id . '/edit').'" class="btn btn-warning btn-sm">Ubah</a> ';
                 $btn = '<a href="'.url('/pengelolaan-informasi/peminjamanruangan/updateValidation/' . $peminjamanruangan->peminjamanruangan_id ).'" class="btn btn-dark btn-sm">'.($peminjamanruangan->status == 0 ? 'Setujui' : 'Batalkan' ).'</a> ';
 
                 // Hanya tampilkan tombol "Tolak" jika status belum ditolak (status != 2)
@@ -208,24 +206,6 @@ class PeminjamanRuanganController extends Controller
         ]);
         
         try{
-
-            // Cek apakah ada peminjaman yang berbenturan
-            // $conflict = PeminjamanRuanganModel::where('tanggal', $request->tanggal)
-            // ->where('ruangan_id', $request->ruangan_id)
-            // ->where(function ($query) use ($request) {
-            //     $query->whereBetween('waktu_mulai', [$request->waktu_mulai, $request->waktu_selesai])
-            //         ->orWhereBetween('waktu_selesai', [$request->waktu_mulai, $request->waktu_selesai])
-            //         ->orWhere(function ($q) use ($request) {
-            //             $q->where('waktu_mulai', '<=', $request->waktu_mulai)
-            //                 ->where('waktu_selesai', '>=', $request->waktu_selesai);
-            //         });
-            // })
-            // ->exists();
-
-            // if ($conflict) {
-            //     return redirect()->back()->with('error_peminjamanruangan', 'Ruangan sudah dipinjam pada waktu tersebut. Silakan pilih waktu lain.');
-            // }
-            
 
             // Simpan data ke database
             PeminjamanRuanganModel::create([

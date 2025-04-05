@@ -78,7 +78,6 @@ class GaleriController extends Controller
     // //Menyimpan data level baru
     public function store(Request $request){
         $validatedData = $request->validate([
-            //judul harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom judul
             'judul' => 'required|string|min:3|max:50|unique:t_galeri,judul',
             'deskripsi' => 'nullable|string',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
@@ -150,8 +149,6 @@ class GaleriController extends Controller
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
         $request->validate([
-            //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
-            //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit
             'judul' => 'required|string|min:3|max:50|unique:t_galeri,judul,'.$id.',galeri_id',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -199,6 +196,11 @@ class GaleriController extends Controller
         }
 
         try{
+            // Hapus file foto jika ada
+            if ($check->foto && Storage::exists('public/images/galeri/' . $check->foto)) {
+                Storage::delete('public/images/galeri/' . $check->foto);
+            }
+            
             GaleriModel::destroy($id); //Hapus data galeri
 
             return redirect('pengelolaan-informasi/galeri')->with('success_galeri', 'Data galeri berhasil dihapus');
