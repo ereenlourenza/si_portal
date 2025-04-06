@@ -144,6 +144,12 @@
                 </a> 
             </li>
             <li class="nav-item">
+                <a href="{{ route('sejarah.index') }}" class="nav-link {{ ($activeMenu == 'sejarah')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-film"></i> 
+                    <p>Sejarah</p>
+                </a> 
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('pelkat.index') }}" class="nav-link {{ ($activeMenu == 'pelkat')? 'active' : '' }} "> 
                     <i class="nav-icon fas fa-object-group"></i> 
                     <p>Pelkat</p>

@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('pengelolaan-pengguna/level/create') }}">Tambah Level</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('pengelolaan-informasi/sejarah/create') }}">Tambah Konten</a>
             </div>
         </div>
         <div class="card-body">
@@ -15,28 +15,12 @@
             @if(session('error'))
                 <div class='alert alert-danger'>{{ session('error' ) }}</div>
             @endif
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group row d-flex align-items-center">
-                        <label class="col-auto control-label col-form-label">Filter:</label>
-                        <div class="col-3">
-                            <select class="form-control" id="level_id" name="level_id" required>
-                                <option value="">Semua Level</option>
-                                @foreach($level as $item)
-                                    <option value="{{ $item->level_id }}">{{ $item->level_nama }}</option>
-                                @endforeach
-                            </select>
-                            {{-- <small class="form-text text-muted">Level Nama</small> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <table class="table table-bordered table-striped table-hover table-md" id="table_level">
+            <table class="table table-bordered table-striped table-hover table-md" id="table_sejarah">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Level Kode</th>
-                        <th>Level Nama</th>
+                        <th>Judul Sub Bab</th>
+                        <th>Isi Konten</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -51,17 +35,17 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            var dataLevel = $('#table_level').DataTable({
+            var dataSejarah = $('#table_sejarah').DataTable({
                 responsive: true, // Mengaktifkan fitur responsif
                 lengthChange: true, 
                 autoWidth: false,
                 serverSide: true, // serverSide: true, jika ingin menggunakan server side processing
                 ajax: {
-                    "url": "{{ url('pengelolaan-pengguna/level/list') }}",
+                    "url": "{{ url('pengelolaan-informasi/sejarah/list') }}",
                     "dataType": "json",
                     "type": "POST",
                     "data": function (d) {
-                        d.level_id = $('#level_id').val();
+                        d.sejarah_id = $('#sejarah_id').val();
                     }
                 },
                 columns: [
@@ -72,16 +56,17 @@
                         searchable: false
                     },
                     {
-                        data: "level_kode", 
+                        data: "judul_subbab", 
                         className: "",
                         orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
                         searchable: true // searchable: true, jika ingin kolom ini bisa dicari
                     },
                     {
-                        data: "level_nama", 
+                        data: "isi_konten", 
                         className: "",
                         orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
-                        searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+                        searchable: true, // searchable: true, jika ingin kolom ini bisa dicari
+                        
                     },
                     {
                         data: "aksi", 
@@ -92,8 +77,8 @@
                 ]
             });
             
-            $('#level_id').on('change', function(){
-                dataLevel.ajax.reload();
+            $('#sejarah_id').on('change', function(){
+                dataSejarah.ajax.reload();
             });
         });
     </script>

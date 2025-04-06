@@ -7,7 +7,7 @@
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ url('pengelolaan-informasi/ibadahminggu') }}" class="form-horizontal">
+            <form method="POST" action="{{ url('pengelolaan-pengguna/level') }}" class="form-horizontal">
                 @csrf
                 <div class="form-group row align-items-center">
                     <label class="col-md-1 control-label col-form-label">Level Kode<span class="text-danger">*</span></label>
@@ -33,7 +33,7 @@
                     <label class="col-md-1 control-label col-form-label"></label>
                     <div class="col-md-11">
                         <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-                        <a class="btn btn-sm btn-default ml-1" href="{{ url('pengelolaan-informasi/ibadahminggu') }}">Kembali</a>
+                        <a class="btn btn-sm btn-default ml-1" href="{{ url('pengelolaan-pengguna/level') }}">Kembali</a>
                     </div>
                 </div>
             </form>

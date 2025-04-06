@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\IbadahController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\PendaftaranSakramenController;
 use App\Http\Controllers\PersembahanController;
 use App\Http\Controllers\PHMJController;
 use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\SejarahController;
 use App\Http\Controllers\SektorController;
 use App\Http\Controllers\TataIbadahController;
 use App\Http\Controllers\UserController;
@@ -41,6 +43,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [AuthController::class, 'index'])->name('login.index');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/home', function () {
+    return view('global.home');
+});
 
 Route::middleware(['auth'])->group(function () {
 
@@ -184,6 +190,18 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit', [SektorController::class, 'edit']);
             Route::put('/{id}', [SektorController::class, 'update']);
             Route::delete('/{id}', [SektorController::class, 'destroy']);
+        });
+        
+        Route::prefix('sejarah')->group(function () {
+            Route::get('/', [SejarahController::class, 'index'])->name('sejarah.index');
+            Route::post('/list', [SejarahController::class, 'list']);
+            Route::get('/create', [SejarahController::class, 'create']);
+            Route::post('ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
+            Route::post('/', [SejarahController::class, 'store']);
+            Route::get('/{id}', [SejarahController::class, 'show']);
+            Route::get('/{id}/edit', [SejarahController::class, 'edit']);
+            Route::put('/{id}', [SejarahController::class, 'update']);
+            Route::delete('/{id}', [SejarahController::class, 'destroy']);
         });
         
         Route::prefix('pelkat')->group(function () {
