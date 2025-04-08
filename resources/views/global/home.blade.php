@@ -51,7 +51,7 @@
       <!-- Konten -->
       <div class="relative z-10 mb-12">
         <!-- Welcome Section -->
-        <h1 class="text-3xl font-bold">Selamat Datang di Web GPIB Immanuel Malang</h1>
+        <h1 class="text-2xl md:text-3xl  font-bold">Selamat Datang di Web GPIB Immanuel Malang</h1>
         <p class="mt-4 text-gray-600">Halaman utama portal gereja</p>
 
       </div>
@@ -61,15 +61,23 @@
     
             <!-- Card Jumlah Keluarga -->
             <div class="w-auto text-center">
-                <p id="jumlahKeluarga" class="text-3xl mb-3 font-bold text-blue-600 text-shadow" style="font-size: 48px;">0</p>
+              <p id="jumlah_keluarga" class="text-3xl font-bold text-amber-700 text-shadow" style="font-size: 40px;">0</p>
+              <div class="flex justify-center items-center gap-2 mt-4 text-amber-700">
+                <i class="fas fa-users text-xl text-gray-500"></i>
                 <h3 class="text-xl font-semibold text-gray-700">Jumlah Keluarga Jemaat</h3>
+              </div>
             </div>
-    
+
             <!-- Card Jumlah Sektor -->
             <div class="w-auto text-center">
-                <p id="jumlahSektor" class="text-3xl mb-3 font-bold text-green-600 text-shadow" style="font-size: 48px;">0</p>
+              <p id="jumlah_sektor" class="text-3xl font-bold text-amber-400 text-shadow" style="font-size: 40px;">0</p>
+              <div class="flex justify-center items-center gap-2 mt-4 text-amber-400">
+                <i class="fas fa-layer-group text-xl text-gray-500"></i>
                 <h3 class="text-xl font-semibold text-gray-700">Jumlah Sektor</h3>
+              </div>
             </div>
+
+
     
         </div>
       </div>
@@ -141,7 +149,7 @@
 
     {{-- TEMA TAHUNAN --}}
     <div class="max-w-7xl mx-auto px-4 py-16">
-      <h2 class="text-3xl font-bold text-center mb-12 text-[#231C0D]">Tema Tahunan GPIB</h2>
+      <h2 class="text-2xl md:text-3xl  font-bold text-center mb-12 text-[#231C0D]">Tema Tahunan GPIB</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-t-[0.5px] border-b-[0.5px] border-[#231C0D]/50">
         
@@ -154,7 +162,7 @@
         <!-- Kolom 2 -->
         <div class="p-6 hover:bg-[#F5F0E6] transition">
           <h3 class="text-lg font-semibold text-[#4E3B1F] mb-2">TEMA JANGKA PENDEK IV (2022-2026)</h3>
-          <p class="text-gray-700">“Membangun sinergi dalam hubungan gereja dan masyarakat untuk mewujudkan Kasih Allah yang meliputi seluruh ciptaan-Nya”  ( Matius 22 : 37 – 39; Ulangan 6 : 5; Immamat 19 : 18 )</p>
+          <p class="text-gray-700">“Membangun sinergi dalam hubungan gereja dan masyarakat untuk mewujudkan Kasih Allah yang meliputi seluruh ciptaan-Nya” ( Matius 22 : 37 – 39; Ulangan 6 : 5; Immamat 19 : 18 )</p>
         </div>
     
         <!-- Kolom 3 -->
@@ -181,7 +189,7 @@
             serta di Pakisaji. Bangunannya telah mengalami beberapa renovasi namun tetap mempertahankan keindahan arsitektur aslinya, 
             yang menjadikannya sebagai salah satu ikon sejarah di kota ini.
           </p>
-          <a href="#" class="mt-4 inline-block bg-[#614D24] text-white px-5 py-2 rounded-full focus:outline-none hover:bg-[#4f3f1c] transition">
+          <a href="#" class="mt-4 inline-block font-semibold bg-[#614D24] text-white px-5 py-2 rounded-full focus:outline-none hover:bg-[#4f3f1c] transition">
             Baca Selengkapnya
           </a>
         </div>
@@ -196,7 +204,7 @@
 
     {{-- PELKAT --}}
     <section class="max-w-full mx-auto px-6 py-16 text-[#231C0D]">
-      <h2 class="text-3xl font-bold text-center mt-2 mb-2 text-[#231C0D]">PELAYANAN KATEGORIAL</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-center mt-2 text-[#231C0D]">PELAYANAN KATEGORIAL</h2>
 
       <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
@@ -268,7 +276,65 @@
     
       </div>
     </section>
-    
+
+    {{-- JADWAL IBADAH --}}
+    <section class="mb-20 bg-white">
+      <!-- Judul -->
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 text-[#231C0D]">JADWAL IBADAH RUTIN</h2>
+
+      <!-- Grid Card -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 md:px-20">
+
+        <!-- Card 1: Ibadah Minggu Umum -->
+        <div class="bg-gradient-to-br from-amber-800 to-yellow-600 rounded-2xl text-white shadow-lg p-6">
+          <h3 class="text-lg font-bold mb-4 flex items-center">
+            <i class="fas fa-church mr-2 text-white/80"></i> Ibadah Minggu Umum
+          </h3>
+          <ul class="text-sm space-y-1">
+            <li><span class="font-semibold">EBED</span> - PK 06.00</li>
+            <li><span class="font-semibold">IMMANUEL</span> - PK 08.00</li>
+            <li><span class="font-semibold">PAKISAJI</span> - PK 09.00</li>
+            <li><span class="font-semibold">IMMANUEL</span> - PK 17.00</li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Ibadah Keluarga -->
+        <div class="bg-gradient-to-br from-teal-800 to-green-500 rounded-2xl text-white shadow-lg p-6">
+          <h3 class="text-lg font-bold mb-4 flex items-center">
+            <i class="fas fa-house-user mr-2 text-white/80"></i> Ibadah Keluarga (Rabu)
+          </h3>
+          <ul class="text-sm space-y-1">
+            <li>Sektor 1–5 & 7–9 - PK 17.00</li>
+            <li>Sektor 6 - PK 18.00</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Ibadah Pelkat -->
+        <div class="bg-gradient-to-br from-indigo-800 to-purple-500 rounded-2xl text-white shadow-lg p-6">
+          <h3 class="text-lg font-bold mb-4 flex items-center">
+            <i class="fas fa-users mr-2 text-white/80"></i> Ibadah Pelkat (IMM - Pakisaji)
+          </h3>
+          <ul class="text-sm space-y-1">
+            <li><span class="font-semibold">Pelkat PA</span> - Minggu PK 08.00 & 09.00</li>
+            <li><span class="font-semibold">Pelkat PT</span> - Minggu PK 08.00</li>
+            <li><span class="font-semibold">Pelkat GP</span> - Jumat/Sabtu PK 18.30/18.00</li>
+            <li><span class="font-semibold">Pelkat PKP</span> - Selasa PK 17.00</li>
+            <li><span class="font-semibold">Pelkat PKB</span> - Sabtu PK 17.00</li>
+            <li><span class="font-semibold">Pelkat PKLU</span> - Sabtu PK 10.00</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CTA Tombol -->
+      <div class="text-center mt-8 px-10">
+        <p class="text-sm text-gray-600 mb-3">Jadwal Ibadah Non Rutin Lainnya Dapat Dilihat di Laman Berikut Ini</p>
+        {{-- <a href="#" class="inline-block bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2 rounded-full transition"> --}}
+        <a href="#" class="inline-block font-semibold bg-[#614D24] text-white px-5 py-2 rounded-full focus:outline-none hover:bg-[#4f3f1c] transition">
+          Lihat Jadwal
+        </a>
+      </div>
+    </section>
+
        
 @endsection
 
@@ -298,11 +364,11 @@
     }
 
     // Simulate fetching numbers from the database
-    const jumlahKeluarga = 950; // replace with dynamic value from the database
-    const jumlahSektor = 9; // replace with dynamic value from the database
+    const jumlah_keluarga = {{ $jumlah_keluarga }}
+    const jumlah_sektor = {{ $jumlah_sektor }}
 
     // Trigger the animations
-    animateNumber('jumlahKeluarga', jumlahKeluarga);
-    animateNumber('jumlahSektor', jumlahSektor);
+    animateNumber('jumlah_keluarga', jumlah_keluarga);
+    animateNumber('jumlah_sektor', jumlah_sektor);
   </script>
 @endpush

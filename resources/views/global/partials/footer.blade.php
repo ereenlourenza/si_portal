@@ -72,8 +72,12 @@
   
     <!-- Footer Bawah -->
     <div class="mt-12 border-t border-[#3D2F1C] pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 gap-2">
-      <p>© 2025 <span class="font-semibold text-white">GPIB Immanuel Malang</span>. All rights reserved.</p>
+      <p>© {{ date('Y') }} <span class="font-semibold text-white">GPIB Immanuel Malang</span>. All rights reserved.</p>
       <p>Church Website by <span class="font-semibold text-white">Ereen</span></p>
     </div>
   </footer>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+  </script>
   

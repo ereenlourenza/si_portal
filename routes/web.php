@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IbadahController;
 use App\Http\Controllers\IbadahMingguController;
 use App\Http\Controllers\JadwalController;
@@ -40,17 +41,22 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/beranda', [HomeController::class, 'index']);
+Route::get('/tentang-gpib', function () {
+    return view('global.tentang_gpib');
+});
+
 Route::get('/login', [AuthController::class, 'index'])->name('login.index');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/home', function () {
-    return view('global.home');
-});
-
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/', [WelcomeController::class, 'index'])->name('beranda.index');
+    Route::get('/dashboard', [WelcomeController::class, 'index'])->name('beranda.index');
     // Route::get('/portal', [WelcomeController::class, 'index'])->name('portal.index');
 
     // Modul Pengelolaan Pengguna - Hanya Super Admin

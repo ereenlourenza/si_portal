@@ -133,6 +133,12 @@
     </div>
     <!-- /.login-card-body -->
   </div>
+
+  <div class="text-center mt-3">
+    <a href="/" class="btn btn-dark">
+      <i class="fas fa-home"></i> Kembali ke Beranda
+    </a>
+  </div>
 </div>
 <!-- /.login-box -->
 

@@ -85,22 +85,24 @@
       <div class="max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6 flex justify-between items-center">
         
         {{-- Logo --}}
-        <div class="flex items-center space-x-2">
-            <img src="{{ asset('images/logo-gpib-full.png') }}" alt="Logo" class="w-14 h-14 md:w-22 md:h-22">
-        
-            <div class="ml-2 md:ml-6">
-                <div class="text-lg md:text-3xl" style="font-family: 'Playfair Display', serif; font-weight: 700;">
-                    GPIB IMMANUEL MALANG
-                </div>
-                <div class="text-sm md:text-lg tracking-wide md:tracking-[2.4px]" style="font-family: 'Platypi', serif;">
-                    GEREJA JAGO
-                </div>
-            </div>
-        </div>
+        <a href="/">
+          <div class="flex items-center space-x-2">
+              <img src="{{ asset('images/logo-gpib-full.png') }}" alt="Logo" class="w-14 h-14 md:w-22 md:h-22">
+          
+              <div class="ml-2 md:ml-6">
+                  <div class="text-lg md:text-3xl" style="font-family: 'Playfair Display', serif; font-weight: 700;">
+                      GPIB IMMANUEL MALANG
+                  </div>
+                  <div class="text-sm md:text-lg tracking-wide md:tracking-[2.4px]" style="font-family: 'Platypi', serif;">
+                      GEREJA JAGO
+                  </div>
+              </div>
+          </div>
+        </a>
     
         <!-- Tombol Sign In (Desktop) -->
         <a href="{{ route('login.index') }}"
-          class="hidden md:inline-block bg-[#4f3f1c] text-white px-6 py-2 rounded-full text-sm md:text-base tracking-wide shadow-md hover:bg-[#231C0D] hover:shadow-lg transition duration-300 ease-in-out">
+          class="hidden md:inline-block bg-amber-600 text-white px-6 py-2 rounded-full text-sm md:text-base tracking-wide shadow-md hover:bg-[#231C0D] hover:shadow-lg transition duration-300 ease-in-out">
           SIGN IN
         </a>
     
@@ -116,19 +118,30 @@
       </div>
     
     
-      
     
       {{-- Baris bawah: Menu navigasi --}}
-      <nav class="hidden sticky top-0 z-50 md:flex justify-center space-x-6 lg:space-x-12 xl:space-x-16 items-center text-sm" style="font-family: 'Lato', sans-serif; font-size:11px" x-data="{ dropdown: null }">
+      <nav class="hidden sticky top-0 z-50 md:flex justify-center space-x-6 lg:space-x-12 xl:space-x-16 items-center text-sm" style="font-family: 'Lato', sans-serif; font-size:11px" 
+      x-data="{ open: false, dropdown: null, dropdownTimeout: null }">
         
-        <a href="#" class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition">BERANDA</a>
-      
+        <a href="/beranda" 
+          class="px-2 py-3 md:tracking-[2.4px] rounded transition
+                  {{ request()->is('beranda') ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}">
+          BERANDA
+        </a>
+
+        @php
+          $isProfilActive = request()->is('tentang-gpib') || request()->is('visi-misi') || request()->is('pemahaman-iman') || request()->is('simbol-tahun-gereja') || request()->is('sejarah-gereja') || request()->is('wilayah-pelayanan');
+        @endphp
+
         <!-- Dropdown PROFIL -->
-        <div class="relative group" @mouseenter="dropdown = 'profil'" @mouseleave="dropdown = null">
+        <div class="relative group" 
+           @mouseenter="clearTimeout(dropdownTimeout); dropdown = 'profil'"
+           @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
+          >
           <button 
             @click="dropdown === 'profil' ? dropdown = null : dropdown = 'profil'"
-            :class="dropdown === 'profil' ? 'bg-[#231C0D] text-white' : ''"
-            class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition"
+            class="px-2 py-3 md:tracking-[2.4px] rounded transition 
+              {{ $isProfilActive ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}"
           >
             PROFIL
           </button>
@@ -137,12 +150,14 @@
           <div 
             x-show="dropdown === 'profil'" 
             x-transition 
+            @mouseenter="clearTimeout(dropdownTimeout)"
+            @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
             class="absolute mt-2 bg-white shadow rounded p-4 z-10 w-[400px] grid grid-cols-2 gap-6"
           >
             <!-- Kolom GPIB -->
             <div>
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">GPIB</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Tentang GPIB</a>
+              <a href="/tentang-gpib" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Tentang GPIB</a>
               <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Visi Misi</a>
               <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pemahaman Iman</a>
               <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Simbol Tahun Gereja</a>
@@ -156,21 +171,31 @@
             </div>
           </div>
         </div>
+
+        @php
+          $isPelayananActive = request()->is('ibadah-rutin') || request()->is('persembahan') || request()->is('kanal-youtube') || request()->is('baptisan') || request()->is('katekisasi') || request()->is('pemberkatan-nikah') || request()->is('peminjaman-ruangan');
+        @endphp
       
         <!-- Dropdown PELAYANAN -->
-        <div class="relative" @mouseenter="dropdown = 'pelayanan'" @mouseleave="dropdown = null">
+        <div class="relative group" 
+           @mouseenter="clearTimeout(dropdownTimeout); dropdown = 'pelayanan'"
+           @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
+          >
           <button 
             @click="dropdown === 'pelayanan' ? dropdown = null : dropdown = 'pelayanan'"
-            :class="dropdown === 'pelayanan' ? 'bg-[#231C0D] text-white' : ''"
-            class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition"
+            class="px-2 py-3 md:tracking-[2.4px] rounded transition 
+              {{ $isPelayananActive ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}"
           >
             PELAYANAN
           </button>
+          
 
           <!-- Dropdown satu kotak, isinya dua kolom -->
           <div 
             x-show="dropdown === 'pelayanan'" 
             x-transition 
+            @mouseenter="clearTimeout(dropdownTimeout)"
+            @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
             class="absolute mt-2 bg-white shadow rounded p-4 z-10 w-[400px] grid grid-cols-2 gap-6"
           >
             <!-- Kolom Kegiatan Ibadah -->
@@ -193,12 +218,19 @@
           
         </div>
 
+        @php
+          $isFungsionarisActive = request()->is('pendeta-kmj') || request()->is('vikaris') || request()->is('phmj') || request()->is('majelis-jemaat') || request()->is('pa') || request()->is('pt') || request()->is('gp') || request()->is('pkp') || request()->is('pkb') || request()->is('pklu') || request()->is('teologi') || request()->is('pelkes') || request()->is('peg') || request()->is('germasa') || request()->is('ppsdi-ppk') || request()->is('inforkom-litbang') || request()->is('bppj') || request()->is('kantor-sekretariat');
+        @endphp
+
         <!-- Dropdown FUNGSIONARIS -->
-        <div class="relative" @mouseenter="dropdown = 'fungsionaris'" @mouseleave="dropdown = null">
+        <div class="relative group" 
+           @mouseenter="clearTimeout(dropdownTimeout); dropdown = 'fungsionaris'"
+           @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
+          >
           <button 
             @click="dropdown === 'fungsionaris' ? dropdown = null : dropdown = 'fungsionaris'"
-            :class="dropdown === 'fungsionaris' ? 'bg-[#231C0D] text-white' : ''"
-            class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition"
+            class="px-2 py-3 md:tracking-[2.4px] rounded transition 
+              {{ $isFungsionarisActive ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}"
           >
             FUNGSIONARIS
           </button>
@@ -207,6 +239,8 @@
           <div 
             x-show="dropdown === 'fungsionaris'" 
             x-transition 
+            @mouseenter="clearTimeout(dropdownTimeout)"
+            @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
             class="absolute mt-2 bg-white shadow rounded p-4 z-10 w-[800px] grid grid-cols-4 gap-6 left-1/2 -translate-x-1/2"
           >
             <!-- Kolom Fungsionaris -->
@@ -250,12 +284,19 @@
           
         </div>
 
+        @php
+          $isDokumenActive = request()->is('tata-ibadah') || request()->is('warta-jemaat');
+        @endphp
+
         <!-- Dropdown DOKUMEN -->
-        <div class="relative group" @mouseenter="dropdown = 'dokumen'" @mouseleave="dropdown = null">
+        <div class="relative group" 
+           @mouseenter="clearTimeout(dropdownTimeout); dropdown = 'dokumen'"
+           @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
+          >
           <button 
             @click="dropdown === 'dokumen' ? dropdown = null : dropdown = 'dokumen'"
-            :class="dropdown === 'dokumen' ? 'bg-[#231C0D] text-white' : ''"
-            class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition"
+            class="px-2 py-3 md:tracking-[2.4px] rounded transition 
+              {{ $isDokumenActive ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}"
           >
             DOKUMEN
           </button>
@@ -264,6 +305,8 @@
           <div 
             x-show="dropdown === 'dokumen'" 
             x-transition 
+            @mouseenter="clearTimeout(dropdownTimeout)"
+            @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
             class="absolute mt-2 bg-white shadow rounded p-4 z-10 w-[200px] grid grid-cols-1 gap-6"
           >
             <!-- Kolom Dokumen -->
@@ -283,7 +326,7 @@
     
       {{-- Mobile Menu --}}
       <div x-show="open" x-transition class="md:hidden bg-white px-4 pb-4 space-y-2">
-        <a href="#" class="block">Beranda</a>
+        <a href="/beranda" class="block">Beranda</a>
         <div>
           <div @click="dropdown = (dropdown === 'profil' ? null : 'profil')" class="cursor-pointer">Profil</div>
           <div x-show="dropdown === 'profil'" class="pl-4">
