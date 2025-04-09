@@ -19,6 +19,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Platypi:ital,wght@1,400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
+  {{-- <!-- Theme style -->
+  <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('js/app.js') }}"> --}}
+
   @stack('css')
 </head>
 <body class="bg-white text-[#231C0D]">

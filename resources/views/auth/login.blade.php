@@ -85,7 +85,7 @@
         </div>      
       </div>
       <hr>
-      <p class="login-box-msg mb-2 mt-4">Silahkan login untuk masuk sisem</p>
+      <p class="login-box-msg mb-2 mt-4">Silahkan login untuk masuk sistem</p>
 
       @if ($errors->any())
         <div class="alert alert-danger">

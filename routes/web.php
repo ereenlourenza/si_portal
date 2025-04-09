@@ -43,13 +43,86 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+// =================
+// INFORMASI PUBLIK
+// =================
 
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/beranda', [HomeController::class, 'index']);
-Route::get('/tentang-gpib', function () {
-    return view('global.tentang_gpib');
+Route::get('/beranda', [HomeController::class, 'index'])->name('beranda');
+
+Route::prefix('profil')->group(function () {
+    Route::prefix('gpib')->group(function () {
+        Route::get('/tentang-gpib', function () {return view('global.tentang-gpib');})->name('tentang-gpib');
+        Route::get('/visi-misi', function () {return view('global.visi-misi');})->name('visi-misi');
+        Route::get('/pemahaman-iman', function () {return view('global.pemahaman-iman');})->name('pemahaman-iman');
+        Route::get('/simbol-tahun-gereja', function () { return view('global.simbol-tahun-gereja');})->name('simbol-tahun-gereja');
+    });
+    Route::prefix('immanuel-malang')->group(function () {
+        Route::get('/sejarah-gereja', [HomeController::class, 'sejarah'])->name('sejarah-gereja');
+        Route::get('/wilayah-pelayanan', [HomeController::class, 'sektor'])->name('wilayah-pelayanan');
+    });
 });
 
+Route::prefix('pelayanan')->group(function () {
+    Route::prefix('kegiatan-ibadah')->group(function () {
+        Route::get('/ibadah-rutin', function () { return view('global.ibadah-rutin');})->name('ibadah-rutin');
+        Route::get('/persembahan', function () { return view('global.persembahan');})->name('persembahan');
+        Route::get('/kanal-youtube', function () { return view('global.kanal-youtube');})->name('kanal-youtube');
+    });
+    Route::prefix('pelayanan-jemaat')->group(function () {
+        Route::get('/baptisan', function () { return view('global.baptisan');})->name('baptisan');
+        Route::get('/katekisasi', function () { return view('global.katekisasi');})->name('katekisasi');
+        Route::get('/pemberkatan-nikah', function () { return view('global.pemberkatan-nikah');})->name('pemberkatan-nikah');
+        Route::get('/peminjaman-ruangan', function () { return view('global.peminjaman-ruangan');})->name('peminjaman-ruangan');
+    });
+});
+
+Route::prefix('fungsionaris')->group(function () {
+    Route::prefix('fungsionaris')->group(function () {
+        Route::get('/pendeta-kmj', function () { return view('global.pendeta-kmj');})->name('pendeta-kmj');
+        Route::get('/vikaris', function () { return view('global.vikaris');})->name('vikaris');
+        Route::get('/phmj', function () { return view('global.phmj');})->name('phmj');
+        Route::get('/majelis-jemaat', function () { return view('global.majelis-jemaat');})->name('majelis-jemaat');
+    });
+
+    Route::prefix('pelkat')->group(function () {
+        Route::get('/pa', function () { return view('global.pa');})->name('pa');
+        Route::get('/pt', function () { return view('global.pt');})->name('pt');
+        Route::get('/gp', function () { return view('global.gp');})->name('gp');
+        Route::get('/pkp', function () { return view('global.pkp');})->name('pkp');
+        Route::get('/pkb', function () { return view('global.pkb');})->name('pkb');
+        Route::get('/pklu', function () { return view('global.pklu');})->name('pklu');
+    });
+
+    Route::prefix('komisi')->group(function () {
+        Route::get('/teologi', function () { return view('global.teologi');})->name('teologi');
+        Route::get('/pelkes', function () { return view('global.pelkes');})->name('pelkes');
+        Route::get('/peg', function () { return view('global.peg');})->name('peg');
+        Route::get('/germasa', function () { return view('global.germasa');})->name('germasa');
+        Route::get('/ppsdi-ppk', function () { return view('global.ppsdi-ppk');})->name('ppsdi-ppk');
+        Route::get('/inforkom-litbang', function () { return view('global.inforkom-litbang');})->name('inforkom-litbang');
+    });
+
+    Route::prefix('lain-lain')->group(function () {
+        Route::get('/bppj', function () { return view('global.bppj');})->name('bppj');
+        Route::get('/kantor-sekretariat', function () { return view('global.kantor-sekretariat');})->name('kantor-sekretariat');
+    });
+});
+
+Route::prefix('dokumen')->group(function () {
+    Route::get('/tata-ibadah', function () { return view('global.tata-ibadah');})->name('tata-ibadah');
+    Route::get('/warta-jemaat', function () { return view('global.warta-jemaat');})->name('warta-jemaat');
+});
+
+Route::get('/galeri', function () { return view('global.galeri');})->name('galeri');
+Route::get('/kontak', function () { return view('global.kontak');})->name('kontak');
+
+
+
+// =================
+// ADMIN
+// =================
+    
 Route::get('/login', [AuthController::class, 'index'])->name('login.index');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

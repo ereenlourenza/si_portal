@@ -123,7 +123,7 @@
       <nav class="hidden sticky top-0 z-50 md:flex justify-center space-x-6 lg:space-x-12 xl:space-x-16 items-center text-sm" style="font-family: 'Lato', sans-serif; font-size:11px" 
       x-data="{ open: false, dropdown: null, dropdownTimeout: null }">
         
-        <a href="/beranda" 
+        <a href="{{ route('beranda') }}" 
           class="px-2 py-3 md:tracking-[2.4px] rounded transition
                   {{ request()->is('beranda') ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}">
           BERANDA
@@ -157,17 +157,17 @@
             <!-- Kolom GPIB -->
             <div>
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">GPIB</div>
-              <a href="/tentang-gpib" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Tentang GPIB</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Visi Misi</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pemahaman Iman</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Simbol Tahun Gereja</a>
+              <a href="{{ route('tentang-gpib') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Tentang GPIB</a>
+              <a href="{{ route('visi-misi') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Visi Misi</a>
+              <a href="{{ route('pemahaman-iman') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pemahaman Iman</a>
+              <a href="{{ route('simbol-tahun-gereja') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Simbol Tahun Gereja</a>
             </div>
 
             <!-- Kolom Immanuel Malang -->
             <div class="border-l border-gray-300 pl-4">
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">Immanuel Malang</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Sejarah Gereja</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Wilayah Pelayanan</a>
+              <a href="{{ route('sejarah-gereja') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Sejarah Gereja</a>
+              <a href="{{ route('wilayah-pelayanan') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Wilayah Pelayanan</a>
             </div>
           </div>
         </div>
@@ -201,18 +201,18 @@
             <!-- Kolom Kegiatan Ibadah -->
             <div>
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">Kegiatan Ibadah</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Ibadah Rutin</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Persembahan</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Kanal Youtube</a>
+              <a href="{{ route('ibadah-rutin') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Ibadah Rutin</a>
+              <a href="{{ route('persembahan') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Persembahan</a>
+              <a href="{{ route('kanal-youtube') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Kanal Youtube</a>
             </div>
 
             <!-- Kolom Pelayanan Jemaat -->
             <div class="border-l border-gray-300 pl-4">
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">Pelayanan Jemaat</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Baptisan</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Katekisasi</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pemberkatan Nikah</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Peminjaman Ruangan</a>
+              <a href="{{ route('baptisan') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Baptisan</a>
+              <a href="{{ route('katekisasi') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Katekisasi</a>
+              <a href="{{ route('pemberkatan-nikah') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pemberkatan Nikah</a>
+              <a href="{{ route('peminjaman-ruangan') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Peminjaman Ruangan</a>
             </div>
           </div>
           
@@ -246,39 +246,39 @@
             <!-- Kolom Fungsionaris -->
             <div>
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">Fungsionaris</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pendeta - KMJ</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Vikaris</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PHMJ</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Majelis Jemaat</a>
+              <a href="{{ route('pendeta-kmj') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pendeta - KMJ</a>
+              <a href="{{ route('vikaris') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Vikaris</a>
+              <a href="{{ route('phmj') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PHMJ</a>
+              <a href="{{ route('majelis-jemaat') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Majelis Jemaat</a>
             </div>
 
             <!-- Kolom Pelkat -->
             <div class="border-l border-gray-300 pl-4">
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">Pelkat</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PA</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PT</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">GP</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PKP</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PKB</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PKLU</a>
+              <a href="{{ route('pa') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PA</a>
+              <a href="{{ route('pt') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PT</a>
+              <a href="{{ route('gp') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">GP</a>
+              <a href="{{ route('pkp') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PKP</a>
+              <a href="{{ route('pkb') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PKB</a>
+              <a href="{{ route('pklu') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PKLU</a>
             </div>
 
             <!-- Kolom Komisi -->
             <div class="border-l border-gray-300 pl-4">
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">Komisi</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Teologi</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pelkes</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PEG</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Germasa</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PPSDI-PPK</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Inforkom-Litbang</a>
+              <a href="{{ route('teologi') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Teologi</a>
+              <a href="{{ route('pelkes') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Pelkes</a>
+              <a href="{{ route('peg') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PEG</a>
+              <a href="{{ route('germasa') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Germasa</a>
+              <a href="{{ route('ppsdi-ppk') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">PPSDI-PPK</a>
+              <a href="{{ route('inforkom-litbang') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Inforkom-Litbang</a>
             </div>
 
             <!-- Kolom Lain-Lain -->
             <div class="border-l border-gray-300 pl-4">
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">Lain-Lain</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">BPPJ</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Kantor Sekretariat</a>
+              <a href="{{ route('bppj') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">BPPJ</a>
+              <a href="{{ route('kantor-sekretariat') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Kantor Sekretariat</a>
             </div>
           </div>
           
@@ -312,40 +312,48 @@
             <!-- Kolom Dokumen -->
             <div>
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">Dokumen</div>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Tata Ibadah</a>
-              <a href="#" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Warta Jemaat</a>
+              <a href="{{ route('tata-ibadah') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Tata Ibadah</a>
+              <a href="{{ route('warta-jemaat') }}" class="block px-2 py-1 text-sm hover:bg-gray-100 rounded">Warta Jemaat</a>
             </div>
 
           </div>
         </div>
 
-        <a href="#" class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition">GALERI</a>
-        <a href="#" class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition">KONTAK</a>
+        <a href="{{ route('galeri') }}" class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition">GALERI</a>
+        <a href="{{ route('kontak') }}" class="px-2 py-3 md:tracking-[2.4px] rounded hover:bg-[#231C0D] hover:text-white transition">KONTAK</a>
       </nav>
       
     
       {{-- Mobile Menu --}}
       <div x-show="open" x-transition class="md:hidden bg-white px-4 pb-4 space-y-2">
-        <a href="/beranda" class="block">Beranda</a>
+        <a href="{{ route('beranda') }}" class="block">Beranda</a>
         <div>
-          <div @click="dropdown = (dropdown === 'profil' ? null : 'profil')" class="cursor-pointer">Profil</div>
-          <div x-show="dropdown === 'profil'" class="pl-4">
-            <a href="#" class="block">Tentang Kami</a>
-            <a href="#" class="block">Sejarah</a>
+          <div 
+            @click="dropdown = (dropdown === 'profil' ? null : 'profil')" 
+            :class="dropdown === 'profil' ? 'bg-[#231C0D] text-white font-semibold' : ''"
+            class="cursor-pointer py-1 rounded"
+          >Profil</div>
+          <div x-show="dropdown === 'profil'" class="pl-4 space-y-2">
+            <a href="{{ route('tentang-gpib') }}" class="block">Tentang GPIB</a>
+            <a href="{{ route('visi-misi') }}" class="block">Visi Misi GPIB</a>
+            <a href="{{ route('pemahaman-iman') }}" class="block">Pemahaman Iman GPIB</a>
+            <a href="{{ route('simbol-tahun-gereja') }}" class="block">Simbol Tahun Gereja GPIB</a>
+            <a href="{{ route('sejarah-gereja') }}" class="block">Sejarah Gereja Immanuel</a>
+            <a href="{{ route('wilayah-pelayanan') }}" class="block">Wilayah Pelayanan Immanuel</a>
           </div>
         </div>
         <div>
           <div @click="dropdown = (dropdown === 'pelayanan' ? null : 'pelayanan')" class="cursor-pointer">Pelayanan</div>
           <div x-show="dropdown === 'pelayanan'" class="pl-4">
-            <a href="#" class="block">Pelkat</a>
-            <a href="#" class="block">Komisi</a>
+            <a href="/pelkat" class="block">Pelkat</a>
+            <a href="/komisi" class="block">Komisi</a>
           </div>
         </div>
-        <a href="#" class="block">Fungsionaris</a>
-        <a href="#" class="block">Dokumen</a>
-        <a href="#" class="block">Galeri</a>
-        <a href="#" class="block">Kontak</a>
-        <a href="{{ route('login.index') }}" class="bg-amber-600 text-white px-4 py-1 rounded inline-block">Sign In</a>
+        <a href="/fungsionaris" class="block">Fungsionaris</a>
+        <a href="/dokumen" class="block">Dokumen</a>
+        <a href="/galeri" class="block">Galeri</a>
+        <a href="/kontak" class="block">Kontak</a>
+        <a href="{{ route('login.index') }}" class="bg-amber-600 text-white px-4 py-1 rounded inline-block">SIGN IN</a>
       </div>
     </header>
     

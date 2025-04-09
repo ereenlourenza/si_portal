@@ -46,7 +46,7 @@
     {{-- Informasi Gereja Section --}}
     <div class="max-w-full mx-auto w-full py-20 text-center relative">
       <!-- Background Layer dengan Opacity -->
-      <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/bg-login 2.jpg'); opacity: 0.3;"></div>
+      <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/bg-login 2.jpg'); opacity: 0.6;"></div>
     
       <!-- Konten -->
       <div class="relative z-10 mb-12">
@@ -61,24 +61,22 @@
     
             <!-- Card Jumlah Keluarga -->
             <div class="w-auto text-center">
-              <p id="jumlah_keluarga" class="text-3xl font-bold text-amber-700 text-shadow" style="font-size: 40px;">0</p>
+              <p id="jumlah_keluarga" class="text-2xl md:text-3xl font-bold text-amber-700 text-shadow" style="font-size: 40px;">0</p>
               <div class="flex justify-center items-center gap-2 mt-4 text-amber-700">
                 <i class="fas fa-users text-xl text-gray-500"></i>
-                <h3 class="text-xl font-semibold text-gray-700">Jumlah Keluarga Jemaat</h3>
+                <h3 class="text-xl md:text-2xl font-semibold text-gray-700">Jumlah Keluarga Jemaat</h3>
               </div>
             </div>
 
             <!-- Card Jumlah Sektor -->
             <div class="w-auto text-center">
-              <p id="jumlah_sektor" class="text-3xl font-bold text-amber-400 text-shadow" style="font-size: 40px;">0</p>
+              <p id="jumlah_sektor" class="text-2xl md:text-3xl font-bold text-amber-400 text-shadow" style="font-size: 40px;">0</p>
               <div class="flex justify-center items-center gap-2 mt-4 text-amber-400">
                 <i class="fas fa-layer-group text-xl text-gray-500"></i>
-                <h3 class="text-xl font-semibold text-gray-700">Jumlah Sektor</h3>
+                <h3 class="text-xl md:text-2xl font-semibold text-gray-700">Jumlah Sektor</h3>
               </div>
             </div>
-
-
-    
+   
         </div>
       </div>
     
@@ -154,22 +152,22 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-t-[0.5px] border-b-[0.5px] border-[#231C0D]/50">
         
         <!-- Kolom 1 -->
-        <div class="p-6 hover:bg-[#F5F0E6] transition">
-          <h3 class="text-lg font-semibold text-[#4E3B1F] mb-2">TEMA SENTRAL</h3>
+        <div class="p-6">
+          <h3 class="text-lg font-bold text-[#4E3B1F] mb-4">TEMA SENTRAL</h3>
           <p class="text-gray-700">“Yesus Kristus Sumber Damai Sejahtera" (Yohanes 14:27)</p>
-        </div>
-    
-        <!-- Kolom 2 -->
-        <div class="p-6 hover:bg-[#F5F0E6] transition">
-          <h3 class="text-lg font-semibold text-[#4E3B1F] mb-2">TEMA JANGKA PENDEK IV (2022-2026)</h3>
+          </div>
+      
+          <!-- Kolom 2 -->
+          <div class="p-6">
+          <h3 class="text-lg font-bold text-[#4E3B1F] mb-4">TEMA JANGKA PENDEK IV (2022-2026)</h3>
           <p class="text-gray-700">“Membangun sinergi dalam hubungan gereja dan masyarakat untuk mewujudkan Kasih Allah yang meliputi seluruh ciptaan-Nya” ( Matius 22 : 37 – 39; Ulangan 6 : 5; Immamat 19 : 18 )</p>
-        </div>
-    
-        <!-- Kolom 3 -->
-        <div class="p-6 hover:bg-[#F5F0E6] transition">
-          <h3 class="text-lg font-semibold text-[#4E3B1F] mb-2">TEMA TAHUNAN (2025-2026)</h3>
+          </div>
+      
+          <!-- Kolom 3 -->
+          <div class="p-6">
+          <h3 class="text-lg font-bold text-[#4E3B1F] mb-4">TEMA TAHUNAN (2025-2026)</h3>
           <p class="text-gray-700">“Memperteguh Panggilan dan Pengutusan Gereja secara Intergenerasional dengan Mendayagunakan Teknologi Digital untuk Mewujudkan Kasih Allah dalam Seluruh Ciptaan”
-            ( Yesaya 42 : 5 – 7 )</p>
+              ( Yesaya 42 : 5 – 7 )</p>
         </div>
     
       </div>
@@ -189,7 +187,7 @@
             serta di Pakisaji. Bangunannya telah mengalami beberapa renovasi namun tetap mempertahankan keindahan arsitektur aslinya, 
             yang menjadikannya sebagai salah satu ikon sejarah di kota ini.
           </p>
-          <a href="#" class="mt-4 inline-block font-semibold bg-[#614D24] text-white px-5 py-2 rounded-full focus:outline-none hover:bg-[#4f3f1c] transition">
+          <a href="{{ route('sejarah-gereja') }}" class="mt-4 inline-block font-semibold bg-[#614D24] text-white px-5 py-2 rounded-full focus:outline-none hover:bg-[#4f3f1c] transition">
             Baca Selengkapnya
           </a>
         </div>
