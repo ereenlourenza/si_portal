@@ -143,7 +143,7 @@
             class="px-2 py-3 md:tracking-[2.4px] rounded transition 
               {{ $isProfilActive ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}"
           >
-            PROFIL
+            PROFIL <i class="fas fa-chevron-down text-[10px] ml-1"></i>
           </button>
 
           <!-- Dropdown satu kotak, isinya dua kolom -->
@@ -154,6 +154,8 @@
             @mouseleave="dropdownTimeout = setTimeout(() => dropdown = null, 200)"
             class="absolute mt-2 bg-white shadow rounded p-4 z-10 w-[400px] grid grid-cols-2 gap-6"
           >
+        
+
             <!-- Kolom GPIB -->
             <div>
               <div class="font-semibold text-[#231C0D] mb-2" style="font-size:13px">GPIB</div>
@@ -186,7 +188,7 @@
             class="px-2 py-3 md:tracking-[2.4px] rounded transition 
               {{ $isPelayananActive ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}"
           >
-            PELAYANAN
+            PELAYANAN <i class="fas fa-chevron-down text-[10px] ml-1"></i>
           </button>
           
 
@@ -232,7 +234,7 @@
             class="px-2 py-3 md:tracking-[2.4px] rounded transition 
               {{ $isFungsionarisActive ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}"
           >
-            FUNGSIONARIS
+            FUNGSIONARIS <i class="fas fa-chevron-down text-[10px] ml-1"></i>
           </button>
 
           <!-- Dropdown satu kotak, isinya dua kolom -->
@@ -298,7 +300,7 @@
             class="px-2 py-3 md:tracking-[2.4px] rounded transition 
               {{ $isDokumenActive ? 'bg-[#231C0D] text-white' : 'hover:bg-[#231C0D] hover:text-white' }}"
           >
-            DOKUMEN
+            DOKUMEN <i class="fas fa-chevron-down text-[10px] ml-1"></i>
           </button>
 
           <!-- Dropdown satu kotak, isinya dua kolom -->
@@ -327,33 +329,190 @@
       {{-- Mobile Menu --}}
       <div x-show="open" x-transition class="md:hidden bg-white px-4 pb-4 space-y-2">
         <a href="{{ route('beranda') }}" class="block">Beranda</a>
-        <div>
+        <div x-data="{ dropdown: null, subPelayanan: null }">
           <div 
             @click="dropdown = (dropdown === 'profil' ? null : 'profil')" 
             :class="dropdown === 'profil' ? 'bg-[#231C0D] text-white font-semibold' : ''"
             class="cursor-pointer py-1 rounded"
-          >Profil</div>
-          <div x-show="dropdown === 'profil'" class="pl-4 space-y-2">
-            <a href="{{ route('tentang-gpib') }}" class="block">Tentang GPIB</a>
-            <a href="{{ route('visi-misi') }}" class="block">Visi Misi GPIB</a>
-            <a href="{{ route('pemahaman-iman') }}" class="block">Pemahaman Iman GPIB</a>
-            <a href="{{ route('simbol-tahun-gereja') }}" class="block">Simbol Tahun Gereja GPIB</a>
-            <a href="{{ route('sejarah-gereja') }}" class="block">Sejarah Gereja Immanuel</a>
-            <a href="{{ route('wilayah-pelayanan') }}" class="block">Wilayah Pelayanan Immanuel</a>
+          >Profil <i class="fas fa-chevron-down text-[10px] ml-1"></i>
+          </div>
+          <div x-show="dropdown === 'profil'" class="pl-4 py-2 space-y-2">
+            
+            <div>
+              <div 
+                @click="subPelayanan = (subPelayanan === 'gpib' ? null : 'gpib')" 
+                class="cursor-pointer flex items-center gap-1 text-sm"
+              >
+                GPIB <i class="fas fa-chevron-down text-[10px]"></i>
+              </div>
+              <div x-show="subPelayanan === 'gpib'" class="pl-4 mt-1 space-y-1 text-sm">
+                <a href="{{ route('tentang-gpib') }}" class="block hover:underline">Tentang GPIB</a>
+                <a href="{{ route('visi-misi') }}" class="block hover:underline">Visi Misi GPIB</a>
+                <a href="{{ route('pemahaman-iman') }}" class="block hover:underline">Pemahaman Iman GPIB</a>
+                <a href="{{ route('simbol-tahun-gereja') }}" class="block hover:underline">Simbol Tahun GPIB</a>
+              </div>
+            </div>
+        
+            
+            <div>
+              <div 
+                @click="subPelayanan = (subPelayanan === 'immanuel' ? null : 'immanuel')" 
+                class="cursor-pointer flex items-center gap-1 text-sm"
+              >
+                Immanuel Malang <i class="fas fa-chevron-down text-[10px]"></i>
+              </div>
+              <div x-show="subPelayanan === 'immanuel'" class="pl-4 mt-1 space-y-1 text-sm">
+                <a href="{{ route('sejarah-gereja') }}" class="block hover:underline">Sejarah Gereja Immanuel</a>
+                <a href="{{ route('wilayah-pelayanan') }}" class="block hover:underline">Wilayah Pelayanan Immanuel</a>
+              </div>
+            </div>
           </div>
         </div>
+        <div x-data="{ dropdown: null, subPelayanan: null }">
+          <!-- Parent Pelayanan -->
+          <div 
+            @click="dropdown = (dropdown === 'pelayanan' ? null : 'pelayanan')" 
+            :class="dropdown === 'pelayanan' ? 'bg-[#231C0D] text-white font-semibold' : ''"
+            class="cursor-pointer py-1 rounded flex items-center gap-1"
+          >
+            Pelayanan <i class="fas fa-chevron-down text-[10px] ml-1"></i>
+          </div>          
+        
+          <!-- Dropdown Pelayanan -->
+          <div x-show="dropdown === 'pelayanan'" class="pl-4 mt-2 space-y-2 text-sm">
+            
+            <!-- Kegiatan Ibadah -->
+            <div>
+              <div 
+                @click="subPelayanan = (subPelayanan === 'ibadah' ? null : 'ibadah')" 
+                class="cursor-pointer flex items-center gap-1"
+              >
+                Kegiatan Ibadah <i class="fas fa-chevron-down text-[10px]"></i>
+              </div>
+              <div x-show="subPelayanan === 'ibadah'" class="pl-4 mt-1 space-y-1">
+                <a href="{{ route('ibadah-rutin') }}" class="block hover:underline">Ibadah Rutin</a>
+                <a href="{{ route('persembahan') }}" class="block hover:underline">Persembahan</a>
+                <a href="{{ route('kanal-youtube') }}" class="block hover:underline">Kanal Youtube</a>
+              </div>
+            </div>
+        
+            <!-- Pelayanan Jemaat -->
+            <div>
+              <div 
+                @click="subPelayanan = (subPelayanan === 'jemaat' ? null : 'jemaat')" 
+                class="cursor-pointer flex items-center gap-1"
+              >
+                Pelayanan Jemaat <i class="fas fa-chevron-down text-[10px]"></i>
+              </div>
+              <div x-show="subPelayanan === 'jemaat'" class="pl-4 mt-1 space-y-1">
+                <a href="{{ route('baptisan') }}" class="block hover:underline">Baptisan</a>
+                <a href="{{ route('katekisasi') }}" class="block hover:underline">Katekisasi</a>
+                <a href="{{ route('pemberkatan-nikah') }}" class="block hover:underline">Pemberkatan Nikah</a>
+                <a href="{{ route('peminjaman-ruangan') }}" class="block hover:underline">Peminjaman Ruangan</a>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+
+        <div x-data="{ dropdown: null, subFungsionaris: null }">
+          <!-- Parent fungsionaris -->
+          <div 
+            @click="dropdown = (dropdown === 'fungsionaris' ? null : 'fungsionaris')" 
+            :class="dropdown === 'fungsionaris' ? 'bg-[#231C0D] text-white font-semibold' : ''"
+            class="cursor-pointer py-1 rounded flex items-center gap-1"
+          >
+            Fungsionaris <i class="fas fa-chevron-down text-[10px] ml-1"></i>
+          </div>          
+        
+          <!-- Dropdown Fungsionaris -->
+          <div x-show="dropdown === 'fungsionaris'" class="pl-4 mt-2 space-y-2 text-sm">
+            
+            <!-- Fungsionaris -->
+            <div>
+              <div 
+                @click="subFungsionaris = (subFungsionaris === 'fungsionaris' ? null : 'fungsionaris')" 
+                class="cursor-pointer flex items-center gap-1"
+              >
+                Fungsionaris <i class="fas fa-chevron-down text-[10px]"></i>
+              </div>
+              <div x-show="subFungsionaris === 'fungsionaris'" class="pl-4 mt-1 space-y-1">
+                <a href="{{ route('pendeta-kmj') }}" class="block hover:underline">Pendeta - KMJ</a>
+                <a href="{{ route('vikaris') }}" class="block hover:underline">Vikaris</a>
+                <a href="{{ route('phmj') }}" class="block hover:underline">PHMJ</a>
+                <a href="{{ route('majelis-jemaat') }}" class="block hover:underline">Majelis Jemaat</a>
+              </div>
+            </div>
+        
+            <!-- Pelkat -->
+            <div>
+              <div 
+                @click="subFungsionaris = (subFungsionaris === 'pelkat' ? null : 'pelkat')" 
+                class="cursor-pointer flex items-center gap-1"
+              >
+                Pelkat <i class="fas fa-chevron-down text-[10px]"></i>
+              </div>
+              <div x-show="subFungsionaris === 'pelkat'" class="pl-4 mt-1 space-y-1">
+                <a href="{{ route('pa') }}" class="block hover:underline">PA</a>
+                <a href="{{ route('pt') }}" class="block hover:underline">PT</a>
+                <a href="{{ route('gp') }}" class="block hover:underline">GP</a>
+                <a href="{{ route('pkp') }}" class="block hover:underline">PKP</a>
+                <a href="{{ route('pkb') }}" class="block hover:underline">PKB</a>
+                <a href="{{ route('pklu') }}" class="block hover:underline">PKLU</a>
+              </div>
+            </div>
+        
+            <!-- Komisi -->
+            <div>
+              <div 
+                @click="subFungsionaris = (subFungsionaris === 'komisi' ? null : 'komisi')" 
+                class="cursor-pointer flex items-center gap-1"
+              >
+                Komisi <i class="fas fa-chevron-down text-[10px]"></i>
+              </div>
+              <div x-show="subFungsionaris === 'komisi'" class="pl-4 mt-1 space-y-1">
+                <a href="{{ route('teologi') }}" class="block hover:underline">Teologi</a>
+                <a href="{{ route('pelkes') }}" class="block hover:underline">Pelkes</a>
+                <a href="{{ route('peg') }}" class="block hover:underline">PEG</a>
+                <a href="{{ route('germasa') }}" class="block hover:underline">Germasa</a>
+                <a href="{{ route('ppsdi-ppk') }}" class="block hover:underline">PPSDI-PPK</a>
+                <a href="{{ route('inforkom-litbang') }}" class="block hover:underline">Inforkom-Litbang</a>
+              </div>
+            </div>
+        
+            <!-- Lain-Lain -->
+            <div>
+              <div 
+                @click="subFungsionaris = (subFungsionaris === 'lain-lain' ? null : 'lain-lain')" 
+                class="cursor-pointer flex items-center gap-1"
+              >
+                Lain-Lain <i class="fas fa-chevron-down text-[10px]"></i>
+              </div>
+              <div x-show="subFungsionaris === 'lain-lain'" class="pl-4 mt-1 space-y-1">
+                <a href="{{ route('bppj') }}" class="block hover:underline">BPPJ</a>
+                <a href="{{ route('kantor-sekretariat') }}" class="block hover:underline">Kantor Sekretariat</a>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+
         <div>
-          <div @click="dropdown = (dropdown === 'pelayanan' ? null : 'pelayanan')" class="cursor-pointer">Pelayanan</div>
-          <div x-show="dropdown === 'pelayanan'" class="pl-4">
-            <a href="/pelkat" class="block">Pelkat</a>
-            <a href="/komisi" class="block">Komisi</a>
+          <div 
+            @click="dropdown = (dropdown === 'dokumen' ? null : 'dokumen')" 
+            :class="dropdown === 'dokumen' ? 'bg-[#231C0D] text-white font-semibold' : ''"
+            class="cursor-pointer py-1 rounded"
+          >Dokumen <i class="fas fa-chevron-down text-[10px] ml-1"></i>
+          </div>          
+          <div x-show="dropdown === 'dokumen'" class="pl-4 space-y-2 text-sm py-2">
+            <a href="{{ route('tata-ibadah') }}" class="block hover:underline">Tata Ibadah</a>
+            <a href="{{ route('warta-jemaat') }}" class="block hover:underline">Warta Jemaat</a>
           </div>
         </div>
-        <a href="/fungsionaris" class="block">Fungsionaris</a>
-        <a href="/dokumen" class="block">Dokumen</a>
-        <a href="/galeri" class="block">Galeri</a>
-        <a href="/kontak" class="block">Kontak</a>
-        <a href="{{ route('login.index') }}" class="bg-amber-600 text-white px-4 py-1 rounded inline-block">SIGN IN</a>
+        
+        <a href="{{ route('galeri') }}" class="block hover:underline space-y-2 py-1">Galeri</a>
+        <a href="{{ route('kontak') }}" class="block hover:underline space-y-1 py-1">Kontak</a>
+        <a href="{{ route('login.index') }}" class="bg-amber-600 text-white mt-2 px-4 py-1 rounded inline-block">SIGN IN</a>
       </div>
     </header>
     
