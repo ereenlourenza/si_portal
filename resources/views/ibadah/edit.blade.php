@@ -47,7 +47,7 @@
                     <div class="form-group row align-items-center">
                         <label class="col-md-1 control-label col-form-label">Waktu<span class="text-danger">*</span></label>
                         <div class="col-md-11">
-                            <input type="time" class="form-control" id="waktu" name="waktu" value="{{ old('waktu', $ibadah->waktu) }}" required>
+                            <input type="time" class="form-control" id="waktu" name="waktu" value="{{ old('waktu', \Carbon\Carbon::parse($ibadah->waktu)->format('H:i')) }}" required>
                             @error('waktu')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror

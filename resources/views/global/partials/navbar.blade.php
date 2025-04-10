@@ -85,21 +85,21 @@
       <div class="max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6 flex justify-between items-center">
         
         {{-- Logo --}}
-        <a href="/">
-          <div class="flex items-center space-x-2">
-              <img src="{{ asset('images/logo-gpib-full.png') }}" alt="Logo" class="w-14 h-14 md:w-22 md:h-22">
-          
-              <div class="ml-2 md:ml-6">
-                  <div class="text-lg md:text-3xl" style="font-family: 'Playfair Display', serif; font-weight: 700;">
-                      GPIB IMMANUEL MALANG
-                  </div>
-                  <div class="text-sm md:text-lg tracking-wide md:tracking-[2.4px]" style="font-family: 'Platypi', serif;">
-                      GEREJA JAGO
-                  </div>
-              </div>
-          </div>
-        </a>
-    
+        <div class="flex items-center space-x-2">
+            <img src="{{ asset('images/logo-gpib-full.png') }}" alt="Logo" class="w-14 h-14 md:w-22 md:h-22">
+        
+            <div class="ml-2 md:ml-6">
+              <a href="/">
+                <div class="text-lg md:text-3xl" style="font-family: 'Playfair Display', serif; font-weight: 700;">
+                    GPIB IMMANUEL MALANG
+                </div>
+                <div class="text-sm md:text-lg tracking-wide md:tracking-[2.4px]" style="font-family: 'Platypi', serif;">
+                    GEREJA JAGO
+                </div>
+              </a>
+            </div>
+        </div>
+       
         <!-- Tombol Sign In (Desktop) -->
         <a href="{{ route('login.index') }}"
           class="hidden md:inline-block bg-amber-600 text-white px-6 py-2 rounded-full text-sm md:text-base tracking-wide shadow-md hover:bg-[#231C0D] hover:shadow-lg transition duration-300 ease-in-out">
@@ -512,7 +512,7 @@
         
         <a href="{{ route('galeri') }}" class="block hover:underline space-y-2 py-1">Galeri</a>
         <a href="{{ route('kontak') }}" class="block hover:underline space-y-1 py-1">Kontak</a>
-        <a href="{{ route('login.index') }}" class="bg-amber-600 text-white mt-2 px-4 py-1 rounded inline-block">SIGN IN</a>
+        <a href="{{ route('login.index') }}" class="px-6 py-2 rounded-full bg-amber-600 text-white mt-2 inline-block">SIGN IN</a>
       </div>
     </header>
     

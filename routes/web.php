@@ -65,9 +65,9 @@ Route::prefix('profil')->group(function () {
 
 Route::prefix('pelayanan')->group(function () {
     Route::prefix('kegiatan-ibadah')->group(function () {
-        Route::get('/ibadah-rutin', function () { return view('global.ibadah-rutin');})->name('ibadah-rutin');
-        Route::get('/persembahan', function () { return view('global.persembahan');})->name('persembahan');
-        Route::get('/kanal-youtube', function () { return view('global.kanal-youtube');})->name('kanal-youtube');
+        Route::get('/ibadah-rutin', [HomeController::class, 'ibadah'])->name('ibadah-rutin');
+        Route::get('/persembahan', [HomeController::class, 'persembahan'])->name('persembahan');
+        Route::get('/kanal-youtube', [HomeController::class, 'showLatestVideo'])->name('kanal-youtube');
     });
     Route::prefix('pelayanan-jemaat')->group(function () {
         Route::get('/baptisan', function () { return view('global.baptisan');})->name('baptisan');

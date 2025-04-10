@@ -14,7 +14,7 @@
                 </div>
                 <a href="{{ url('pengelolaan-pengguna/persembahan') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
             @else
-                <form method="POST" action="{{ url('pengelolaan-informasi/persembahan/'.$persembahan->persembahan_id) }}" class="form-horizontal">
+                <form method="POST" action="{{ url('pengelolaan-informasi/persembahan/'.$persembahan->persembahan_id) }}" class="form-horizontal" enctype="multipart/form-data">
                     @csrf {!! method_field('PUT') !!} <!-- tambahkan baris ini untuk proses edit yang butuh method PUT -->
                     
                     <div class="form-group row align-items-center">

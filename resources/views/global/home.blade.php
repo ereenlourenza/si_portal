@@ -87,8 +87,8 @@
           <div class="p-6 bg-[#D9C6A1] rounded-lg shadow-md hover:bg-[#B68E5F] transition-colors mx-auto">
             <h4 class="font-semibold text-lg ">Kontak Kami</h4>
             <p class="text-sm ">Hubungi kami untuk pertanyaan atau permintaan lebih lanjut tentang pelayanan kami.</p>
-            <button class="mt-4 px-6 py-2 bg-[#614D24] text-white rounded-full hover:bg-[#4f3f1c] focus:outline-none">Kontak Kami</button>
-        </div>
+            <a href="{{ route('kontak') }}" class="inline-block mt-4 px-6 py-2 bg-[#614D24] text-white rounded-full hover:bg-[#4f3f1c] focus:outline-none">Kontak Kami</a>
+          </div>
         
         </div>
       </div>
@@ -99,7 +99,7 @@
       <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           
           <!-- Card 1 -->
-          <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+          <a href="{{ route('warta-jemaat') }}" class="transform transition-transform duration-500 hover:scale-105">
             <div class="bg-[#231C0D] rounded-lg shadow-md overflow-hidden hover:bg-[#4f3f1c]">
                 <img src="/images/global/warta-jemaat.png" alt="Warta Jemaat" class="w-full h-54 object-cover">
                 <div class="p-4">
@@ -110,7 +110,7 @@
           </a>
   
           <!-- Card 2 -->
-          <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+          <a href="{{ route('tata-ibadah') }}" class="transform transition-transform duration-500 hover:scale-105">
             <div class="bg-[#231C0D] rounded-lg shadow-md overflow-hidden hover:bg-[#4f3f1c]">
                 <img src="/images/global/tata-ibadah.png" alt="Tata Ibadah" class="w-full h-54 object-cover">
                 <div class="p-4">
@@ -121,7 +121,7 @@
           </a>
   
           <!-- Card 3 -->
-          <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+          <a href="{{ route('kanal-youtube') }}" class="transform transition-transform duration-500 hover:scale-105">
             <div class="bg-[#231C0D] rounded-lg shadow-md overflow-hidden hover:bg-[#4f3f1c]">
                 <img src="/images/global/live-streaming.png" alt="Live Streaming" class="w-full h-54 object-cover">
                 <div class="p-4">
@@ -132,7 +132,7 @@
           </a>
   
           <!-- Card 4 -->
-          <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+          <a href="{{ route('persembahan') }}" class="transform transition-transform duration-500 hover:scale-105">
             <div class="bg-[#231C0D] rounded-lg shadow-md overflow-hidden hover:bg-[#4f3f1c]">
                 <img src="/images/global/persembahan-digital.png" alt="Persembahan Digital" class="w-full h-54 object-cover">
                 <div class="p-4">
@@ -207,7 +207,7 @@
       <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         <!-- Card 1 -->
-        <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+        <a href="{{ route('pa') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
             <img src="/images/logo/pelkat_pa.png" alt="PA" class="w-10 h-10 object-contain">
             <div>
@@ -218,7 +218,7 @@
         </a>
     
         <!-- Card 2 -->
-        <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+        <a href="{{ route('pt') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
             <img src="/images/logo/pelkat_pt.png" alt="PT" class="w-10 h-10 object-contain">
             <div>
@@ -229,7 +229,7 @@
         </a>
     
         <!-- Card 3 -->
-        <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+        <a href="{{ route('gp') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
             <img src="/images/logo/pelkat_gp.png" alt="GP" class="w-10 h-10 object-contain">
             <div>
@@ -240,7 +240,7 @@
         </a>
     
         <!-- Card 4 -->
-        <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+        <a href="{{ route('pkp') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
             <img src="/images/logo/pelkat_pkp.png" alt="PKP" class="w-10 h-10 object-contain">
             <div>
@@ -251,7 +251,7 @@
         </a>
     
         <!-- Card 5 -->
-        <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+        <a href="{{ route('pkb') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
             <img src="/images/logo/pelkat_pkb.png" alt="PKB" class="w-10 h-10 object-contain">
             <div>
@@ -262,7 +262,7 @@
         </a>
     
         <!-- Card 6 -->
-        <a href="#" class="transform transition-transform duration-500 hover:scale-105">
+        <a href="{{ route('pklu') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
             <img src="/images/logo/pelkat_pklu.png" alt="PKLU" class="w-10 h-10 object-contain">
             <div>
@@ -327,7 +327,7 @@
       <div class="text-center mt-8 px-10">
         <p class="text-sm text-gray-600 mb-3">Jadwal Ibadah Non Rutin Lainnya Dapat Dilihat di Laman Berikut Ini</p>
         {{-- <a href="#" class="inline-block bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2 rounded-full transition"> --}}
-        <a href="#" class="inline-block font-semibold bg-[#614D24] text-white px-5 py-2 rounded-full focus:outline-none hover:bg-[#4f3f1c] transition">
+        <a href="{{ route('ibadah-rutin') }}" class="inline-block font-semibold bg-[#614D24] text-white px-5 py-2 rounded-full focus:outline-none hover:bg-[#4f3f1c] transition">
           Lihat Jadwal
         </a>
       </div>
