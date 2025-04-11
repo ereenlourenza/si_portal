@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaptisModel;
 use App\Models\IbadahModel;
 use App\Models\PersembahanModel;
 use App\Models\SejarahModel;
@@ -120,6 +121,78 @@ class HomeController extends Controller
         }
 
         return view('global.kanal-youtube', compact('videoId'));
+    }
+
+    public function baptisCreate()
+    {
+        $page = (object)[
+            'title' => 'Form Pendaftaran Baptis'
+        ];
+
+        return view('global.baptisan-form', [
+            'page' => $page
+        ]);
+    }
+
+    public function baptisStore(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'nama_lengkap' => 'required|string|max:255',
+                'tempat_lahir' => 'required|string',
+                'tanggal_lahir' => 'required|date',
+                'jenis_kelamin' => 'required|string',
+                'nama_ayah' => 'required|string',
+                'nama_ibu' => 'required|string',
+                'tempat_pernikahan' => 'required|string',
+                'tanggal_pernikahan' => 'required|date',
+                'tempat_sidi_ayah' => 'required|string',
+                'tanggal_sidi_ayah' => 'required|date',
+                'tempat_sidi_ibu' => 'required|string',
+                'tanggal_sidi_ibu' => 'required|date',
+                'alamat' => 'required|string',
+                'nomor_telepon' => 'required|string',
+                'tanggal_baptis' => 'required|date',
+                'dilayani' => 'required|string',
+                'surat_nikah_ortu' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+                'akta_kelahiran_anak' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            ]);
+
+            foreach ($request->allFiles() as $key => $file) {
+                $filename = Str::random(10) . '-' . $file->getClientOriginalName();
+                $file->storeAs('public/images/baptis', $filename);
+                $validatedData[$key] = $filename;
+            }
+
+            $validatedData['status'] = 0; // default status "belum diverifikasi"
+            $validatedData['alasan_penolakan'] = null;
+
+            BaptisModel::create($validatedData);
+
+            return redirect('pelayanan/pelayanan-jemaat/baptisan')->with('success_baptisan', 'Pendaftaran baptis berhasil dikirim! Silahkan pantau status verifikasi melalui halaman status pendaftaran');
+        } catch (\Exception $e) {
+            return redirect('pelayanan/pelayanan-jemaat/baptisan')->with('error_baptisan', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function baptisStatus(Request $request)
+    {
+        $query = BaptisModel::query();
+
+        // Filter pencarian berdasarkan nama
+        if ($request->filled('q')) {
+            $query->where('nama_lengkap', 'like', '%' . $request->q . '%');
+        }
+
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Ambil dari terbaru
+        $data = $query->orderByDesc('created_at')->get();
+
+        return view('global.baptisan-status', compact('data'));
     }
 
 }
