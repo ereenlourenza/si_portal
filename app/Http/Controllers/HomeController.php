@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BaptisModel;
 use App\Models\IbadahModel;
 use App\Models\KatekisasiModel;
+use App\Models\PernikahanModel;
 use App\Models\PersembahanModel;
 use App\Models\SejarahModel;
 use App\Models\SektorModel;
@@ -275,6 +276,103 @@ class HomeController extends Controller
         $data = $query->orderByDesc('created_at')->get();
 
         return view('global.katekisasi-status', compact('data'));
+    }
+
+    public function pernikahanCreate()
+    {
+        $page = (object)[
+            'title' => 'Form Pendaftaran Pemberkatan Nikah'
+        ];
+
+        return view('global.pernikahan-form', [
+            'page' => $page
+        ]);
+    }
+
+    public function pernikahanStore(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'nama_lengkap_pria' => 'required|string|max:255',
+                'tempat_lahir_pria' => 'required|string',
+                'tanggal_lahir_pria' => 'required|date',
+                'tempat_sidi_pria' => 'required|string', 
+                'tanggal_sidi_pria' => 'required|date',
+                'pekerjaan_pria' => 'required|string', 
+                'alamat_pria' => 'required|string', 
+                'nomor_telepon_pria' => 'required|string', 
+                'nama_ayah_pria' => 'required|string', 
+                'nama_ibu_pria' => 'required|string', 
+                'nama_lengkap_wanita' => 'required|string|max:255',
+                'tempat_lahir_wanita' => 'required|string',
+                'tanggal_lahir_wanita' => 'required|date',
+                'tempat_sidi_wanita' => 'required|string', 
+                'tanggal_sidi_wanita' => 'required|date',
+                'pekerjaan_wanita' => 'required|string', 
+                'alamat_wanita' => 'required|string', 
+                'nomor_telepon_wanita' => 'required|string', 
+                'nama_ayah_wanita' => 'required|string', 
+                'nama_ibu_wanita' => 'required|string', 
+                'tanggal_pernikahan' => 'required|date', 
+                'waktu_pernikahan' => 'required|date_format:H:i', 
+                'dilayani' => 'required|string', 
+                'ktp' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'kk' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'surat_sidi' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'akta_kelahiran' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'sk_nikah' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'sk_asalusul' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'sp_mempelai' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'sk_ortu' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'akta_perceraian_kematian' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', 
+                'si_kawin_komandan' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', 
+                'sp_gereja_asal' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', 
+                'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'biaya' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'status' => 'nullable|boolean',
+                'alasan_penolakan' => 'nullable|string'
+            ]);
+
+            foreach ($request->allFiles() as $key => $file) {
+                $filename = Str::random(10) . '-' . $file->getClientOriginalName();
+                $file->storeAs('public/images/pernikahan', $filename);
+                $validatedData[$key] = $filename;
+            }
+
+            $validatedData['status'] = 0; // default status "belum diverifikasi"
+            $validatedData['alasan_penolakan'] = null;
+
+            PernikahanModel::create($validatedData);
+
+            return redirect('pelayanan/pelayanan-jemaat/pemberkatan-nikah')->with('success_pernikahan', 'Pendaftaran pemberkatan nikah berhasil dikirim! Silahkan pantau status verifikasi melalui halaman status pendaftaran');
+        } catch (\Exception $e) {
+            return redirect('pelayanan/pelayanan-jemaat/pemberkatan-nikah')->with('error_pernikahan', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function pernikahanStatus(Request $request)
+    {
+        $query = PernikahanModel::query();
+
+        // Filter pencarian berdasarkan nama
+        if ($request->filled('q')) {
+            $query->where('nama_lengkap_pria', 'like', '%' . $request->q . '%');
+        }
+
+        // Filter pencarian berdasarkan nama
+        if ($request->filled('x')) {
+            $query->where('nama_lengkap_wanita', 'like', '%' . $request->x . '%');
+        }
+
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Ambil dari terbaru
+        $data = $query->orderByDesc('created_at')->get();
+
+        return view('global.pernikahan-status', compact('data'));
     }
 
 }
