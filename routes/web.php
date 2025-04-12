@@ -76,7 +76,12 @@ Route::prefix('pelayanan')->group(function () {
             Route::post('/', [HomeController::class, 'baptisStore'])->name('baptis.store');
             Route::get('/status', [HomeController::class, 'baptisStatus'])->name('baptis.status');
         });
-        Route::get('/katekisasi', function () { return view('global.katekisasi');})->name('katekisasi');
+        Route::prefix('katekisasi')->group(function () {
+            Route::get('/', function () { return view('global.katekisasi');})->name('katekisasi');
+            Route::get('/form', [HomeController::class, 'katekisasiCreate'])->name('katekisasi.create');
+            Route::post('/', [HomeController::class, 'katekisasiStore'])->name('katekisasi.store');
+            Route::get('/status', [HomeController::class, 'katekisasiStatus'])->name('katekisasi.status');
+        });
         Route::get('/pemberkatan-nikah', function () { return view('global.pemberkatan-nikah');})->name('pemberkatan-nikah');
         Route::get('/peminjaman-ruangan', function () { return view('global.peminjaman-ruangan');})->name('peminjaman-ruangan');
     });

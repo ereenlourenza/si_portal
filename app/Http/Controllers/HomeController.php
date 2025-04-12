@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BaptisModel;
 use App\Models\IbadahModel;
+use App\Models\KatekisasiModel;
 use App\Models\PersembahanModel;
 use App\Models\SejarahModel;
 use App\Models\SektorModel;
@@ -193,6 +194,87 @@ class HomeController extends Controller
         $data = $query->orderByDesc('created_at')->get();
 
         return view('global.baptisan-status', compact('data'));
+    }
+
+    public function katekisasiCreate()
+    {
+        $page = (object)[
+            'title' => 'Form Pendaftaran Katekisasi'
+        ];
+
+        return view('global.katekisasi-form', [
+            'page' => $page
+        ]);
+    }
+
+    public function katekisasiStore(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'nama_lengkap' => 'required|string|max:255',
+                'tempat_lahir' => 'required|string',
+                'tanggal_lahir' => 'required|date',
+                'jenis_kelamin' => 'required|string',
+                'alamat_katekumen' => 'required|string', 
+                'nomor_telepon_katekumen' => 'required|string', 
+                'pendidikan_terakhir' => 'required|string', 
+                'pekerjaan' => 'required|string', 
+                'is_baptis' => 'required|string',
+                'tempat_baptis' => 'nullable|string',
+                'no_surat_baptis' => 'nullable|string',
+                'tanggal_surat_baptis' => 'nullable|date',
+                'dilayani' => 'nullable|string',
+                'nama_ayah' => 'nullable|string', 
+                'nama_ibu' => 'nullable|string', 
+                'alamat_ortu' => 'nullable|string', 
+                'nomor_telepon_ortu' => 'nullable|string', 
+                'akta_kelahiran' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'surat_baptis' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', 
+                'pas_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048', 
+                'status' => 'nullable|boolean',
+                'alasan_penolakan' => 'nullable|string'
+            ]);
+
+            foreach ($request->allFiles() as $key => $file) {
+                $filename = Str::random(10) . '-' . $file->getClientOriginalName();
+                $file->storeAs('public/images/sidi', $filename);
+                $validatedData[$key] = $filename;
+            }
+
+            // Pastikan key surat_baptis tetap ada walaupun tidak diupload
+            $validatedData += [
+                'surat_baptis' => null
+            ];
+
+            $validatedData['status'] = 0; // default status "belum diverifikasi"
+            $validatedData['alasan_penolakan'] = null;
+
+            KatekisasiModel::create($validatedData);
+
+            return redirect('pelayanan/pelayanan-jemaat/katekisasi')->with('success_katekisasi', 'Pendaftaran katekisasi berhasil dikirim! Silahkan pantau status verifikasi melalui halaman status pendaftaran');
+        } catch (\Exception $e) {
+            return redirect('pelayanan/pelayanan-jemaat/katekisasi')->with('error_katekisasi', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function katekisasiStatus(Request $request)
+    {
+        $query = KatekisasiModel::query();
+
+        // Filter pencarian berdasarkan nama
+        if ($request->filled('q')) {
+            $query->where('nama_lengkap', 'like', '%' . $request->q . '%');
+        }
+
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Ambil dari terbaru
+        $data = $query->orderByDesc('created_at')->get();
+
+        return view('global.katekisasi-status', compact('data'));
     }
 
 }
