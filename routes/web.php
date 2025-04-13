@@ -88,7 +88,12 @@ Route::prefix('pelayanan')->group(function () {
             Route::post('/', [HomeController::class, 'pernikahanStore'])->name('pemberkatan-nikah.store');
             Route::get('/status', [HomeController::class, 'pernikahanStatus'])->name('pemberkatan-nikah.status');
         });
-        Route::get('/peminjaman-ruangan', function () { return view('global.peminjaman-ruangan');})->name('peminjaman-ruangan');
+        Route::prefix('peminjaman-ruangan')->group(function () {
+            Route::get('/', function () { return view('global.ruangan');})->name('peminjaman-ruangan');
+            Route::get('/form', [HomeController::class, 'ruanganCreate'])->name('peminjaman-ruangan.create');
+            Route::post('/', [HomeController::class, 'ruanganStore'])->name('peminjaman-ruangan.store');
+            Route::get('/status', [HomeController::class, 'ruanganStatus'])->name('peminjaman-ruangan.status');
+        });
     });
 });
 

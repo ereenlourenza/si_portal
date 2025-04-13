@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\BaptisModel;
 use App\Models\IbadahModel;
 use App\Models\KatekisasiModel;
+use App\Models\PeminjamanRuanganModel;
 use App\Models\PernikahanModel;
 use App\Models\PersembahanModel;
+use App\Models\RuanganModel;
 use App\Models\SejarahModel;
 use App\Models\SektorModel;
 use Carbon\Carbon;
@@ -373,6 +375,63 @@ class HomeController extends Controller
         $data = $query->orderByDesc('created_at')->get();
 
         return view('global.pernikahan-status', compact('data'));
+    }
+
+    
+    public function ruanganCreate()
+    {
+        $page = (object)[
+            'title' => 'Form Peminjaman Ruangan'
+        ];
+
+        $ruangan = RuanganModel::all();
+
+        return view('global.ruangan-form', [
+            'page' => $page, 'ruangan' => $ruangan
+        ]);
+    }
+
+    public function ruanganStore(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'peminjam_nama' => 'required|string',
+                'peminjam_telepon' => 'required|string',
+                'tanggal' => 'required|date_format:Y-m-d',
+                'waktu_mulai' => 'required|date_format:H:i',
+                'waktu_selesai' => 'required|date_format:H:i',
+                'ruangan_id' => 'required|integer',
+                'keperluan' => 'required|string',
+                'status' => 'nullable|boolean',
+                'alasan_penolakan' => 'nullable|string',
+            ]);
+
+            PeminjamanRuanganModel::create($validatedData);
+    
+            return redirect('pelayanan/pelayanan-jemaat/peminjaman-ruangan')->with('success_ruangan', 'Pengajuan peminjaman ruangan berhasil dikirim! Silahkan pantau status verifikasi melalui halaman status pendaftaran');
+        } catch(\Exception $e){
+            return redirect('pelayanan/pelayanan-jemaat/peminjaman-ruangan')->with('error_ruangan', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
+        }
+    }
+
+    public function ruanganStatus(Request $request)
+    {
+        $query = PeminjamanRuanganModel::query();
+
+        // Filter pencarian berdasarkan nama
+        if ($request->filled('q')) {
+            $query->where('peminjam_nama', 'like', '%' . $request->q . '%');
+        }
+
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Ambil dari terbaru
+        $data = $query->orderByDesc('created_at')->get();
+
+        return view('global.ruangan-status', compact('data'));
     }
 
 }
