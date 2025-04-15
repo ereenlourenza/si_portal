@@ -80,7 +80,7 @@
     {{-- BUTTON --}}
     <div class="mt-6 flex flex-col md:flex-row justify-end items-center gap-4 text-sm md:text-[15px]">
         <a class="bg-white border border-amber-600 text-amber-700 hover:bg-amber-50 font-medium py-2 px-6 rounded shadow transition" 
-           href="{{ url('pelayanan/pelayanan-jemaat/baptisan') }}">
+           href="{{ url('pelayanan/pelayanan-jemaat/pemberkatan-nikah') }}">
             Kembali
         </a>
     </div>  

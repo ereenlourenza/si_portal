@@ -231,7 +231,7 @@ class PelayanController extends Controller
                 }
 
                 // Simpan foto baru
-                $foto = $request->foto('foto');
+                $foto = $request->file('foto');
                 $fotoName = time() . '_' . $foto->getClientOriginalName();
                 $foto->storeAs('public/images/pelayan', $fotoName); // Simpan ke storage
             } else {

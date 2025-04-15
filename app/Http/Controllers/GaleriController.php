@@ -80,7 +80,7 @@ class GaleriController extends Controller
         $validatedData = $request->validate([
             'judul' => 'required|string|min:3|max:50|unique:t_galeri,judul',
             'deskripsi' => 'nullable|string',
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:20048',
             'kategorigaleri_id' => 'required|integer',
         ]);
         
@@ -151,7 +151,7 @@ class GaleriController extends Controller
         $request->validate([
             'judul' => 'required|string|min:3|max:50|unique:t_galeri,judul,'.$id.',galeri_id',
             'deskripsi' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:20048',
             'kategorigaleri_id' => 'required|integer',
         ]);
 

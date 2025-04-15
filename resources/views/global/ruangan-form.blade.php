@@ -100,7 +100,7 @@
                     Kirim Pendaftaran
                 </button>
                 <a class="bg-white border border-amber-600 text-amber-700 hover:bg-amber-50 font-medium py-2 px-6 rounded shadow transition" 
-                   href="{{ url('pelayanan/pelayanan-jemaat/baptisan') }}">
+                   href="{{ url('pelayanan/pelayanan-jemaat/peminjaman-ruangan') }}">
                     Kembali
                 </a>
             </div>            

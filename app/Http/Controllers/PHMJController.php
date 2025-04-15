@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PelayanModel;
 use App\Models\PHMJModel;
 use App\Models\UserModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -22,19 +23,37 @@ class PHMJController extends Controller
             'title' => 'Tambah Informasi',
             'list' => ['Pengelolaan Informasi', 'PHMJ', 'Tambah']
         ];
-
+    
         $page = (object)[
             'title' => 'Tambah PHMJ baru'
         ];
-
-        $pelayan = PelayanModel::whereIn('kategoripelayan_id', [3, 4])->get();
-
-        $pemakaiPelayan = DB::table('t_phmj')->pluck('pelayan_id')->toArray(); // Ambil pelayan yang sudah digunakan
-        $pelayanTakTerpakai = PelayanModel::whereNotIn('pelayan_id', $pemakaiPelayan)->get(); // Ambil pelayan yang belum digunakan
-
-        $activeMenu = 'pelayan'; //set menu yang sedang aktif
-
-        return view('phmj.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'pelayan' => $pelayan, 'pemakaiPelayan' => $pemakaiPelayan, 'pelayanTakTerpakai' => $pelayanTakTerpakai, 'activeMenu' => $activeMenu, 'notifUser' => UserModel::all()]);
+    
+        $currentYear = Carbon::now()->year;
+    
+        // Ambil pelayan yang kategorinya Pendeta (1), Diaken (3), Penatua (4), dan masa jabatannya masih aktif
+        $pelayan = PelayanModel::whereIn('kategoripelayan_id', [1, 3, 4])
+            ->where('masa_jabatan_mulai', '<=', $currentYear)
+            ->where('masa_jabatan_selesai', '>=', $currentYear)
+            ->get();
+    
+        $pemakaiPelayan = DB::table('t_phmj')->pluck('pelayan_id')->toArray(); // Pelayan yang sudah digunakan
+        $pelayanTakTerpakai = PelayanModel::whereNotIn('pelayan_id', $pemakaiPelayan)
+            ->whereIn('kategoripelayan_id', [1, 3, 4])
+            ->where('masa_jabatan_mulai', '<=', $currentYear)
+            ->where('masa_jabatan_selesai', '>=', $currentYear)
+            ->get(); // Pelayan yang belum dipakai & aktif
+    
+        $activeMenu = 'pelayan'; // Set menu aktif
+    
+        return view('phmj.create', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'pelayan' => $pelayan,
+            'pemakaiPelayan' => $pemakaiPelayan,
+            'pelayanTakTerpakai' => $pelayanTakTerpakai,
+            'activeMenu' => $activeMenu,
+            'notifUser' => UserModel::all()
+        ]);
     }
 
     //Menyimpan data user baru

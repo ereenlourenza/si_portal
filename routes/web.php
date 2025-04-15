@@ -99,19 +99,20 @@ Route::prefix('pelayanan')->group(function () {
 
 Route::prefix('fungsionaris')->group(function () {
     Route::prefix('fungsionaris')->group(function () {
-        Route::get('/pendeta-kmj', function () { return view('global.pendeta-kmj');})->name('pendeta-kmj');
-        Route::get('/vikaris', function () { return view('global.vikaris');})->name('vikaris');
-        Route::get('/phmj', function () { return view('global.phmj');})->name('phmj');
-        Route::get('/majelis-jemaat', function () { return view('global.majelis-jemaat');})->name('majelis-jemaat');
+        Route::get('/pendeta-kmj', [HomeController::class, 'pendeta'])->name('pendeta-kmj');
+        Route::get('/vikaris', [HomeController::class, 'vikaris'])->name('vikaris');
+        Route::get('/phmj', [HomeController::class, 'phmj'])->name('phmj');
+        Route::get('/majelis-jemaat', [HomeController::class, 'majelisJemaat'])->name('majelis-jemaat');
     });
 
     Route::prefix('pelkat')->group(function () {
-        Route::get('/pa', function () { return view('global.pa');})->name('pa');
-        Route::get('/pt', function () { return view('global.pt');})->name('pt');
-        Route::get('/gp', function () { return view('global.gp');})->name('gp');
-        Route::get('/pkp', function () { return view('global.pkp');})->name('pkp');
-        Route::get('/pkb', function () { return view('global.pkb');})->name('pkb');
-        Route::get('/pklu', function () { return view('global.pklu');})->name('pklu');
+        // Route::get('/pa', [HomeController::class, 'pelkatPA'])->name('pa');
+        Route::get('/pa', function () { return view('global.pelkat-pa');})->name('pa');
+        Route::get('/pt', function () { return view('global.pelkat-pt');})->name('pt');
+        Route::get('/gp', function () { return view('global.pelkat-gp');})->name('gp');
+        Route::get('/pkp', function () { return view('global.pelkat-pkp');})->name('pkp');
+        Route::get('/pkb', function () { return view('global.pelkat-pkb');})->name('pkb');
+        Route::get('/pklu', function () { return view('global.pelkat-pklu');})->name('pklu');
     });
 
     Route::prefix('komisi')->group(function () {
@@ -130,11 +131,12 @@ Route::prefix('fungsionaris')->group(function () {
 });
 
 Route::prefix('dokumen')->group(function () {
-    Route::get('/tata-ibadah', function () { return view('global.tata-ibadah');})->name('tata-ibadah');
-    Route::get('/warta-jemaat', function () { return view('global.warta-jemaat');})->name('warta-jemaat');
+    Route::get('/tata-ibadah', [HomeController::class, 'tataibadah'])->name('tata-ibadah');
+    Route::get('/warta-jemaat', [HomeController::class, 'wartajemaat'])->name('warta-jemaat');
 });
 
-Route::get('/galeri', function () { return view('global.galeri');})->name('galeri');
+Route::get('/galeri', [HomeController::class, 'galeri'])->name('galeri');
+Route::get('/galeri/kategori/{id}', [HomeController::class, 'galeriByKategori'])->name('galeri-kategori');
 Route::get('/kontak', function () { return view('global.kontak');})->name('kontak');
 
 

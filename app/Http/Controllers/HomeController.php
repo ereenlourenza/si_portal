@@ -3,14 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaptisModel;
+use App\Models\GaleriModel;
 use App\Models\IbadahModel;
+use App\Models\KategoriGaleriModel;
+use App\Models\KategoriPelayanModel;
 use App\Models\KatekisasiModel;
+use App\Models\PelayanModel;
+use App\Models\PelkatModel;
 use App\Models\PeminjamanRuanganModel;
 use App\Models\PernikahanModel;
 use App\Models\PersembahanModel;
+use App\Models\PHMJModel;
 use App\Models\RuanganModel;
 use App\Models\SejarahModel;
 use App\Models\SektorModel;
+use App\Models\TataIbadahModel;
+use App\Models\WartaJemaatModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -433,5 +441,175 @@ class HomeController extends Controller
 
         return view('global.ruangan-status', compact('data'));
     }
+
+    public function pendeta()
+    {
+        // Ambil kategori dengan nama "Pendeta" (bisa disesuaikan berdasarkan kode juga)
+        $kategoriPendeta = KategoriPelayanModel::where('kategoripelayan_nama', 'Pendeta')->first();
+
+        if (!$kategoriPendeta) {
+            return abort(404, 'Kategori Pendeta tidak ditemukan.');
+        }
+
+        // Ambil semua pelayan yang merupakan pendeta
+        $pendetaList = PelayanModel::where('kategoripelayan_id', $kategoriPendeta->kategoripelayan_id)
+            ->orderByDesc('masa_jabatan_mulai')
+            ->get();
+
+        return view('global.pendeta-kmj', compact('pendetaList'));
+    }
+
+    public function vikaris()
+    {
+        // Ambil kategori dengan nama "Vikaris"
+        $kategoriVikaris = KategoriPelayanModel::where('kategoripelayan_nama', 'Vikaris')->first();
+        
+        if (!$kategoriVikaris) {
+            return abort(404, 'Kategori Vikaris tidak ditemukan.');
+        }
+
+        // Ambil tahun ini
+        $tahunSekarang = date('Y');
+
+        // Ambil semua pelayan vikaris yang sedang bertugas tahun ini
+        $vikarisList = PelayanModel::where('kategoripelayan_id', $kategoriVikaris->kategoripelayan_id)
+            ->where(function ($query) use ($tahunSekarang) {
+                $query->where('masa_jabatan_mulai', '<=', $tahunSekarang)
+                    ->where(function ($subQuery) use ($tahunSekarang) {
+                        $subQuery->where('masa_jabatan_selesai', '>=', $tahunSekarang)
+                                ->orWhereNull('masa_jabatan_selesai');
+                    });
+            })
+            ->orderByDesc('masa_jabatan_mulai')
+            ->get();
+
+        return view('global.vikaris', compact('vikarisList'));
+    }
+
+    public function phmj()
+    {
+        // Ambil ID kategori untuk Diaken dan Penatua
+        $kategoriPendeta = KategoriPelayanModel::where('kategoripelayan_nama', 'Pendeta')->first();
+        $kategoriDiaken = KategoriPelayanModel::where('kategoripelayan_nama', 'Diaken')->first();
+        $kategoriPenatua = KategoriPelayanModel::where('kategoripelayan_nama', 'Penatua')->first();
+
+        if (!$kategoriPendeta || !$kategoriDiaken || !$kategoriPenatua) {
+            return abort(404, 'Kategori Pendeta, Diaken dan Penatua tidak ditemukan.');
+        }
+
+        $phmjList = PHMJModel::whereHas('pelayan', function ($query) use ($kategoriPendeta, $kategoriDiaken, $kategoriPenatua) {
+                $query->whereIn('kategoripelayan_id', [$kategoriPendeta->kategoripelayan_id, $kategoriDiaken->kategoripelayan_id, $kategoriPenatua->kategoripelayan_id]);
+            })
+            ->with('pelayan.kategoripelayan')
+            ->orderByDesc('periode_mulai')
+            ->get();
+
+
+        return view('global.phmj', compact('phmjList'));
+    }
+
+    public function majelisJemaat(Request $request)
+    {
+        // Ambil semua data Diaken & Penatua
+        $allMajelis = PelayanModel::with('kategoripelayan')
+            ->whereHas('kategoripelayan', function ($query) {
+                $query->whereIn('kategoripelayan_nama', ['Diaken', 'Penatua']);
+            })
+            ->orderBy('masa_jabatan_mulai', 'desc')
+            ->orderBy('nama')
+            ->get();
+
+        // Kelompokkan berdasarkan periode
+        $groupedPeriode = $allMajelis->groupBy(function ($item) {
+            return $item->masa_jabatan_mulai . ' - ' . $item->masa_jabatan_selesai;
+        });
+
+        // Cek apakah ada periode dipilih dari dropdown
+        $selectedPeriode = $request->input('periode');
+
+        if ($selectedPeriode) {
+            [$mulai, $selesai] = explode(' - ', $selectedPeriode);
+            $periode_terpilih = $allMajelis->where('masa_jabatan_mulai', $mulai)->where('masa_jabatan_selesai', $selesai);
+        } else {
+            // default: ambil periode terkini
+            $selesai_tertinggi = $allMajelis->max('masa_jabatan_selesai');
+            $periode_terpilih = $allMajelis->where('masa_jabatan_selesai', $selesai_tertinggi);
+            $mulai = $periode_terpilih->min('masa_jabatan_mulai');
+            $selesai = $selesai_tertinggi;
+            $selectedPeriode = "$mulai - $selesai";
+        }
+
+        return view('global.majelis-jemaat', [
+            'periode_terpilih' => $periode_terpilih,
+            'groupedPeriode' => $groupedPeriode,
+            'selectedPeriode' => $selectedPeriode
+        ]);
+    }
+
+    public function tataibadah(Request $request)
+    {
+        $tanggal = $request->input('tanggal');
+
+        $tataIbadahList = TataIbadahModel::when($tanggal, function ($query, $tanggal) {
+                                    return $query->whereDate('tanggal', $tanggal);
+                                }, function ($query) {
+                                    return $query->take(3); // ambil 3 teratas kalau tidak ada filter
+                                })
+                                ->orderBy('tanggal', 'desc')
+                                ->get();
+
+        return view('global.tata-ibadah', compact('tataIbadahList', 'tanggal'));
+    }
+
+    public function wartajemaat(Request $request)
+    {
+        $tanggal = $request->input('tanggal');
+
+        $wartaJemaatList = WartaJemaatModel::when($tanggal, function ($query, $tanggal) {
+                                    return $query->whereDate('tanggal', $tanggal);
+                                }, function ($query) {
+                                    return $query->take(3); // ambil 3 teratas kalau tidak ada filter
+                                })
+                                ->orderBy('tanggal', 'desc')
+                                ->get();
+
+        return view('global.warta-jemaat', compact('wartaJemaatList', 'tanggal'));
+    }
+
+
+    public function galeri()
+    {
+        // Ambil semua kategori galeri
+        $kategoriList = KategoriGaleriModel::all();
+
+        // Inisialisasi array hasil
+        $galeriByKategori = [];
+
+        foreach ($kategoriList as $kategori) {
+            $galeriByKategori[$kategori->kategorigaleri_nama] = GaleriModel::where('kategorigaleri_id', $kategori->kategorigaleri_id)
+                ->latest()
+                ->take(3) // ambil 3 teratas seperti contoh halamanmu
+                ->get();
+        }
+
+        return view('global.galeri', compact('galeriByKategori'));
+    }
+
+    public function galeriByKategori($id)
+    {
+        // Ambil data kategori
+        $kategori = KategoriGaleriModel::findOrFail($id);
+
+        // Ambil semua galeri dalam kategori ini
+        $galeriList = GaleriModel::where('kategorigaleri_id', $id)
+            ->latest()
+            ->get();
+
+        return view('global.galeri-kategori', compact('kategori', 'galeriList'));
+    }
+
+
+
+
 
 }

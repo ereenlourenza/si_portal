@@ -74,7 +74,7 @@ class WartaJemaatController extends Controller
     public function store(Request $request){
         $validatedData = $request->validate([
             'tanggal' => 'required|date_format:Y-m-d',
-            'judul' => 'required|string|min:3|max:50|unique:t_wartajemaat,judul',
+            'judul' => 'required|string|min:3|max:50',
             'deskripsi' => 'nullable|string',
             'file' => 'nullable|mimes:pdf'
         ]);
@@ -143,7 +143,7 @@ class WartaJemaatController extends Controller
     public function update(Request $request, string $id){
         $request->validate([
             'tanggal' => 'required|date_format:Y-m-d',
-            'judul' => 'required|string|min:3|max:50|unique:t_wartajemaat,judul,'.$id.',wartajemaat_id',
+            'judul' => 'required|string|min:3|max:50',
             'deskripsi' => 'nullable|string',
             'file' => 'nullable|mimes:pdf|max:2048'
         ]);

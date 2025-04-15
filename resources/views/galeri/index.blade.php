@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('pengelolaan-informasi/galeri/create') }}">Tambah Tata Ibadah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('pengelolaan-informasi/galeri/create') }}">Tambah Galeri</a>
                 
             </div>
         </div>
@@ -58,80 +58,6 @@
 @endpush
 
 @push('js')
-    {{-- <script>
-        $(document).ready(function() {
-
-            // Inisialisasi DataTable Tata Ibadah
-            var dataGaleri = $('#table_galeri').DataTable({
-                responsive: true, // Mengaktifkan fitur responsif
-                // scrollX: true,
-                // fixedHeader: true,
-                lengthChange: true, 
-                autoWidth: false,
-                serverSide: true, // serverSide: true, jika ingin menggunakan server side processing
-                ajax: {
-                    "url": "{{ url('pengelolaan-informasi/galeri/list') }}",
-                    "dataType": "json",
-                    "type": "POST",
-                    "data": function (d) {
-                        // d.galeri_id = $('#galeri_id').val();
-                        // d.tanggal = $('#filter_tanggal').val(); // Kirim tanggal ke backend
-                        d.kategorigaleri_id = $('#kategorigaleri_id').val(); // Kirim tanggal ke backend
-                    }
-                },
-                columns: [
-                    {
-                        data: "DT_RowIndex", // nomor urut dari laravel datatable addIndexColumn()
-                        className: "text-center",
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: "kategorigaleri.kategorigaleri_nama", 
-                        className: "",
-                        orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
-                        searchable: true // searchable: true, jika ingin kolom ini bisa dicari
-                    },
-                    {
-                        data: "judul", 
-                        className: "",
-                        orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
-                        searchable: true // searchable: true, jika ingin kolom ini bisa dicari
-                    },
-                    {
-                        data: "deskripsi", 
-                        className: "",
-                        orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
-                        searchable: true, // searchable: true, jika ingin kolom ini bisa dicari
-                        render: function (data, type, row) {
-                            if (!data || data.trim() === "") return "-"; // Jika null atau string kosong, tampilkan "-"
-                            return data.length > 50 ? data.substring(0, 50) + "..." : data;
-                        }
-                    },
-                    {
-                        data: "foto", 
-                        className: "",
-                        orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
-                        searchable: false, // searchable: true, jika ingin kolom ini bisa dicari
-                                      
-                    },
-                    {
-                        data: "aksi", 
-                        className: "",
-                        orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
-                        searchable: false // searchable: true, jika ingin kolom ini bisa dicari
-                    }
-                ]
-            });
-
-            // Data Galeri
-            $('#kategorigaleri_id').on('change', function(){
-                dataGaleri.ajax.reload();
-            });
-
-        });
-    </script> --}}
-
     <script>
         $(document).ready(function() {
         function loadGaleri() {
@@ -207,34 +133,11 @@
                             ordered: true,
                         });
     
-                        // Perbaiki lebar tabel setelah DataTables dimuat
-                        // dataTable.columns.adjust().draw();
-    
-                        // // Atur ulang lebar tabel ketika jendela diubah ukurannya
-                        // $(window).on('resize', function() {
-                        //     dataTable.columns.adjust().draw();
-                        // });
                     });
                 }
             });
         }
     
-        // function loadFilterTahun() {
-        //     $.ajax({
-        //         url: "{{ url('pengelolaan-informasi/pelayan/list') }}",
-        //         type: "POST",
-        //         success: function(response) {
-        //             let minYear = response.minYear ? parseInt(response.minYear) : new Date().getFullYear();
-        //             let maxYear = response.maxYear ? parseInt(response.maxYear) : new Date().getFullYear();
-        //             let dropdown = $('#kategorigaleri_id');
-        //             dropdown.empty();
-        //             dropdown.append('<option value="">Semua Tahun</option>');
-        //             for (let year = maxYear; year >= minYear; year--) {
-        //                 dropdown.append('<option value="' + year + '">' + year + '</option>');
-        //             }
-        //         }
-        //     });
-        // }
     
         $('#kategorigaleri_id').on('change', function() {
             loadGaleri();

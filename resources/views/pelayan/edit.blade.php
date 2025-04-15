@@ -45,16 +45,23 @@
                             @enderror
                         </div>
                     </div>
+                    @php
+                        $currentYear = date('Y');
+                        $futureYear = $currentYear + 5; // Bisa diganti sesuai kebutuhan
+                    @endphp
                     <div class="form-group row align-items-center">
                         <label class="col-md-1 control-label col-form-label">Masa Jabatan Mulai<span class="text-danger">*</span></label>
                         <div class="col-md-11">
                             <select class="form-control" id="masa_jabatan_mulai" name="masa_jabatan_mulai" required>
                                 <option value="" disabled>Pilih Tahun</option>
-                                @for ($year = date('Y'); $year >= 1900; $year--)
+                                {{-- @for ($year = date('Y'); $year >= 1900; $year--)
                                     <option value="{{ $year }}" 
                                         {{ (old('masa_jabatan_mulai', $pelayan->masa_jabatan_mulai ?? '') == $year) ? 'selected' : '' }}>
                                         {{ $year }}
                                     </option>
+                                @endfor --}}
+                                @for ($year = $futureYear; $year >= 1900; $year--)
+                                    <option value="{{ $year }}" {{ old('masa_jabatan_mulai', $pelayan->masa_jabatan_mulai ?? '') == $year ? 'selected' : '' }}>{{ $year }}</option>
                                 @endfor
                             </select>
                                                     
@@ -68,11 +75,14 @@
                         <div class="col-md-11">
                             <select class="form-control" id="masa_jabatan_selesai" name="masa_jabatan_selesai" required>
                                 <option value="" disabled>Pilih Tahun</option>
-                                @for ($year = date('Y'); $year >= 1900; $year--)
+                                {{-- @for ($year = date('Y'); $year >= 1900; $year--)
                                     <option value="{{ $year }}"     
                                         {{ (old('masa_jabatan_selesai', $pelayan->masa_jabatan_selesai ?? '') == $year) ? 'selected' : '' }}>
                                         {{ $year }}
                                     </option>
+                                @endfor --}}
+                                @for ($year = $futureYear; $year >= 1900; $year--)
+                                    <option value="{{ $year }}" {{ old('masa_jabatan_selesai', $pelayan->masa_jabatan_selesai ?? '') == $year ? 'selected' : '' }}>{{ $year }}</option>
                                 @endfor
                             </select>
                                                     

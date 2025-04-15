@@ -35,6 +35,7 @@
                     <div class="col-md-11">
                         <select class="form-control" id="jabatan" name="jabatan">
                             <option value="" disabled selected>Pilih Jabatan</option>
+                            <option value="Ketua Majelis Jemaat">Ketua Majelis Jemaat</option>
                             <option value="Ketua 1">Ketua 1</option>
                             <option value="Ketua 2">Ketua 2</option>
                             <option value="Ketua 3">Ketua 3</option>
