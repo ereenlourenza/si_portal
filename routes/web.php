@@ -13,6 +13,7 @@ use App\Http\Controllers\KategoriGaleriController;
 use App\Http\Controllers\KategoriIbadahController;
 use App\Http\Controllers\KategoriPelayanController;
 use App\Http\Controllers\KategoriPersembahan;
+use App\Http\Controllers\KomisiController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PelayanController;
 use App\Http\Controllers\PelkatController;
@@ -115,17 +116,17 @@ Route::prefix('fungsionaris')->group(function () {
     });
 
     Route::prefix('komisi')->group(function () {
-        Route::get('/teologi', function () { return view('global.teologi');})->name('teologi');
-        Route::get('/pelkes', function () { return view('global.pelkes');})->name('pelkes');
-        Route::get('/peg', function () { return view('global.peg');})->name('peg');
-        Route::get('/germasa', function () { return view('global.germasa');})->name('germasa');
-        Route::get('/ppsdi-ppk', function () { return view('global.ppsdi-ppk');})->name('ppsdi-ppk');
-        Route::get('/inforkom-litbang', function () { return view('global.inforkom-litbang');})->name('inforkom-litbang');
+        Route::get('/teologi', [HomeController::class, 'komisiteologi'])->name('teologi');
+        Route::get('/pelkes', [HomeController::class, 'komisipelkes'])->name('pelkes');
+        Route::get('/peg', [HomeController::class, 'komisipeg'])->name('peg');
+        Route::get('/germasa', [HomeController::class, 'komisigermasa'])->name('germasa');
+        Route::get('/ppsdi-ppk', [HomeController::class, 'komisippsdi'])->name('ppsdi-ppk');
+        Route::get('/inforkom-litbang', [HomeController::class, 'komisiinforkomlitbang'])->name('inforkom-litbang');
     });
 
     Route::prefix('lain-lain')->group(function () {
-        Route::get('/bppj', function () { return view('global.bppj');})->name('bppj');
-        Route::get('/kantor-sekretariat', function () { return view('global.kantor-sekretariat');})->name('kantor-sekretariat');
+        Route::get('/bppj', [HomeController::class, 'bppj'])->name('bppj');
+        Route::get('/kantor-sekretariat', [HomeController::class, 'kantor'])->name('kantor-sekretariat');
     });
 });
 
@@ -314,6 +315,18 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit', [PelkatController::class, 'edit']);
             Route::put('/{id}', [PelkatController::class, 'update']);
             Route::delete('/{id}', [PelkatController::class, 'destroy']);
+        });
+        
+        Route::prefix('komisi')->group(function () {
+            Route::get('/', [KomisiController::class, 'index'])->name('komisi.index');
+            Route::post('/list', [KomisiController::class, 'list']);
+            Route::get('/create', [KomisiController::class, 'create']);
+            Route::post('ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor-komisi.upload');
+            Route::post('/', [KomisiController::class, 'store']);
+            Route::get('/{id}', [KomisiController::class, 'show']);
+            Route::get('/{id}/edit', [KomisiController::class, 'edit']);
+            Route::put('/{id}', [KomisiController::class, 'update']);
+            Route::delete('/{id}', [KomisiController::class, 'destroy']);
         });
         
         Route::prefix('persembahan')->group(function () {

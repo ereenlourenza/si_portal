@@ -156,6 +156,12 @@
                 </a> 
             </li>
             <li class="nav-item">
+                <a href="{{ route('komisi.index') }}" class="nav-link {{ ($activeMenu == 'komisi')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-object-group"></i> 
+                    <p>Komisi</p>
+                </a> 
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('persembahan.index') }}" class="nav-link {{ ($activeMenu == 'persembahan')? 'active' : '' }} "> 
                     <i class="nav-icon fas fa-qrcode"></i> 
                     <p>QR Persembahan</p>

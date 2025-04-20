@@ -8,6 +8,7 @@ use App\Models\IbadahModel;
 use App\Models\KategoriGaleriModel;
 use App\Models\KategoriPelayanModel;
 use App\Models\KatekisasiModel;
+use App\Models\KomisiModel;
 use App\Models\PelayanModel;
 use App\Models\PelkatModel;
 use App\Models\PeminjamanRuanganModel;
@@ -580,6 +581,54 @@ class HomeController extends Controller
         $pelkat_pklu = PelkatModel::whereRaw("LOWER(pelkat_nama) LIKE ?", ['%pklu%'])->get();
 
         return view('global.pelkat-pklu', compact('pelkat_pklu'));
+    }
+
+    public function komisiteologi(){
+        $komisi_teologi = KomisiModel::whereRaw("LOWER(komisi_nama) LIKE ?", ['%teologi%'])->get();
+
+        return view('global.komisi-teologi', compact('komisi_teologi'));
+    }
+
+    public function komisipelkes(){
+        $komisi_pelkes = KomisiModel::whereRaw("LOWER(komisi_nama) LIKE ?", ['%pelkes%'])->get();
+
+        return view('global.komisi-pelkes', compact('komisi_pelkes'));
+    }
+
+    public function komisipeg(){
+        $komisi_peg = KomisiModel::whereRaw("LOWER(komisi_nama) LIKE ?", ['%peg%'])->get();
+
+        return view('global.komisi-peg', compact('komisi_peg'));
+    }
+
+    public function komisigermasa(){
+        $komisi_germasa = KomisiModel::whereRaw("LOWER(komisi_nama) LIKE ?", ['%germasa%'])->get();
+
+        return view('global.komisi-germasa', compact('komisi_germasa'));
+    }
+
+    public function komisippsdi(){
+        $komisi_ppsdi = KomisiModel::whereRaw("LOWER(komisi_nama) LIKE ?", ['%ppsdi%'])->get();
+
+        return view('global.komisi-ppsdi', compact('komisi_ppsdi'));
+    }
+
+    public function komisiinforkomlitbang(){
+        $komisi_inforkomlitbang = KomisiModel::whereRaw("LOWER(komisi_nama) LIKE ?", ['%inforkom-litbang%'])->get();
+
+        return view('global.komisi-inforkomlitbang', compact('komisi_inforkomlitbang'));
+    }
+
+    public function bppj(){
+        $bppj = KomisiModel::whereRaw("LOWER(komisi_nama) LIKE ?", ['%bppj%'])->get();
+
+        return view('global.bppj', compact('bppj'));
+    }
+
+    public function kantor(){
+        $kantor = KomisiModel::whereRaw("LOWER(komisi_nama) LIKE ?", ['%kantor%'])->get();
+
+        return view('global.kantor', compact('kantor'));
     }
 
     public function tataibadah(Request $request)
