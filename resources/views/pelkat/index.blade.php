@@ -66,10 +66,10 @@
                         className: "",
                         orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
                         searchable: true, // searchable: true, jika ingin kolom ini bisa dicari
-                        render: function(data, type, row) {
-                            return data
-                                .replace(/\n/g, '<br>'); // Mengubah newline ke <br> agar format tetap rapi
-                        },
+                        // render: function(data, type, row) {
+                        //     return data
+                        //         .replace(/\n/g, '<br>'); // Mengubah newline ke <br> agar format tetap rapi
+                        // },
                     },
                     {
                         data: "aksi", 

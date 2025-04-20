@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PelkatModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 class PelkatController extends Controller
@@ -37,6 +38,31 @@ class PelkatController extends Controller
         
         return DataTables::of($pelkats)
             ->addIndexColumn() // menambahkan kolom index / no urut (default name kolom: DT_RowIndex)
+            ->editColumn('deskripsi', function ($row) {
+                $html = $row->deskripsi;
+            
+                // Kecilkan gambar
+                $html = preg_replace(
+                    '/<img(.*?)>/i',
+                    '<img$1 style="max-width: 100px; height: auto;">',
+                    $html
+                );
+            
+                // Ambil semua gambar
+                preg_match_all('/<img[^>]+>/i', $html, $gambar);
+            
+                // Hapus semua tag kecuali <a> dan <img>
+                $filteredHtml = strip_tags($html, '<a><img><table><tr><td><th><tbody><thead>');
+            
+                // Batasi panjang teks dengan tag <a> tetap ada
+                // Caranya: potong manual string HTML-nya
+                $textLimited = Str::limit($filteredHtml, 150);
+            
+                return '<div class="deskripsi-table">'
+                    . implode('', $gambar[0]) .
+                    '<p>' . $textLimited . '</p>' .
+                    '</div>';
+            })
             ->addColumn('aksi', function ($pelkat) { // menambahkan kolom aksi
                 $btn = '<a href="'.url('/pengelolaan-informasi/pelkat/' . $pelkat->pelkat_id).'" class="btn btn-success btn-sm">Lihat</a> ';
                 $btn .= '<a href="'.url('/pengelolaan-informasi/pelkat/' . $pelkat->pelkat_id . '/edit').'" class="btn btn-warning btn-sm">Ubah</a> ';
@@ -45,7 +71,7 @@ class PelkatController extends Controller
                 
                 return $btn;
             })
-            ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html
+            ->rawColumns(['deskripsi','aksi']) // memberitahu bahwa kolom aksi adalah html
             ->make(true);
     }
 
@@ -72,11 +98,16 @@ class PelkatController extends Controller
             'deskripsi'         => 'required|string',                                    
         ]);
 
+        $kontenBaru = $request->deskripsi;
 
-        PelkatModel::create([
+
+        $pelkat = PelkatModel::create([
             'pelkat_nama'   => $request->pelkat_nama,  
             'deskripsi'     => $request->deskripsi,      
         ]);
+
+        // Bersihkan gambar yang tidak digunakan di konten lain
+        $this->hapusGambarTidakDipakai('', $kontenBaru, $pelkat->id);
 
         return redirect('/pengelolaan-informasi/pelkat')->with('success', 'Data pelkat berhasil disimpan');
     }
@@ -123,13 +154,57 @@ class PelkatController extends Controller
             'pelkat_nama'       => 'required|string|min:3|max:50|unique:t_pelkat,pelkat_nama,'.$id.',pelkat_id',  
             'deskripsi'         => 'required|string',     
         ]);
+
+        $pelkat = PelkatModel::find($id);
+        $kontenLama = $pelkat->deskripsi;
+        $kontenBaru = $request->deskripsi;
         
-        PelkatModel::find($id)->update([
+        $pelkat->update([
             'pelkat_nama'      => $request->pelkat_nama,
-            'deskripsi'          => $request->deskripsi,
+            'deskripsi'        => $request->deskripsi,
         ]);
 
-        return redirect('/pengelolaan-infromasi/pelkat')->with('success', 'Data pelkat berhasil diubah');
+        // Hapus gambar yang tidak dipakai
+        $this->hapusGambarTidakDipakai($kontenLama, $kontenBaru, $id);
+
+        // Update sejarah
+        $pelkat->update([
+            'pelkat_nama'      => $request->pelkat_nama,
+            'deskripsi'        => $request->deskripsi,
+        ]);
+
+        return redirect('/pengelolaan-informasi/pelkat')->with('success', 'Data pelkat berhasil diubah');
+    }
+
+    protected function hapusGambarTidakDipakai($kontenLama, $kontenBaru, $id)
+    {
+        // Ambil semua URL gambar dari konten lama
+        preg_match_all('/<img[^>]+src="([^">]+)"/i', $kontenLama, $gambarLama);
+        $gambarLama = $gambarLama[1];
+
+        // Ambil semua URL gambar dari konten baru
+        preg_match_all('/<img[^>]+src="([^">]+)"/i', $kontenBaru, $gambarBaru);
+        $gambarBaru = $gambarBaru[1];
+
+        // Bandingkan, cari gambar yang tidak ada di konten baru
+        $gambarTerhapus = array_diff($gambarLama, $gambarBaru);
+
+        foreach ($gambarTerhapus as $imgUrl) {
+            // Cek apakah gambar ini dipakai entri lain
+            $dipakaiDiLain = PelkatModel::where('pelkat_id', '!=', $id)
+                ->where('deskripsi', 'LIKE', '%' . $imgUrl . '%')
+                ->exists();
+
+            if (!$dipakaiDiLain) {
+                // Ubah URL ke path
+                $relativePath = str_replace(url('/storage'), 'public', $imgUrl);
+                $fullPath = storage_path('app/' . $relativePath);
+
+                if (file_exists($fullPath)) {
+                    @unlink($fullPath);
+                }
+            }
+        }
     }
 
     //Menghapus data user

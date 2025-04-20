@@ -23,7 +23,7 @@
                 <div class="form-group row">
                     <label class="col-md-1 control-label col-form-label">Deskripsi<span class="text-danger">*</span></label>
                     <div class="col-md-11">
-                        <textarea type="text" class="form-control" id="deskripsi" name="deskripsi" value="{{ old('deskripsi') }}" required></textarea>
+                        <textarea id="editor" class="form-control" rows="10" name="deskripsi" >{{ old('deskripsi') }}</textarea>
                         
                         @error('deskripsi')
                             <small class="form-text text-danger">{{ $message }}</small>
@@ -46,4 +46,38 @@
 @endpush
 
 @push('js')
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script>
+        let editor;
+        let editorReady = false;
+
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('ckeditor-pa.upload', ['_token' => csrf_token() ]) }}"
+                }
+            })
+            .then(newEditor => {
+                editor = newEditor;
+                editorReady = true;
+            });
+
+
+        document.querySelector('form').addEventListener('submit', function (e) {
+            if (!editorReady) {
+                e.preventDefault();
+                alert('Editor belum siap, mohon tunggu sebentar.');
+                return;
+            }
+
+            const isi = editor.getData();
+            document.querySelector('#isi_konten').value = isi;
+
+            if (!isi.trim()) {
+                e.preventDefault();
+                alert('Deskripsi tidak boleh kosong.');
+            }
+        });
+
+    </script>
 @endpush

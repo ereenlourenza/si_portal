@@ -24,7 +24,7 @@
                     </tr>
                     <tr>
                         <th>Deskripsi</th>
-                        <td>{!! nl2br(e($pelkat->deskripsi)) !!}</td>
+                        <td>{!! $pelkat->deskripsi !!}</td>
                     </tr>
                 </table>
             @endempty

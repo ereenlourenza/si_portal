@@ -546,6 +546,42 @@ class HomeController extends Controller
         ]);
     }
 
+    public function pelkatpa(){
+        $pelkat_pa = PelkatModel::whereRaw("LOWER(pelkat_nama) LIKE ?", ['%pa%'])->get();
+
+        return view('global.pelkat-pa', compact('pelkat_pa'));
+    }
+
+    public function pelkatpt(){
+        $pelkat_pt = PelkatModel::whereRaw("LOWER(pelkat_nama) LIKE ?", ['%pt%'])->get();
+
+        return view('global.pelkat-pt', compact('pelkat_pt'));
+    }
+
+    public function pelkatgp(){
+        $pelkat_gp = PelkatModel::whereRaw("LOWER(pelkat_nama) LIKE ?", ['%gp%'])->get();
+
+        return view('global.pelkat-gp', compact('pelkat_gp'));
+    }
+
+    public function pelkatpkp(){
+        $pelkat_pkp = PelkatModel::whereRaw("LOWER(pelkat_nama) LIKE ?", ['%pkp%'])->get();
+
+        return view('global.pelkat-pkp', compact('pelkat_pkp'));
+    }
+
+    public function pelkatpkb(){
+        $pelkat_pkb = PelkatModel::whereRaw("LOWER(pelkat_nama) LIKE ?", ['%pkb%'])->get();
+
+        return view('global.pelkat-pkb', compact('pelkat_pkb'));
+    }
+
+    public function pelkatpklu(){
+        $pelkat_pklu = PelkatModel::whereRaw("LOWER(pelkat_nama) LIKE ?", ['%pklu%'])->get();
+
+        return view('global.pelkat-pklu', compact('pelkat_pklu'));
+    }
+
     public function tataibadah(Request $request)
     {
         $tanggal = $request->input('tanggal');

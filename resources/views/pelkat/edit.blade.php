@@ -16,6 +16,7 @@
             @else
                 <form method="POST" action="{{ url('pengelolaan-informasi/pelkat/'.$pelkat->pelkat_id) }}" class="form-horizontal" enctype='multipart/form-data'>
                     @csrf {!! method_field('PUT') !!} <!-- tambahkan baris ini untuk proses edit yang butuh method PUT -->
+                    
                     <div class="form-group row">
                         <label class="col-md-1 control-label col-form-label">Pelkat Nama<span class="text-danger">*</span></label>
                         <div class="col-md-11">
@@ -28,7 +29,8 @@
                     <div class="form-group row align-items-center">
                         <label class="col-md-1 control-label col-form-label">Deskripsi<span class="text-danger">*</span></label>
                         <div class="col-md-11">
-                            <textarea type="text" class="form-control" id="deskripsi" name="deskripsi" required>{{ old('deskripsi', $pelkat->deskripsi) }}</textarea>
+                            <textarea id="editor" name="deskripsi" rows="10" class="form-control">{!! old('deskripsi', $pelkat->deskripsi) !!}</textarea>
+                            
                             @error('deskripsi')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -51,4 +53,37 @@
 @endpush
 
 @push('js')
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script>
+        let editor;
+        let editorReady = false;
+
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('ckeditor-pa.upload', ['_token' => csrf_token() ]) }}"
+                }
+            })
+            .then(newEditor => {
+                editor = newEditor;
+                editorReady = true;
+            });
+
+        document.querySelector('form').addEventListener('submit', function (e) {
+            if (!editorReady) {
+                e.preventDefault();
+                alert('Editor belum siap, mohon tunggu sebentar.');
+                return;
+            }
+
+            const isi = editor.getData();
+            document.querySelector('#isi_konten').value = isi;
+
+            if (!isi.trim()) {
+                e.preventDefault();
+                alert('Deskripsi tidak boleh kosong.');
+            }
+        });
+
+    </script>
 @endpush

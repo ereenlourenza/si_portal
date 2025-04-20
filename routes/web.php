@@ -106,13 +106,12 @@ Route::prefix('fungsionaris')->group(function () {
     });
 
     Route::prefix('pelkat')->group(function () {
-        // Route::get('/pa', [HomeController::class, 'pelkatPA'])->name('pa');
-        Route::get('/pa', function () { return view('global.pelkat-pa');})->name('pa');
-        Route::get('/pt', function () { return view('global.pelkat-pt');})->name('pt');
-        Route::get('/gp', function () { return view('global.pelkat-gp');})->name('gp');
-        Route::get('/pkp', function () { return view('global.pelkat-pkp');})->name('pkp');
-        Route::get('/pkb', function () { return view('global.pelkat-pkb');})->name('pkb');
-        Route::get('/pklu', function () { return view('global.pelkat-pklu');})->name('pklu');
+        Route::get('/pa', [HomeController::class, 'pelkatpa'])->name('pa');
+        Route::get('/pt', [HomeController::class, 'pelkatpt'])->name('pt');
+        Route::get('/gp', [HomeController::class, 'pelkatgp'])->name('gp');
+        Route::get('/pkp', [HomeController::class, 'pelkatpkp'])->name('pkp');
+        Route::get('/pkb', [HomeController::class, 'pelkatpkb'])->name('pkb');
+        Route::get('/pklu', [HomeController::class, 'pelkatpklu'])->name('pklu');
     });
 
     Route::prefix('komisi')->group(function () {
@@ -309,6 +308,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [PelkatController::class, 'index'])->name('pelkat.index');
             Route::post('/list', [PelkatController::class, 'list']);
             Route::get('/create', [PelkatController::class, 'create']);
+            Route::post('ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor-pa.upload');
             Route::post('/', [PelkatController::class, 'store']);
             Route::get('/{id}', [PelkatController::class, 'show']);
             Route::get('/{id}/edit', [PelkatController::class, 'edit']);
