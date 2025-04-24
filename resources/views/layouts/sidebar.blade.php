@@ -58,7 +58,7 @@
             <li class="nav-header">Data Pengguna</li> 
             <li class="nav-item"> 
                 <a href="{{ route('level.index') }}" class="nav-link {{ ($activeMenu == 'level')? 'active' : '' }} "> 
-                    <i class="nav-icon far fa-layer-group"></i> 
+                    <i class="nav-icon fas fa-layer-group"></i> 
                     <p>Level Pengguna</p> 
                 </a>
             </li> 

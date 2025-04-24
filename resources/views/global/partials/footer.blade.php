@@ -35,13 +35,15 @@
       <div>
         <h4 class="text-[#D99841] font-semibold text-md mb-4">NAVIGASI MENU</h4>
         <ul class="space-y-2 text-sm text-gray-300">
-          <li><a href="/" class="hover:text-[#D99841]">Beranda</a></li>
-          <li><a href="/profil" class="hover:text-[#D99841]">Profil</a></li>
-          <li><a href="/pelayanan" class="hover:text-[#D99841]">Pelayanan</a></li>
-          <li><a href="/fungsionaris" class="hover:text-[#D99841]">Fungsionaris</a></li>
-          <li><a href="/dokumen" class="hover:text-[#D99841]">Dokumen</a></li>
-          <li><a href="/galeri" class="hover:text-[#D99841]">Galeri</a></li>
-          <li><a href="/kontak" class="hover:text-[#D99841]">Kontak</a></li>
+          <li><a href="{{ Route('beranda') }}" class="hover:text-[#D99841]">Beranda</a></li>
+          <li><a href="{{ Route('wilayah-pelayanan') }}" class="hover:text-[#D99841]">Wilayah Pelayanan</a></li>
+          <li><a href="{{ Route('ibadah-rutin') }}" class="hover:text-[#D99841]">Jadwal Ibadah</a></li>
+          <li><a href="{{ Route('persembahan') }}" class="hover:text-[#D99841]">Persembahan</a></li>
+          <li><a href="{{ Route('kanal-youtube') }}" class="hover:text-[#D99841]">Kanal Youtube</a></li>
+          <li><a href="{{ Route('tata-ibadah') }}" class="hover:text-[#D99841]">Tata Ibadah</a></li>
+          <li><a href="{{ Route('warta-jemaat') }}" class="hover:text-[#D99841]">Warta Jemaat</a></li>
+          <li><a href="{{ Route('galeri') }}" class="hover:text-[#D99841]">Galeri</a></li>
+          <li><a href="{{ Route('kontak') }}" class="hover:text-[#D99841]">Kontak</a></li>
         </ul>
       </div>
   

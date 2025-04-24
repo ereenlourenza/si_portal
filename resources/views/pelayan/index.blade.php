@@ -56,9 +56,6 @@
                         let kategori = item.kategoripelayan ? item.kategoripelayan.kategoripelayan_nama : 'Lainnya';
 
                         // Jika pelayan memiliki data PHMJ, kategorikan sebagai "PHMJ"
-                        if (item.phmj) {
-                            kategori = "PHMJ";
-                        }
 
                         // // Jika pelayan memiliki data PHMJ, tambahkan ke kategori "PHMJ" 
                         // if (item.phmj) {
@@ -73,6 +70,13 @@
                             groupedByKategori[kategori] = [];
                         }
                         groupedByKategori[kategori].push(item);
+                        
+                        if (item.phmj) {
+                            if (!groupedByKategori["PHMJ"]) {
+                                groupedByKategori["PHMJ"] = [];
+                            }
+                            groupedByKategori["PHMJ"].push(item);
+                        }
                     });
 
                     // Urutkan agar kategori "PHMJ" muncul pertama
