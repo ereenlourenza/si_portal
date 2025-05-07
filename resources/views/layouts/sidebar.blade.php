@@ -11,11 +11,11 @@
         </div>
         @elseif(auth()->user()->level->level_kode == 'MLJ')
         <div class="info">
-            <a href="#" class="d-block">Majelis Jemaat</a>
+            <a href="#" class="d-block">Pengelolaan Berita Acara Ibadah</a>
         </div>
         @elseif(auth()->user()->level->level_kode == 'PHM')
         <div class="info">
-            <a href="#" class="d-block">PHMJ</a>
+            <a href="#" class="d-block">Pengelolaan Berita Acara Ibadah</a>
         </div>
         @endif
     </div>
@@ -53,6 +53,30 @@
                     <p>Dashboard</p> 
                 </a> 
             </li>
+
+            @if(auth()->user()->level->level_kode == 'MLJ' || auth()->user()->level->level_kode == 'ADM' || auth()->user()->level->level_kode == 'PHM')
+            <li class="nav-header">Berita Acara</li> 
+            <li class="nav-item"> 
+                <a href="{{ route('berita-acara.index') }}" class="nav-link {{ ($activeMenu == 'beritaacara')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-layer-group"></i> 
+                    <p>Berita Acara Ibadah</p> 
+                </a>
+            </li> 
+            <li class="nav-item"> 
+                <a href="{{ route('kategoripersembahan.index') }}" class="nav-link {{ ($activeMenu == 'beritaacara-kategoripersembahan')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-layer-group"></i> 
+                    <p>Kategori Persembahan</p> 
+                </a>
+            </li> 
+            {{-- 
+            <li class="nav-item"> 
+                <a href="{{ route('beritaacara-persembahan.index') }}" class="nav-link {{ ($activeMenu == 'beritaacara-persembahan')? 'active' : '' }} "> 
+                    <i class="nav-icon fas fa-layer-group"></i> 
+                    <p>BA Persembahan</p> 
+                </a>
+            </li>  --}}
+            
+            @endif
 
             @if(auth()->user()->level->level_kode == 'SAD')
             <li class="nav-header">Data Pengguna</li> 

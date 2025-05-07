@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BeritaAcaraIbadahController;
+use App\Http\Controllers\BeritaAcaraPersembahan;
+use App\Http\Controllers\BeritaAcaraWizardController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\GaleriController;
@@ -13,6 +16,7 @@ use App\Http\Controllers\KategoriGaleriController;
 use App\Http\Controllers\KategoriIbadahController;
 use App\Http\Controllers\KategoriPelayanController;
 use App\Http\Controllers\KategoriPersembahan;
+use App\Http\Controllers\KategoriPersembahanController;
 use App\Http\Controllers\KomisiController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PelayanController;
@@ -378,4 +382,31 @@ Route::middleware(['auth'])->group(function () {
         });
 
     });
+
+    Route::middleware(['checklevel:MLJ,ADM,PHM'])->prefix('pengelolaan-berita-acara')->group(function () {
+
+        Route::prefix('berita-acara')->group(function () {
+            Route::get('/', [BeritaAcaraIbadahController::class, 'index'])->name('berita-acara.index');
+            Route::post('/list', [BeritaAcaraIbadahController::class, 'list']);
+            Route::get('/create', [BeritaAcaraIbadahController::class, 'create']);
+            Route::post('/', [BeritaAcaraIbadahController::class, 'store']);
+            Route::get('/{id}/edit', [BeritaAcaraIbadahController::class, 'edit']);
+            Route::put('/{id}', [BeritaAcaraIbadahController::class, 'update']);
+            Route::get('/{id}', [BeritaAcaraIbadahController::class, 'show']);
+            Route::delete('/{id}', [BeritaAcaraIbadahController::class, 'destroy']);
+        });
+        
+        Route::prefix('kategoripersembahan')->group(function () {
+            Route::get('/', [KategoriPersembahanController::class, 'index'])->name('kategoripersembahan.index');
+            Route::post('/list', [KategoriPersembahanController::class, 'list']);
+            Route::get('/create', [KategoriPersembahanController::class, 'create']);
+            Route::post('/', [KategoriPersembahanController::class, 'store']);
+            Route::get('/{id}', [KategoriPersembahanController::class, 'show']);
+            Route::get('/{id}/edit', [KategoriPersembahanController::class, 'edit']);
+            Route::put('/{id}', [KategoriPersembahanController::class, 'update']);
+            Route::delete('/{id}', [KategoriPersembahanController::class, 'destroy']);
+        });
+    
+    });
+    
 });

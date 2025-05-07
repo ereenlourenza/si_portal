@@ -124,6 +124,22 @@
 
 @push('css')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important; /* samakan dengan .form-control (default Bootstrap) */
+        padding: 6px 3px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    .select2-selection__rendered {
+        line-height: 30px !important;
+    }
+
+    .select2-selection__arrow {
+        height: 36px !important;
+    }
+</style>
 @endpush
 
 @push('js')
@@ -164,7 +180,8 @@
             $('#pelayan_firman').select2({
                 tags: true, // Memungkinkan input manual
                 placeholder: "Pilih atau Ketik Manual",
-                allowClear: true
+                allowClear: true, // Menambahkan tombol clear
+                width: '100%' // Menyesuaikan lebar dropdown dengan elemen form
             });
         });
 

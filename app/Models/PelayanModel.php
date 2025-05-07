@@ -29,4 +29,19 @@ class PelayanModel extends Model
     public function phmj() {
         return $this->hasOne(PHMJModel::class, 'pelayan_id', 'pelayan_id');
     }
+
+    public function beritaAcaraPelayan1()
+    {
+        return $this->hasMany(BeritaAcaraIbadahModel::class, 'ttd_pelayan_1_id');
+    }
+
+    public function beritaAcaraPelayan4()
+    {
+        return $this->hasMany(BeritaAcaraIbadahModel::class, 'ttd_pelayan_4_id');
+    }
+
+    public function sebagaiPetugas()
+    {
+        return $this->hasMany(BeritaAcaraPetugasModel::class, 'pelayan_id');
+    }
 }
