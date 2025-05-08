@@ -7,7 +7,7 @@
           GPIB JEMAAT “IMMANUEL” MALANG
         </h3>
         <div class="flex items-start gap-6">
-          <img src="/images/logo-gpib-full.png" alt="Logo GPIB" class="w-16 md:w-20 shrink-0">
+          <img src="/images/logo-gpib-full.webp" alt="Logo GPIB" class="w-16 md:w-20 shrink-0">
           <div class="space-y-3 text-sm text-gray-300 leading-relaxed">
             <p>
               GPIB Immanuel Malang, yang berdiri sejak 1861, merupakan gereja tertua di Kota Malang dan dikenal dengan sebutan "Gereja Jago." Gereja ini telah ditetapkan sebagai cagar budaya.

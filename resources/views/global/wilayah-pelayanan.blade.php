@@ -8,7 +8,7 @@
         </h1>
     
         <div class="text-center px-4 py-4">
-            <img src="/images/global/wilayah-pelayanan.png" alt="Wilayah Pelayanan" class="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto my-4 h-auto rounded shadow">
+            <img src="/images/global/wilayah-pelayanan.webp" alt="Wilayah Pelayanan" class="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto my-4 h-auto rounded shadow">
             <p class="text-sm italic text-gray-500">Wilayah Pelayanan</p>
         </div>
 

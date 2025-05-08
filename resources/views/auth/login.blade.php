@@ -16,7 +16,7 @@
 
   <style>
     body {
-      background: url('/images/bg-login 3.jpg') ;
+      background: url('/images/bg-login 3.webp') ;
       background-size: cover; /* Menyesuaikan gambar dengan layar */
     }
 

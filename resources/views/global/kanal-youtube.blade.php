@@ -15,7 +15,7 @@
         </div>
         <a href="https://www.youtube.com/@GPIBImmanuelMalang/streams" class="w-full md:w-auto">
             <div class="flex items-center border py-2 px-3 shadow-lg border-[#614D24] gap-3 rounded hover:bg-[#614D24] hover:text-white transition">
-                <img src="{{ asset('images/global/youtube-icon.jpg') }}" alt="YouTube Icon" class="w-6 h-6">
+                <img src="{{ asset('images/global/youtube-icon.webp') }}" alt="YouTube Icon" class="w-6 h-6">
                 <div>
                     <p class="text-sm font-semibold">GPIB Immanuel Malang</p>
                     <p class="text-xs">@gpibimmanuelmalang</p>

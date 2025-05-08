@@ -6,7 +6,7 @@
     
     {{-- <title>{{ config('app.name', 'GPIB Immanuel Malang') }}</title> --}}
     <title>GPIB Immanuel Malang</title>
-    <link rel="shortcut icon" href="/images/logo-gpib-sm.png">
+    <link rel="shortcut icon" href="/images/logo-gpib-sm.webp">
 
     <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Untuk mengirimkan token Laravel CRSF pada setiap request ajax-->
 
@@ -72,7 +72,7 @@
             
             <!-- Brand Logo -->
             <a href="{{ url('/') }}" class="brand-link">
-                <img src="/images/logo-gpib-sm.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
+                <img src="/images/logo-gpib-sm.webp" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
                 <span class="brand-text "><b>GPIB IMM MLG</b></span>
             </a>
             

@@ -86,7 +86,7 @@
         
         {{-- Logo --}}
         <div class="flex items-center space-x-2">
-            <img src="{{ asset('images/logo-gpib-full.png') }}" alt="Logo" class="w-14 h-14 md:w-22 md:h-22">
+            <img src="{{ asset('images/logo-gpib-full.webp') }}" alt="Logo" class="w-14 h-14 md:w-22 md:h-22">
         
             <div class="ml-2 md:ml-6">
               <a href="/">

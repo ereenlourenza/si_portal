@@ -21,12 +21,12 @@
                         <label class="col-auto control-label col-form-label">Filter:</label>
             
                         {{-- Filter Tanggal --}}
-                        <div class="col-md-3">
+                        <div class="col-md-3 mb-3">
                             <input type="date" id="filterTanggal" name="tanggal" class="form-control">
                         </div>
 
                         @if (auth()->user()->level->level_kode == 'ADM') 
-                            <div class="text-right">
+                            <div class="col-md-3 text-right">
                                 <a href="{{ route('berita-acara.exportPdfAll') }}" class="btn btn-sm btn-danger" target="_blank">
                                     <i class="fas fa-file-pdf"></i> Export PDF All
                                 </a>

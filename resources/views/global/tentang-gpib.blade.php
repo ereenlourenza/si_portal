@@ -8,7 +8,7 @@
         </h1>
     
         <div class="text-center px-4 py-4">
-            <img src="/images/global/willemskerk.png" alt="Willemskerk di Weltevreden Batavia" class="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto my-4 h-auto rounded shadow">
+            <img src="/images/global/willemskerk.webp" alt="Willemskerk di Weltevreden Batavia" class="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto my-4 h-auto rounded shadow">
             <p class="text-sm italic">Willemskerk di Weltevreden Batavia</p>
         </div>
         

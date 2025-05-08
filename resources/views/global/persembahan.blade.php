@@ -16,7 +16,7 @@
         <div class="max-w-2xl mx-auto bg-[#231C0D] rounded-xl p-6 shadow-lg text-white flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
             <!-- Ilustrasi HP -->
             <div class="w-full md:w-1/3 flex justify-center">
-                <img src="{{ asset('images/global/qris.png') }}" alt="QRIS Ilustrasi" class="w-32 md:w-40">
+                <img src="{{ asset('images/global/qris.webp') }}" alt="QRIS Ilustrasi" class="w-32 md:w-40">
             </div>
 
             <!-- Info QR & Rekening -->

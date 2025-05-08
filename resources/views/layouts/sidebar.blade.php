@@ -58,13 +58,13 @@
             <li class="nav-header">Berita Acara</li> 
             <li class="nav-item"> 
                 <a href="{{ route('berita-acara.index') }}" class="nav-link {{ ($activeMenu == 'beritaacara')? 'active' : '' }} "> 
-                    <i class="nav-icon fas fa-layer-group"></i> 
+                    <i class="nav-icon fas fa-newspaper"></i> 
                     <p>Berita Acara Ibadah</p> 
                 </a>
             </li> 
             <li class="nav-item"> 
                 <a href="{{ route('kategoripersembahan.index') }}" class="nav-link {{ ($activeMenu == 'beritaacara-kategoripersembahan')? 'active' : '' }} "> 
-                    <i class="nav-icon fas fa-layer-group"></i> 
+                    <i class="nav-icon fas fa-inbox"></i> 
                     <p>Kategori Persembahan</p> 
                 </a>
             </li> 
