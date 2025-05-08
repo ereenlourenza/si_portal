@@ -26,14 +26,14 @@
                         </div>
             
                         {{-- Filter Tempat Ibadah --}}
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <select class="form-control" id="ibadah_id" name="ibadah_id">
                                 <option value="">Semua Ibadah</option>
                                 @foreach($ibadah as $item)
                                     <option value="{{ $item->ibadah_id }}">{{ $item->tempat }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

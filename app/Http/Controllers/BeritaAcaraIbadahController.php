@@ -79,12 +79,14 @@ class BeritaAcaraIbadahController extends Controller
             })
             ->addColumn('aksi', function ($item) {
                 $btn = '<a href="' . url('/pengelolaan-berita-acara/berita-acara/' . $item->berita_acara_ibadah_id) . '" class="btn btn-success btn-sm">Lihat</a> ';
-                // if (auth()->user()->level->level_kode == 'PHM') {
+                if (auth()->user()->level->level_kode == 'PHM') {
                     $btn .= '<a href="' . url('/pengelolaan-berita-acara/berita-acara/' . $item->berita_acara_ibadah_id . '/edit') . '" class="btn btn-warning btn-sm">Ubah</a> ';
-                // }
-                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/pengelolaan-berita-acara/berita-acara/' . $item->berita_acara_ibadah_id) . '">' .
-                    csrf_field() . method_field('DELETE') .
-                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Hapus data ini?\');">Hapus</button></form>';
+                }
+                if (auth()->user()->level->level_kode == 'PHM' || auth()->user()->level->level_kode == 'MLJ') {
+                    $btn .= '<form class="d-inline-block" method="POST" action="' . url('/pengelolaan-berita-acara/berita-acara/' . $item->berita_acara_ibadah_id) . '">' .
+                        csrf_field() . method_field('DELETE') .
+                        '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Hapus data ini?\');">Hapus</button></form>';
+                }
                 return $btn;
             })
             ->rawColumns(['aksi'])
