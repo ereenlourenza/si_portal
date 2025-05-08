@@ -18,43 +18,41 @@ class PHMJController extends Controller
     }
 
     //Menampilkan halaman form tambah user
-    public function create(){
+    public function create()
+    {
         $breadcrumb = (object)[
             'title' => 'Tambah Informasi',
             'list' => ['Pengelolaan Informasi', 'PHMJ', 'Tambah']
         ];
-    
+
         $page = (object)[
             'title' => 'Tambah PHMJ baru'
         ];
-    
+
         $currentYear = Carbon::now()->year;
-    
-        // Ambil pelayan yang kategorinya Pendeta (1), Diaken (3), Penatua (4), dan masa jabatannya masih aktif
-        $pelayan = PelayanModel::whereIn('kategoripelayan_id', [1, 3, 4])
-            ->where('masa_jabatan_mulai', '<=', $currentYear)
-            ->where('masa_jabatan_selesai', '>=', $currentYear)
-            ->get();
-    
-        $pemakaiPelayan = DB::table('t_phmj')->pluck('pelayan_id')->toArray(); // Pelayan yang sudah digunakan
-        $pelayanTakTerpakai = PelayanModel::whereNotIn('pelayan_id', $pemakaiPelayan)
+
+        // Ambil ID pelayan yang sudah digunakan
+        $pemakaiPelayan = DB::table('t_phmj')->pluck('pelayan_id')->toArray();
+
+        // Ambil pelayan yang belum digunakan & masih aktif
+        $pelayan = PelayanModel::whereNotIn('pelayan_id', $pemakaiPelayan)
             ->whereIn('kategoripelayan_id', [1, 3, 4])
             ->where('masa_jabatan_mulai', '<=', $currentYear)
             ->where('masa_jabatan_selesai', '>=', $currentYear)
-            ->get(); // Pelayan yang belum dipakai & aktif
-    
-        $activeMenu = 'pelayan'; // Set menu aktif
-    
+            ->get();
+
+        $activeMenu = 'pelayan';
+
         return view('phmj.create', [
             'breadcrumb' => $breadcrumb,
             'page' => $page,
-            'pelayan' => $pelayan,
             'pemakaiPelayan' => $pemakaiPelayan,
-            'pelayanTakTerpakai' => $pelayanTakTerpakai,
+            'pelayan' => $pelayan,
             'activeMenu' => $activeMenu,
             'notifUser' => UserModel::all()
         ]);
     }
+
 
     //Menyimpan data user baru
     public function store(Request $request){

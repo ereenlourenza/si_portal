@@ -12,7 +12,7 @@
                 <div class="form-group row">
                     <label class="col-md-1 control-label col-form-label">Pelayan<span class="text-danger">*</span></label>
                     <div class="col-md-11">
-                        <select class="form-control" id="pelayan_id" name="pelayan_id" required>
+                        <select class="form-control select2" id="pelayan_id" name="pelayan_id" required>
                             <option value="">Pilih Diaken/Penatua</option>
                             {{-- @foreach($pelayan as $item)
                                 <option value="{{ $item->pelayan_id }}">{{ $item->nama }}</option>
@@ -72,12 +72,16 @@
                         @enderror
                     </div>
                 </div> --}}
+                @php
+                    $currentYear = date('Y');
+                    $futureYear = $currentYear + 5; // Bisa diganti sesuai kebutuhan
+                @endphp
                 <div class="form-group row align-items-center">
                     <label class="col-md-1 control-label col-form-label">Periode Mulai<span class="text-danger">*</span></label>
                     <div class="col-md-11">
                         <select class="form-control" id="periode_mulai" name="periode_mulai" required>
                             <option value="">Pilih Tahun</option>
-                            @for ($year = date('Y'); $year >= 1900; $year--)
+                            @for ($year = $futureYear; $year >= 1900; $year--)
                                 <option value="{{ $year }}" {{ old('periode_mulai') == $year ? 'selected' : '' }}>{{ $year }}</option>
                             @endfor
                         </select>
@@ -92,7 +96,7 @@
                     <div class="col-md-11">
                         <select class="form-control" id="periode_selesai" name="periode_selesai" required>
                             <option value="">Pilih Tahun</option>
-                            @for ($year = date('Y'); $year >= 1900; $year--)
+                            @for ($year = $futureYear; $year >= 1900; $year--)
                                 <option value="{{ $year }}" {{ old('periode_selesai') == $year ? 'selected' : '' }}>{{ $year }}</option>
                             @endfor
                         </select>
@@ -115,7 +119,35 @@
 @endsection
 
 @push('css')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important; /* samakan dengan .form-control (default Bootstrap) */
+        padding: 6px 3px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    .select2-selection__rendered {
+        line-height: 30px !important;
+    }
+
+    .select2-selection__arrow {
+        height: 36px !important;
+    }
+</style>
 @endpush
 
 @push('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#pelayan_id').select2({
+            tags: false, // Memungkinkan input manual
+            placeholder: "Pilih Pelayan",
+            allowClear: true, // Menambahkan tombol clear
+            width: '100%' // Menyesuaikan lebar dropdown dengan elemen form
+        });
+    });
+</script>
 @endpush

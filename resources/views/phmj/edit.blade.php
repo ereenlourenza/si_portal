@@ -60,12 +60,16 @@
                             @enderror
                         </div>
                     </div>
+                    @php
+                        $currentYear = date('Y');
+                        $futureYear = $currentYear + 5; // Bisa diganti sesuai kebutuhan
+                    @endphp
                     <div class="form-group row align-items-center">
                         <label class="col-md-1 control-label col-form-label">Periode Mulai<span class="text-danger">*</span></label>
                         <div class="col-md-11">
                             <select class="form-control" id="periode_mulai" name="periode_mulai" required>
                                 <option value="" disabled>Pilih Tahun</option>
-                                @for ($year = date('Y'); $year >= 1900; $year--)
+                                @for ($year = $futureYear; $year >= 1900; $year--)
                                     <option value="{{ $year }}" 
                                         {{ (old('periode_mulai', $phmj->periode_mulai ?? '') == $year) ? 'selected' : '' }}>
                                         {{ $year }}
@@ -83,7 +87,7 @@
                         <div class="col-md-11">
                             <select class="form-control" id="periode_selesai" name="periode_selesai" required>
                                 <option value="" disabled>Pilih Tahun</option>
-                                @for ($year = date('Y'); $year >= 1900; $year--)
+                                @for ($year = $futureYear; $year >= 1900; $year--)
                                     <option value="{{ $year }}" 
                                         {{ (old('periode_selesai', $phmj->periode_selesai ?? '') == $year) ? 'selected' : '' }}>
                                         {{ $year }}

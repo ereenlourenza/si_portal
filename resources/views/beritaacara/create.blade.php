@@ -16,7 +16,7 @@
                     <!-- Pilih Ibadah -->
                     <div class="form-group">
                         <label for="ibadah_id">Ibadah</label>
-                        <select name="ibadah_id" id="ibadah_id" class="form-control" required>
+                        <select name="ibadah_id" id="ibadah_id" class="form-control select2" required>
                             <option value="">-- Pilih Ibadah --</option>
                             @foreach($ibadah as $item)
                                 <option value="{{ $item->ibadah_id }}" data-pelayan-firman="{{ $item->pelayan_firman }}">

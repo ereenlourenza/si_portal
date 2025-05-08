@@ -29,6 +29,14 @@
     <div class="card mb-4">
         <div class="card-header">
             <h3 class="card-title">Filter Data</h3>
+            @if (auth()->user()->level->level_kode == 'ADM') 
+                <!-- Tombol Export Semua Grafik -->
+                <div class="text-right">
+                    <button id="exportAllExcel" class="btn btn-sm btn-success"><i class="fas fa-file-excel"></i> Excel</button>
+                    <button id="exportAllPNG" class="btn btn-sm btn-secondary"><i class="fas fa-image"></i> PNG</button>
+                    <button id="exportAllPDF" class="btn btn-sm btn-danger"><i class="fas fa-file-pdf"></i> PDF</button>
+                </div>
+            @endif
         </div>
         <div class="card-body">
             <form method="GET" action="{{ route('beranda.index') }}">
@@ -144,6 +152,9 @@
 
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
     // Langkah ke-2: Kirim data dari controller ke JavaScript
     var dataBeritaAcara = @json($data);
@@ -241,13 +252,6 @@
                     tooltip: {
                         mode: 'nearest', // Tooltip muncul untuk data terdekat
                         intersect: false, // Tooltip muncul meskipun kursor tidak tepat di atas bar
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                // Format tooltip agar lebih jelas
-                                const value = tooltipItem.raw; // Ambil nilai data
-                                return `Total: ${value.toLocaleString('id-ID')} IDR`; // Format angka dengan pemisah ribuan
-                            }
-                        }
                     }
                 },
                 scales: {
@@ -313,6 +317,98 @@
         });
 
         
+    });
+
+    // Fungsi untuk mengekspor semua grafik ke Excel
+    document.getElementById('exportAllExcel').addEventListener('click', function () {
+        const wb = XLSX.utils.book_new();
+
+        // Grafik Kehadiran
+        const dataKehadiranSheet = [['Tanggal', 'Jumlah Kehadiran']];
+        dataBeritaAcara.forEach(item => {
+            dataKehadiranSheet.push([item.tanggal, item.jumlah_kehadiran]);
+        });
+        const wsKehadiran = XLSX.utils.aoa_to_sheet(dataKehadiranSheet);
+        XLSX.utils.book_append_sheet(wb, wsKehadiran, 'Grafik Kehadiran');
+
+        // Grafik Total Persembahan
+        const dataPersembahanSheet = [['Tanggal', 'Total Persembahan']];
+        dataBeritaAcara.forEach(item => {
+            dataPersembahanSheet.push([item.tanggal, item.total_persembahan]);
+        });
+        const wsPersembahan = XLSX.utils.aoa_to_sheet(dataPersembahanSheet);
+        XLSX.utils.book_append_sheet(wb, wsPersembahan, 'Grafik Persembahan');
+
+        // Grafik Kategori Persembahan
+        const kategoriLabels = Object.keys(dataBeritaAcara[0]?.kategori_persembahan || {});
+        const kategoriData = Object.values(dataBeritaAcara[0]?.kategori_persembahan || {});
+        const dataKategoriSheet = [['Kategori', 'Jumlah']];
+        kategoriLabels.forEach((label, index) => {
+            dataKategoriSheet.push([label, kategoriData[index]]);
+        });
+        const wsKategori = XLSX.utils.aoa_to_sheet(dataKategoriSheet);
+        XLSX.utils.book_append_sheet(wb, wsKategori, 'Kategori Persembahan');
+
+        // Grafik Distribusi Berdasarkan Minggu
+        const mingguLabels = Object.keys(@json($persembahanMinggu->toArray()));
+        const mingguData = Object.values(@json($persembahanMinggu->toArray()));
+        const dataMingguSheet = [['Minggu ke-', 'Jumlah']];
+        mingguLabels.forEach((label, index) => {
+            dataMingguSheet.push([label, mingguData[index]]);
+        });
+        const wsMinggu = XLSX.utils.aoa_to_sheet(dataMingguSheet);
+        XLSX.utils.book_append_sheet(wb, wsMinggu, 'Persembahan per Minggu');
+
+        // Unduh file Excel
+        XLSX.writeFile(wb, 'semua_grafik.xlsx');
+    });
+
+
+    // Fungsi untuk mengekspor grafik ke PNG
+    document.getElementById('exportAllPNG').addEventListener('click', function () {
+        const grafikIds = ['grafikKehadiran', 'grafikPersembahan', 'grafikKategoriPersembahan', 'grafikPersembahanMinggu'];
+        const zip = new JSZip(); // Inisialisasi objek JSZip
+        const folder = zip.folder('grafik'); // Buat folder di dalam ZIP
+
+        grafikIds.forEach((id) => {
+            const canvas = document.getElementById(id);
+            if (canvas) {
+                const image = canvas.toDataURL('image/png', 1.0); // Konversi canvas ke data URL
+                const base64Data = image.split(',')[1]; // Ambil data base64 dari data URL
+                folder.file(`${id}.png`, base64Data, { base64: true }); // Tambahkan file PNG ke folder ZIP
+            } else {
+                console.error(`Canvas dengan ID ${id} tidak ditemukan.`);
+            }
+        });
+
+        // Generate file ZIP dan unduh
+        zip.generateAsync({ type: 'blob' }).then(function (content) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = 'grafik.zip'; // Nama file ZIP
+            link.click();
+        });
+    });
+
+    // Fungsi untuk mengekspor semua grafik ke PDF
+    document.getElementById('exportAllPDF').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf; // Pastikan jsPDF diakses dari namespace window.jspdf
+        const pdf = new jsPDF('landscape'); // Buat PDF dalam orientasi landscape
+        const grafikIds = ['grafikKehadiran', 'grafikPersembahan', 'grafikKategoriPersembahan', 'grafikPersembahanMinggu'];
+
+        grafikIds.forEach((id, index) => {
+            const canvas = document.getElementById(id);
+            if (canvas) {
+                console.log(`Canvas ditemukan: ${id}`);
+                const image = canvas.toDataURL('image/png', 1.0);
+                if (index > 0) pdf.addPage();
+                pdf.addImage(image, 'PNG', 10, 10, 280, 150);
+            } else {
+                console.error(`Canvas dengan ID ${id} tidak ditemukan.`);
+            }
+        });
+
+        pdf.save('semua_grafik.pdf'); // Unduh PDF
     });
 </script>
 @endpush

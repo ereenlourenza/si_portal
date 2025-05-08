@@ -34,6 +34,7 @@ use App\Http\Controllers\TataIbadahController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WartaJemaatController;
 use App\Http\Controllers\WelcomeController;
+use App\Models\BeritaAcaraIbadahModel;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -386,13 +387,17 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['checklevel:MLJ,ADM,PHM'])->prefix('pengelolaan-berita-acara')->group(function () {
 
         Route::prefix('berita-acara')->group(function () {
+            
             Route::get('/', [BeritaAcaraIbadahController::class, 'index'])->name('berita-acara.index');
             Route::post('/list', [BeritaAcaraIbadahController::class, 'list']);
+            Route::get('/export-pdf-all', [BeritaAcaraIbadahController::class, 'exportPdfAll'])->name('berita-acara.exportPdfAll');
             Route::get('/create', [BeritaAcaraIbadahController::class, 'create']);
             Route::post('/', [BeritaAcaraIbadahController::class, 'store']);
             Route::get('/{id}/edit', [BeritaAcaraIbadahController::class, 'edit']);
             Route::put('/{id}', [BeritaAcaraIbadahController::class, 'update']);
             Route::get('/{id}', [BeritaAcaraIbadahController::class, 'show']);
+            Route::get('/{id}/export-pdf', [BeritaAcaraIbadahController::class, 'exportPdf'])->name('berita-acara.exportPdf');
+            Route::get('/export-persembahan/{id}', [BeritaAcaraIbadahController::class, 'exportPersembahan'])->name('berita-acara.exportPersembahan');
             Route::delete('/{id}', [BeritaAcaraIbadahController::class, 'destroy']);
         });
         

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BeritaAcaraSingleExport;
+use App\Exports\PersembahanExport;
 use App\Models\BeritaAcaraIbadahModel;
 use App\Models\BeritaAcaraPersembahanModel;
 use App\Models\BeritaAcaraPetugasModel;
@@ -11,12 +13,14 @@ use App\Models\PelayanModel;
 use App\Models\PersembahanAmplopModel;
 use App\Models\PersembahanLembaranModel;
 use App\Models\UserModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BeritaAcaraIbadahController extends Controller
 {
@@ -106,8 +110,13 @@ class BeritaAcaraIbadahController extends Controller
 
         $activeMenu = 'beritaacara';
 
-        // Ambil hanya ibadah kategori 1
-        $ibadah = IbadahModel::where('kategoriibadah_id', 1)->get();
+        // Ambil semua ibadah_id yang sudah digunakan di berita acara
+        $usedIbadahIds = BeritaAcaraIbadahModel::pluck('ibadah_id')->toArray();
+
+        // Ambil hanya ibadah kategori 1 yang belum digunakan
+        $ibadah = IbadahModel::where('kategoriibadah_id', 1)
+                    ->whereNotIn('ibadah_id', $usedIbadahIds)
+                    ->get();
 
         $pelayan = PelayanModel::whereIn('kategoripelayan_id', [1,2,3,4])->get();
 
@@ -585,4 +594,38 @@ class BeritaAcaraIbadahController extends Controller
             return redirect('pengelolaan-berita-acara/berita-acara')->with('error', 'Gagal menghapus data: ' . $e->getMessage());
         }
     }
+
+    public function exportPdf($id)
+    {
+        $berita = BeritaAcaraIbadahModel::with([
+            'ibadah', 'petugas.pelayanJadwal', 'petugas.pelayanHadir',
+            'persembahan.kategori', 'persembahan.amplop', 'persembahan.lembaran'
+        ])->findOrFail($id);
+
+        $pdf = Pdf::loadView('beritaacara.exportPdf', compact('berita'))
+                ->setPaper('a4', 'portrait');
+
+        return $pdf->download('beritaacara_' . $id . '.pdf');
+    }
+
+    public function exportPdfAll()
+    {
+        $semua_berita = BeritaAcaraIbadahModel::with([
+            'ibadah', 'petugas.pelayanJadwal', 'petugas.pelayanHadir',
+            'persembahan.kategori', 'persembahan.amplop', 'persembahan.lembaran'
+        ])->orderBy('created_at', 'desc')->get();
+        
+        $pdf = Pdf::loadView('beritaacara.exportPdfAll', compact('semua_berita'))
+                ->setPaper('a4', 'portrait');
+        
+                
+
+        return $pdf->download('semua_berita_acara.pdf');
+    }
+
+    public function exportPersembahan($id)
+    {
+        return Excel::download(new PersembahanExport($id), 'persembahan_'. $id .'.xlsx');
+    }
+
 }

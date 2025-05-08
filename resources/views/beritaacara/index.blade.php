@@ -24,6 +24,14 @@
                         <div class="col-md-3">
                             <input type="date" id="filterTanggal" name="tanggal" class="form-control">
                         </div>
+
+                        @if (auth()->user()->level->level_kode == 'ADM') 
+                            <div class="text-right">
+                                <a href="{{ route('berita-acara.exportPdfAll') }}" class="btn btn-sm btn-danger" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> Export PDF All
+                                </a>
+                            </div>
+                        @endif
             
                         {{-- Filter Tempat Ibadah --}}
                         {{-- <div class="col-md-3">
