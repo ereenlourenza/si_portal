@@ -44,99 +44,17 @@ class PendaftaranController extends Controller
     
         if ($jenis == 'baptis') {
             $pendaftarans = BaptisModel::select(
-                'baptis_id as pendaftaran_id',
-                'nama_lengkap',
-                'tempat_lahir',
-                'tanggal_lahir',
-                'jenis_kelamin',
-                'nama_ayah',
-                'nama_ibu',
-                'tempat_pernikahan', 
-                'tanggal_pernikahan', 
-                'tempat_sidi_ayah', 
-                'tanggal_sidi_ayah', 
-                'tempat_sidi_ibu', 
-                'tanggal_sidi_ibu', 
-                'alamat', 
-                'nomor_telepon', 
-                'tanggal_baptis', 
-                'dilayani', 
-                'surat_nikah_ortu', 
-                'akta_kelahiran_anak',
-                'status',
-                'alasan_penolakan',
+                'baptis_id as pendaftaran_id','nama_lengkap','tempat_lahir','tanggal_lahir','jenis_kelamin','nama_ayah','nama_ibu','tempat_pernikahan', 'tanggal_pernikahan', 'tempat_sidi_ayah', 'tanggal_sidi_ayah', 'tempat_sidi_ibu', 'tanggal_sidi_ibu', 'alamat', 'nomor_telepon', 'tanggal_baptis', 'dilayani', 'surat_nikah_ortu', 'akta_kelahiran_anak','status','alasan_penolakan',
                 DB::raw('"baptis" as jenis_pendaftaran')
             );
         } elseif ($jenis == 'sidi') {
             $pendaftarans = KatekisasiModel::select(
-                'katekisasi_id as pendaftaran_id',
-                'nama_lengkap', 
-                'tempat_lahir', 
-                'tanggal_lahir', 
-                'jenis_kelamin', 
-                'alamat_katekumen', 
-                'nomor_telepon_katekumen', 
-                'pendidikan_terakhir', 
-                'pekerjaan', 
-                'is_baptis',
-                'tempat_baptis',
-                'no_surat_baptis',
-                'tanggal_surat_baptis',
-                'dilayani',
-                'nama_ayah', 
-                'nama_ibu', 
-                'alamat_ortu', 
-                'nomor_telepon_ortu', 
-                'akta_kelahiran', 
-                'surat_baptis', 
-                'pas_foto', 
-                'status',
-                'alasan_penolakan',
+                'katekisasi_id as pendaftaran_id', 'nama_lengkap', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'alamat_katekumen', 'nomor_telepon_katekumen', 'pendidikan_terakhir', 'pekerjaan', 'is_baptis', 'tempat_baptis', 'no_surat_baptis', 'tanggal_surat_baptis', 'dilayani', 'nama_ayah', 'nama_ibu', 'alamat_ortu', 'nomor_telepon_ortu', 'akta_kelahiran', 'surat_baptis', 'pas_foto', 'status', 'alasan_penolakan',
                 DB::raw('"sidi" as jenis_pendaftaran')
             );
         } elseif ($jenis == 'pernikahan') {
             $pendaftarans = PernikahanModel::select(
-                'pernikahan_id as pendaftaran_id',
-                'nama_lengkap_pria', 
-                'nama_lengkap_pria', 
-                'tempat_lahir_pria', 
-                'tanggal_lahir_pria', 
-                'tempat_sidi_pria', 
-                'tanggal_sidi_pria', 
-                'pekerjaan_pria', 
-                'alamat_pria', 
-                'nomor_telepon_pria',
-                'nama_ayah_pria',
-                'nama_ibu_pria',
-                'nama_lengkap_wanita', 
-                'nama_lengkap_wanita', 
-                'tempat_lahir_wanita', 
-                'tanggal_lahir_wanita', 
-                'tempat_sidi_wanita', 
-                'tanggal_sidi_wanita', 
-                'pekerjaan_wanita', 
-                'alamat_wanita', 
-                'nomor_telepon_wanita',
-                'nama_ayah_wanita',
-                'nama_ibu_wanita',
-                'tanggal_pernikahan',
-                'waktu_pernikahan',
-                'dilayani',
-                'ktp',
-                'kk',
-                'surat_sidi',
-                'akta_kelahiran',
-                'sk_nikah',
-                'sk_asalusul',
-                'sp_mempelai',
-                'sk_ortu',
-                'akta_perceraian_kematian',
-                'si_kawin_komandan',
-                'sp_gereja_asal',
-                'foto',
-                'biaya',
-                'status',
-                'alasan_penolakan',
+                'pernikahan_id as pendaftaran_id', 'nama_lengkap_pria', 'nama_lengkap_pria', 'tempat_lahir_pria', 'tanggal_lahir_pria', 'tempat_sidi_pria', 'tanggal_sidi_pria', 'pekerjaan_pria', 'alamat_pria', 'nomor_telepon_pria', 'nama_ayah_pria', 'nama_ibu_pria', 'nama_lengkap_wanita', 'nama_lengkap_wanita', 'tempat_lahir_wanita', 'tanggal_lahir_wanita', 'tempat_sidi_wanita', 'tanggal_sidi_wanita', 'pekerjaan_wanita', 'alamat_wanita', 'nomor_telepon_wanita', 'nama_ayah_wanita', 'nama_ibu_wanita', 'tanggal_pernikahan', 'waktu_pernikahan', 'dilayani', 'ktp', 'kk', 'surat_sidi', 'akta_kelahiran', 'sk_nikah', 'sk_asalusul', 'sp_mempelai', 'sk_ortu', 'akta_perceraian_kematian', 'si_kawin_komandan', 'sp_gereja_asal', 'foto', 'biaya', 'status', 'alasan_penolakan',
                 DB::raw('"pernikahan" as jenis_pendaftaran')
             );
         } else {
@@ -210,10 +128,29 @@ class PendaftaranController extends Controller
 
         if ($jenis == 'baptis') {
             $pendaftaran = BaptisModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Sakramen Baptisan', 'validation', "Memvalidasi data: \n"
+                . "Tanggal Baptis: {$pendaftaran->tanggal_baptis}\n"
+                . "Nama: {$pendaftaran->nama_lengkap}\n"
+            );
         } elseif ($jenis == 'sidi') {
             $pendaftaran = KatekisasiModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Katekisasi', 'validation', "Memvalidasi data: \n"
+                . "Tanggal Lahir: {$pendaftaran->tanggal_lahir}\n"
+                . "Nama: {$pendaftaran->nama_lengkap}\n"
+            );
         } elseif ($jenis == 'pernikahan') {
             $pendaftaran = PernikahanModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Sakramen Pernikahan', 'validation', "Memvalidasi data: \n"
+                . "Tanggal Nikah: {$pendaftaran->tanggal_pernikahan}\n"
+                . "Nama Pria: {$pendaftaran->nama_lengkap_pria}\n"
+                . "Nama Wanita: {$pendaftaran->nama_lengkap_wanita}\n"
+            );
         } else {
             return redirect('pengelolaan-informasi/pendaftaran')->with('error_pendaftaran', 'Jenis pendaftaran tidak valid');
         }
@@ -230,6 +167,30 @@ class PendaftaranController extends Controller
             ? 'Pendaftaran sakramen telah disetujui.' 
             : 'Persetujuan pendaftaran sakramen telah dibatalkan.';
 
+        if ($jenis == 'baptis') {
+
+            // log aktivitas
+            simpanLogAktivitas('Sakramen Baptisan', 'cancel validation', "Batalkan validasi data: \n"
+                . "Tanggal Baptis: {$pendaftaran->tanggal_baptis}\n"
+                . "Nama: {$pendaftaran->nama_lengkap}\n"
+            );
+        } elseif ($jenis == 'sidi') {
+
+            // log aktivitas
+            simpanLogAktivitas('Katekisasi', 'cancel validation', "Batalkan validasi data: \n"
+                . "Tanggal Lahir: {$pendaftaran->tanggal_lahir}\n"
+                . "Nama: {$pendaftaran->nama_lengkap}\n"
+            );
+        } elseif ($jenis == 'pernikahan') {
+
+            // log aktivitas
+            simpanLogAktivitas('Sakramen Pernikahan', 'cancel validation', "Batakan validasi data: \n"
+                . "Tanggal Nikah: {$pendaftaran->tanggal_pernikahan}\n"
+                . "Nama Pria: {$pendaftaran->nama_lengkap_pria}\n"
+                . "Nama Wanita: {$pendaftaran->nama_lengkap_wanita}\n"
+            );
+        }
+
         return redirect('pengelolaan-informasi/pendaftaran')->with('success_pendaftaran', $pesan);
     }
 
@@ -240,10 +201,32 @@ class PendaftaranController extends Controller
 
         if ($jenis == 'baptis') {
             $pendaftaran = BaptisModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Sakramen Baptisan', 'reject', "Menolak data: \n"
+                . "Alasan: {$pendaftaran->alasan_penolakan}\n"
+                . "Tanggal Baptis: {$pendaftaran->tanggal_baptis}\n"
+                . "Nama: {$pendaftaran->nama_lengkap}\n"
+            );
         } elseif ($jenis == 'sidi') {
             $pendaftaran = KatekisasiModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Katekisasi', 'reject', "Menolak data: \n"
+                . "Alasan: {$pendaftaran->alasan_penolakan}\n"    
+                . "Tanggal Lahir: {$pendaftaran->tanggal_lahir}\n"
+                . "Nama: {$pendaftaran->nama_lengkap}\n"
+            );
         } elseif ($jenis == 'pernikahan') {
             $pendaftaran = PernikahanModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Sakramen Pernikahan', 'reject', "Menolak data: \n"
+                . "Alasan: {$pendaftaran->alasan_penolakan}\n"
+                . "Tanggal Nikah: {$pendaftaran->tanggal_pernikahan}\n"
+                . "Nama Pria: {$pendaftaran->nama_lengkap_pria}\n"
+                . "Nama Wanita: {$pendaftaran->nama_lengkap_wanita}\n"
+            );
         } else {
             return redirect('pengelolaan-informasi/pendaftaran')->with('error_pendaftaran', 'Jenis pendaftaran tidak valid');
         }
@@ -322,6 +305,13 @@ class PendaftaranController extends Controller
 
                 $model = new BaptisModel();
                 $folder = 'baptis';
+
+                // log aktivitas
+                simpanLogAktivitas('Sakramen Baptisan', 'store', "Menambahkan data: \n"
+                    . "Tanggal Baptis: {$request->tanggal_baptis}\n"
+                    . "Nama: {$request->nama_lengkap}\n"
+                );
+
             } elseif ($jenis === 'sidi') {
                 $validatedData = $request->validate([
                     'nama_lengkap' => 'required|string|max:255',
@@ -350,6 +340,13 @@ class PendaftaranController extends Controller
 
                 $model = new KatekisasiModel();
                 $folder = 'sidi';
+
+                // log aktivitas
+                simpanLogAktivitas('Katekisasi', 'store', "Menambahkan data: \n"
+                    . "Tanggal Lahir: {$request->tanggal_lahir}\n"
+                    . "Nama: {$request->nama_lengkap}\n"
+                );
+
             } elseif ($jenis === 'pernikahan') {
                 $validatedData = $request->validate([
                     'nama_lengkap_pria' => 'required|string|max:255',
@@ -394,6 +391,13 @@ class PendaftaranController extends Controller
 
                 $model = new PernikahanModel();
                 $folder = 'pernikahan';
+
+                // log aktivitas
+                simpanLogAktivitas('Sakramen Pernikahan', 'store', "Menambahkan data: \n"
+                    . "Tanggal Nikah: {$request->tanggal_pernikahan}\n"
+                    . "Nama Pria: {$request->nama_lengkap_pria}\n"
+                    . "Nama Wanita: {$request->nama_lengkap_wanita}\n"
+                );
             } else {
                 return redirect()->back()->with('error_pendaftaran', 'Jenis pendaftaran tidak valid.');
             }
@@ -407,7 +411,7 @@ class PendaftaranController extends Controller
 
             // Simpan ke database dengan model yang sesuai
             $model->create($validatedData);
-
+            
             return redirect('pengelolaan-informasi/pendaftaran')->with('success_pendaftaran', 'Pendaftaran berhasil dikirim.');
         } catch (\Exception $e) {
             return redirect('pengelolaan-informasi/pendaftaran')->with('error_pendaftaran', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -533,6 +537,12 @@ class PendaftaranController extends Controller
                 ]);
 
                 $folder = 'baptis';
+
+                // log aktivitas
+                simpanLogAktivitas('Sakramen Baptisan', 'update', "Mengubah data: \n"
+                    . "Tanggal: {$request->tanggal_baptis}\n"
+                    . "Nama: {$request->nama_lengkap}\n"
+                );
             } elseif ($jenis === 'sidi'){
                 $validatedData = $request->validate([
                     'nama_lengkap' => 'required|string|max:255',
@@ -560,6 +570,12 @@ class PendaftaranController extends Controller
                 ]);
 
                 $folder = 'sidi';
+
+                // log aktivitas
+                simpanLogAktivitas('Katekisasi', 'update', "Mengubah data: \n"
+                    . "Tanggal Lahir: {$request->tanggal_lahir}\n"
+                    . "Nama: {$request->nama_lengkap}\n"
+                );
             } elseif ($jenis === 'pernikahan'){
                 $validatedData = $request->validate([
                     'nama_lengkap_pria' => 'required|string|max:255',
@@ -603,6 +619,13 @@ class PendaftaranController extends Controller
                 ]);
 
                 $folder = 'pernikahan';
+
+                // log aktivitas
+                simpanLogAktivitas('Sakramen Pernikahan', 'update', "Mengubah data: \n"
+                    . "Tanggal Nikah: {$request->tanggal_pernikahan}\n"
+                    . "Nama Pria: {$request->nama_lengkap_pria}\n"
+                    . "Nama Wanita: {$request->nama_lengkap_wanita}\n"
+                );
             } else {
                 return redirect()->back()->with('error_pendaftaran', 'Jenis pendaftaran tidak valid.');
             }
@@ -633,10 +656,29 @@ class PendaftaranController extends Controller
 
         if ($jenis == 'baptis') {
             $pendaftaran = BaptisModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Sakramen Baptisan', 'destroy', "Menghapus data: \n"
+                . "Tanggal: {$pendaftaran->tanggal_baptis}\n"
+                . "Nama: {$pendaftaran->nama_lengkap}\n"
+            );
         } elseif ($jenis == 'sidi') {
             $pendaftaran = KatekisasiModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Katekisasi', 'destroy', "Menghapus data: \n"
+                . "Tanggal Lahir: {$pendaftaran->tanggal_lahir}\n"
+                . "Nama: {$pendaftaran->nama_lengkap}\n"
+            );
         } elseif ($jenis == 'pernikahan') {
             $pendaftaran = PernikahanModel::find($id);
+
+            // log aktivitas
+            simpanLogAktivitas('Sakramen Pernikahan', 'destroy', "Menghapus data: \n"
+                . "Tanggal Nikah: {$pendaftaran->tanggal_pernikahan}\n"
+                . "Nama Pria: {$pendaftaran->nama_lengkap_pria}\n"
+                . "Nama Wanita: {$pendaftaran->nama_lengkap_wanita}\n"
+            );
         } else {
             return redirect('pengelolaan-informasi/pendaftaran')->with('error_pendaftaran', 'Jenis pendaftaran tidak valid');
         }

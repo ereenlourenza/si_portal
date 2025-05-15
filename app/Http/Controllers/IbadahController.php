@@ -115,6 +115,14 @@ class IbadahController extends Controller
                 'ruang' => $request->ruang,
                 'pelayan_firman' => $request->pelayan_firman,
             ]);
+
+            // log aktivitas
+            simpanLogAktivitas('Ibadah', 'store', "Menambahkan data: \n"
+                . "ID: {$request->ibadah_id}\n"
+                . "Tanggal: {$request->tanggal}\n"
+                . "Waktu: {$request->waktu}\n"
+                . "Tempat: {$request->tempat}\n"
+            );
     
             return redirect('pengelolaan-informasi/ibadah')->with('success_ibadah', 'Data ibadah berhasil disimpan');
         } catch(\Exception $e){
@@ -188,6 +196,14 @@ class IbadahController extends Controller
                 'pelayan_firman' => $request->pelayan_firman,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Ibadah', 'update', "Mengubah data: \n"
+                . "ID: {$id}\n"
+                . "Tanggal: {$request->tanggal}\n"
+                . "Waktu: {$request->waktu}\n"
+                . "Tempat: {$request->tempat}\n"
+            );
+
             return redirect('pengelolaan-informasi/ibadah')->with('success_ibadah', 'Data ibadah berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/ibadah')->with('error_ibadah', 'Terjadi kesalahan saat mengubah data: ' );
@@ -203,6 +219,14 @@ class IbadahController extends Controller
 
         try{
             IbadahModel::destroy($id); //Hapus data ibadah
+
+            // log aktivitas
+            simpanLogAktivitas('Ibadah', 'destroy', "Menghapus data: \n"
+                . "ID: {$check->ibadah_id}\n"
+                . "Tanggal: {$check->tanggal}\n"
+                . "Waktu: {$check->waktu}\n"
+                . "Tempat: {$check->tempat}\n"
+            );
 
             return redirect('pengelolaan-informasi/ibadah')->with('success_ibadah', 'Data ibadah berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

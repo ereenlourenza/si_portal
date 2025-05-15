@@ -86,6 +86,11 @@ class KategoriIbadahController extends Controller
                 'kategoriibadah_kode'  => $request->kategoriibadah_kode,
                 'kategoriibadah_nama'      => $request->kategoriibadah_nama
                 ]);
+            
+            // log aktivitas
+            simpanLogAktivitas('Kategori Ibadah', 'store', "Menambahkan data: \n"
+                . "{$request->kategoriibadah_nama}\n"
+            );
     
             return redirect('pengelolaan-informasi/kategoriibadah')->with('success_kategoriibadah', 'Data Kategori Ibadah berhasil disimpan');
         } catch(\Exception $e){
@@ -145,6 +150,11 @@ class KategoriIbadahController extends Controller
                 'kategoriibadah_nama'  => $request->kategoriibadah_nama,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Kategori Ibadah', 'update', "Mengubah data: \n"
+                . "{$request->kategoriibadah_nama}\n"
+            );
+
             return redirect('pengelolaan-informasi/kategoriibadah')->with('success_kategoriibadah', 'Data Kategori Ibadah berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/kategoriibadah')->with('error_kategoriibadah', 'Terjadi kesalahan saat mengubah data: ');
@@ -160,6 +170,11 @@ class KategoriIbadahController extends Controller
 
         try{
             kategoriibadahModel::destroy($id); //Hapus data Kategori Ibadah
+
+            // log aktivitas
+            simpanLogAktivitas('Kategori Ibadah', 'destroy', "Menghapus data: \n"
+                . "{$check->kategoriibadah_nama}\n"
+            );
 
             return redirect('pengelolaan-informasi/kategoriibadah')->with('success_kategoriibadah', 'Data Kategori Ibadah berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

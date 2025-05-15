@@ -62,6 +62,8 @@ class PHMJController extends Controller
             'periode_selesai' => 'required|date_format:Y|after_or_equal:periode_mulai',
             'pelayan_id' => 'required|integer|unique:t_phmj,pelayan_id',
         ]);
+
+        $pelayan = PelayanModel::find($request->pelayan_id);
         
         try{
     
@@ -72,6 +74,12 @@ class PHMJController extends Controller
                 'periode_mulai' => $request->periode_mulai,
                 'periode_selesai' => $request->periode_selesai,
             ]);
+
+            // log aktivitas
+            simpanLogAktivitas('PHMJ', 'store', "Menambahkan data: \n"
+                . "Nama: {$pelayan->nama}\n"
+                . "Jabatan: {$request->jabatan}\n"
+            );
     
             return redirect('pengelolaan-informasi/pelayan')->with('success_pelayan', 'Data PHMJ berhasil disimpan');
         } catch(\Exception $e){
@@ -110,6 +118,8 @@ class PHMJController extends Controller
             'pelayan_id' => 'required|integer|unique:t_phmj,pelayan_id,'.$id.',phmj_id',
         ]);
 
+        $pelayan = PelayanModel::find($request->pelayan_id);
+
         // dd($request->all());
 
         try{
@@ -121,6 +131,12 @@ class PHMJController extends Controller
                 'periode_selesai'  => $request->periode_selesai,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('PHMJ', 'update', "Mengubah data: \n"
+                . "Nama: {$pelayan->nama}\n"
+                . "Jabatan: {$request->jabatan}\n"
+            );
+
             return redirect('pengelolaan-informasi/pelayan')->with('success_pelayan', 'Data PHMJ berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/pelayan')->with('error_pelayan', 'Terjadi kesalahan saat mengubah data: ' . $e->getMessage());
@@ -130,6 +146,8 @@ class PHMJController extends Controller
     //Menghapus data level
     public function destroy(string $id){
         $check = PHMJModel::find($id);
+        $pelayan = PelayanModel::find($check->pelayan_id);
+
         if(!$check){        //untuk mengecek apakah data tata ibadah dengan id yang dimaksud ada atau tidak
             return redirect('pengelolaan-informasi/pelayan')->with('error_pelayan', 'Data PHMJ tidak ditemukan');
         }
@@ -137,6 +155,12 @@ class PHMJController extends Controller
         try{
             PHMJModel::destroy($id); //Hapus data pelayan
 
+            // log aktivitas
+            simpanLogAktivitas('PHMJ', 'destroy', "Menghapus data: \n"
+                . "Nama: {$pelayan->nama}\n"
+                . "Jabatan: {$check->jabatan}\n"
+            );
+    
             return redirect('pengelolaan-informasi/pelayan')->with('success_pelayan', 'Data PHMJ berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){
 

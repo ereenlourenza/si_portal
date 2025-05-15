@@ -84,6 +84,11 @@ class KategoriPersembahanController extends Controller
             KategoriPersembahanModel::create([
                 'kategori_persembahan_nama'      => $request->kategori_persembahan_nama
                 ]);
+
+            // log aktivitas
+            simpanLogAktivitas('Kategori Persembahan', 'store', "Menambahkan data: \n"
+                . "{$request->kategori_persembahan_nama}\n"
+            );
     
             return redirect('pengelolaan-berita-acara/kategoripersembahan')->with('success_kategoripersembahan', 'Data Kategori Persembahan berhasil disimpan');
         } catch(\Exception $e){
@@ -139,6 +144,11 @@ class KategoriPersembahanController extends Controller
                 'kategori_persembahan_nama'  => $request->kategori_persembahan_nama,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Kategori Persembahan', 'update', "Mengubah data: \n"
+                . "{$request->kategori_persembahan_nama}\n"
+            );
+
             return redirect('pengelolaan-berita-acara/kategoripersembahan')->with('success_kategoripersembahan', 'Data Kategori Persembahan berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-berita-acara/kategoripersembahan')->with('error_kategoripersembahan', 'Terjadi kesalahan saat mengubah data: ');
@@ -154,6 +164,11 @@ class KategoriPersembahanController extends Controller
 
         try{
             KategoriPersembahanModel::destroy($id); //Hapus data Kategori Persembahan
+
+            // log aktivitas
+            simpanLogAktivitas('Kategori Persembahan', 'destroy', "Menghapus data: \n"
+                . "{$check->kategori_persembahan_nama}\n"
+            );
 
             return redirect('pengelolaan-berita-acara/kategoripersembahan')->with('success_kategoripersembahan', 'Data Kategori Persembahan berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

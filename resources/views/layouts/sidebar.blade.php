@@ -94,7 +94,7 @@
             </li> 
             <li class="nav-header">Aktivitas Pengguna</li> 
             <li class="nav-item">
-                <a href="{{ url('/aktivitas') }}" class="nav-link {{ ($activeMenu == 'aktivitas')? 'active' : '' }} "> 
+                <a href="{{ route('log.index') }}" class="nav-link {{ ($activeMenu == 'log')? 'active' : '' }} "> 
                     <i class="nav-icon far fa-bookmark"></i> 
                     <p>Log Aktivitas</p>
                 </a> 

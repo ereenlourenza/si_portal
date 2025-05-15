@@ -140,11 +140,29 @@ class PeminjamanRuanganController extends Controller
                 ]);
             }
 
+            // log aktivitas
+            simpanLogAktivitas('Peminjaman Ruangan', 'validation', "Memvalidasi data: \n"
+                . "Tanggal: {$peminjamanruangan->tanggal}\n"
+                . "Peminjam Nama: {$peminjamanruangan->peminjam_nama}\n"
+                . "Keperluan: {$peminjamanruangan->keperluan}\n"
+                . "Ruangan: {$peminjamanruangan->ruangan_id}\n"
+                . "Waktu: {$peminjamanruangan->waktu_mulai} - {$peminjamanruangan->waktu_selesai}\n"
+            );
+
             return redirect('pengelolaan-informasi/peminjamanruangan')->with('success_peminjamanruangan', 'Peminjaman ruangan berhasil disetujui dan peminjaman lain yang bentrok telah ditolak.');
         }
 
         // Jika sebelumnya sudah disetujui, ubah status kembali ke belum disetujui
         $peminjamanruangan->update(['status' => 0]);
+
+        // log aktivitas
+        simpanLogAktivitas('Peminjaman Ruangan', 'cancel validation', "Batalkan validasi data: \n"
+            . "Tanggal: {$peminjamanruangan->tanggal}\n"
+            . "Peminjam Nama: {$peminjamanruangan->peminjam_nama}\n"
+            . "Keperluan: {$peminjamanruangan->keperluan}\n"
+            . "Ruangan: {$peminjamanruangan->ruangan_id}\n"
+            . "Waktu: {$peminjamanruangan->waktu_mulai} - {$peminjamanruangan->waktu_selesai}\n"
+        );
 
         return redirect('pengelolaan-informasi/peminjamanruangan')->with('success_peminjamanruangan', 'Persetujuan peminjaman ruangan telah dibatalkan.');
     }
@@ -168,6 +186,16 @@ class PeminjamanRuanganController extends Controller
             'status' => 2,
             'alasan_penolakan' => $request->alasan_penolakan
         ]);
+
+        // log aktivitas
+        simpanLogAktivitas('Peminjaman Ruangan', 'reject', "Menolak data: \n"
+            . "Alasan: {$peminjamanruangan->alasan_penolakan}\n"
+            . "Tanggal: {$peminjamanruangan->tanggal}\n"
+            . "Peminjam Nama: {$peminjamanruangan->peminjam_nama}\n"
+            . "Keperluan: {$peminjamanruangan->keperluan}\n"
+            . "Ruangan: {$peminjamanruangan->ruangan_id}\n"
+            . "Waktu: {$peminjamanruangan->waktu_mulai} - {$peminjamanruangan->waktu_selesai}\n"
+        );
 
         return redirect('pengelolaan-informasi/peminjamanruangan')->with('success_peminjamanruangan', 'Peminjaman ruangan berhasil ditolak dengan alasan: ' . $request->alasan_penolakan);
     }
@@ -219,6 +247,15 @@ class PeminjamanRuanganController extends Controller
                 'status'  => $request['status'] ?? 0,
                 'alasan_penolakan'  => $request['alasan_penolakan'] ?? null,
             ]);
+
+            // log aktivitas
+            simpanLogAktivitas('Peminjaman Ruangan', 'store', "Mengubah data: \n"
+                . "Tanggal: {$request->tanggal}\n"
+                . "Peminjam Nama: {$request->peminjam_nama}\n"
+                . "Keperluan: {$request->keperluan}\n"
+                . "Ruangan: {$request->ruangan_id}\n"
+                . "Waktu: {$request->waktu_mulai} - {$request->waktu_selesai}\n"
+            );
     
             return redirect('pengelolaan-informasi/peminjamanruangan')->with('success_peminjamanruangan', 'Data peminjaman ruangan berhasil disimpan');
         } catch(\Exception $e){
@@ -234,6 +271,15 @@ class PeminjamanRuanganController extends Controller
 
         try{
             PeminjamanRuanganModel::destroy($id); //Hapus data peminjamanruangan
+
+            // log aktivitas
+            simpanLogAktivitas('Peminjaman Ruangan', 'destroy', "Menghapus data: \n"
+                . "Tanggal: {$check->tanggal}\n"
+                . "Peminjam Nama: {$check->peminjam_nama}\n"
+                . "Keperluan: {$check->keperluan}\n"
+                . "Ruangan: {$check->ruangan_id}\n"
+                . "Waktu: {$check->waktu_mulai} - {$check->waktu_selesai}\n"
+            );
 
             return redirect('pengelolaan-informasi/peminjamanruangan')->with('success_peminjamanruangan', 'Data peminjaman ruangan berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

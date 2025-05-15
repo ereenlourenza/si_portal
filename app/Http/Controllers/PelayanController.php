@@ -111,7 +111,7 @@ class PelayanController extends Controller
     public function store(Request $request){
         $validatedData = $request->validate([
             //judul harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter, dan bernilai unik di tabel m_level kolom judul
-            'nama' => ['required',
+            'nama' => ['required', 
                         Rule::unique('t_pelayan')->where(function ($query) use ($request) {
                             return $query->where('masa_jabatan_mulai', $request->masa_jabatan_mulai)
                                         ->where('masa_jabatan_selesai', $request->masa_jabatan_selesai);
@@ -163,6 +163,12 @@ class PelayanController extends Controller
                 'masa_jabatan_selesai'  => $validatedData['masa_jabatan_selesai'],
                 'keterangan'  => $validatedData['keterangan'],
             ]);
+
+            // log aktivitas
+            simpanLogAktivitas('Pelayan', 'store', "Menambahkan data: \n"
+                . "Kategori ID: {$request->kategoripelayan_id}\n"
+                . "Nama: {$request->nama}\n"
+            );
     
             return redirect('pengelolaan-informasi/pelayan')->with('success_pelayan', 'Data pelayan berhasil disimpan');
         } catch(\Exception $e){
@@ -249,6 +255,12 @@ class PelayanController extends Controller
                 'keterangan'  => $request->keterangan,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Pelayan', 'update', "Mengubah data: \n"
+                . "Kategori ID: {$request->kategoripelayan_id}\n"
+                . "Nama: {$request->nama}\n"
+            );
+
             return redirect('pengelolaan-informasi/pelayan')->with('success_pelayan', 'Data pelayan berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/pelayan')->with('error_pelayan', 'Terjadi kesalahan saat mengubah data: ' . $e->getMessage());
@@ -269,6 +281,12 @@ class PelayanController extends Controller
             }
 
             PelayanModel::destroy($id); //Hapus data pelayan
+
+            // log aktivitas
+            simpanLogAktivitas('Pelayan', 'destroy', "Menghapus data: \n"
+                . "Kategori ID: {$check->kategoripelayan_id}\n"
+                . "Nama: {$check->nama}\n"
+            );
 
             return redirect('pengelolaan-informasi/pelayan')->with('success_pelayan', 'Data pelayan berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

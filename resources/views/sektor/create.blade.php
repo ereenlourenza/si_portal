@@ -33,7 +33,7 @@
                 <div class="form-group row align-items-center">
                     <label class="col-md-1 control-label col-form-label">Jumlah Jemaat<span class="text-danger">*</span></label>
                     <div class="col-md-11">
-                        <input type="text" class="form-control" id="jumlah_jemaat" name="jumlah_jemaat" value="{{ old('jumlah_jemaat') }}" required>
+                        <input type="number" class="form-control" id="jumlah_jemaat" name="jumlah_jemaat" required>
                         
                         @error('jumlah_jemaat')
                             <small class="form-text text-danger">{{ $message }}</small>

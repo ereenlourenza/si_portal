@@ -108,6 +108,11 @@ class KomisiController extends Controller
         // Bersihkan gambar yang tidak digunakan di konten lain
         $this->hapusGambarTidakDipakai('', $kontenBaru, $komisi->id);
 
+        // log aktivitas
+        simpanLogAktivitas('Komisi', 'store', "Menambahkan data: \n"
+            . "{$request->komisi_nama}\n"
+        );
+
         return redirect('/pengelolaan-informasi/komisi')->with('success', 'Data komisi berhasil disimpan');
     }
 
@@ -172,6 +177,11 @@ class KomisiController extends Controller
             'deskripsi'        => $request->deskripsi,
         ]);
 
+        // log aktivitas
+        simpanLogAktivitas('Komisi', 'update', "Menambahkan data: \n"
+            . "{$request->komisi_nama}\n"
+        );
+
         return redirect('/pengelolaan-informasi/komisi')->with('success', 'Data komisi berhasil diubah');
     }
 
@@ -216,6 +226,11 @@ class KomisiController extends Controller
         try{
             KomisiModel::destroy($id); //Hapus data level
 
+            // log aktivitas
+            simpanLogAktivitas('Komisi', 'destroy', "Menghapus data: \n"
+                . "{$check->komisi_nama}\n"
+            );
+            
             return redirect('/pengelolaan-informasi/komisi')->with('success', 'Data komisi berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){
 

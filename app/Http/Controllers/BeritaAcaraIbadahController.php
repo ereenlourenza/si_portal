@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class BeritaAcaraIbadahController extends Controller
@@ -86,11 +87,11 @@ class BeritaAcaraIbadahController extends Controller
                 if (auth()->user()->level->level_kode == 'PHM') {
                     $btn .= '<a href="' . url('/pengelolaan-berita-acara/berita-acara/' . $item->berita_acara_ibadah_id . '/edit') . '" class="btn btn-warning btn-sm">Ubah</a> ';
                 }
-                if (auth()->user()->level->level_kode == 'PHM' || auth()->user()->level->level_kode == 'MLJ') {
+                // if (auth()->user()->level->level_kode == 'PHM' || auth()->user()->level->level_kode == 'MLJ') {
                     $btn .= '<form class="d-inline-block" method="POST" action="' . url('/pengelolaan-berita-acara/berita-acara/' . $item->berita_acara_ibadah_id) . '">' .
                         csrf_field() . method_field('DELETE') .
                         '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Hapus data ini?\');">Hapus</button></form>';
-                }
+                // }
                 return $btn;
             })
             ->rawColumns(['aksi'])
@@ -282,6 +283,14 @@ class BeritaAcaraIbadahController extends Controller
             }
 
             $berita->update(['total_persembahan' => $totalPersembahan]);
+
+            // log aktivitas
+            simpanLogAktivitas('Berita Acara', 'store', "Menambahkan data berita acara: \n"
+                . "ID : {$berita->berita_acara_ibadah_id}\n"
+                . "Tanggal: {$ibadah->tanggal}\n"
+                . "Waktu: {$ibadah->waktu}\n"
+                . "Tempat: {$ibadah->tempat}"   
+            );
             
             DB::commit();
             return redirect('pengelolaan-berita-acara/berita-acara')->with('success', 'Data berita acara berhasil disimpan');
@@ -298,13 +307,40 @@ class BeritaAcaraIbadahController extends Controller
     {
         if (!$base64) return null;
 
-        $image = str_replace('data:image/png;base64,', '', $base64);
-        $image = str_replace(' ', '+', $image);
-        $filename = $prefix . '_' . uniqid() . '.png';
-        \Illuminate\Support\Facades\Storage::put('public/ttd/' . $filename, base64_decode($image));
+        // Validasi apakah base64 memiliki format yang benar
+        if (!preg_match('/^data:image\/\w+;base64,/', $base64)) {
+            // Jika tidak sesuai, kembalikan null atau error
+            return null;
+        }
 
-        return 'storage/ttd/' . $filename;
+        // Menghilangkan prefix "data:image/png;base64,"
+        $image = preg_replace('/^data:image\/\w+;base64,/', '', $base64);
+        $image = str_replace(' ', '+', $image);
+
+        // Nama file dengan tambahan prefix, unique ID dan timestamp
+        $filename = $prefix . '_' . time() . '_' . uniqid() . '.png';
+
+        // Tentukan path direktori berdasarkan tanggal untuk organisasi file yang lebih baik
+        $datePath = date('Y/m/d');
+        $directoryPath = 'public/images/ttd/' . $datePath;
+
+        // Pastikan direktori tersedia
+        Storage::makeDirectory($directoryPath);
+
+        // Simpan file di folder yang sudah ditentukan
+        $filePath = $directoryPath . '/' . $filename;
+
+        try {
+            Storage::put($filePath, base64_decode($image));
+        } catch (\Exception $e) {
+            // Jika terjadi error saat menyimpan, kembalikan null atau log error
+            return null;
+        }
+
+        // Path yang bisa diakses via URL (symlink ke public/storage harus dibuat)
+        return 'storage/images/ttd/' . $datePath . '/' . $filename;
     }
+
     
     public function show(string $id)
     {

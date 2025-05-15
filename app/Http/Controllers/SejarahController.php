@@ -114,6 +114,11 @@ class SejarahController extends Controller
         // Bersihkan gambar yang tidak digunakan di konten lain
         $this->hapusGambarTidakDipakai('', $kontenBaru, $sejarah->id);
 
+        // log aktivitas
+        simpanLogAktivitas('Sejarah', 'store', "Menambahkan data: \n"
+            . "{$request->judul_subbab}\n"
+        );
+
         return redirect('/pengelolaan-informasi/sejarah')->with('success', 'Konten berhasil disimpan');
     }
 
@@ -179,6 +184,11 @@ class SejarahController extends Controller
             'isi_konten' => $kontenBaru,
         ]);
 
+        // log aktivitas
+        simpanLogAktivitas('Sejarah', 'update', "Mengubah data: \n"
+            . "{$request->judul_subbab}\n"
+        );
+
         return redirect('/pengelolaan-informasi/sejarah')->with('success', 'Konten berhasil diubah');
     }
 
@@ -226,6 +236,11 @@ class SejarahController extends Controller
             $this->hapusGambarTidakDipakai($check->isi_konten, '', $id);
 
             $check->delete(); //Hapus data level
+
+            // log aktivitas
+            simpanLogAktivitas('Sejarah', 'destroy', "Menghapus data: \n"
+                . "{$check->judul_subbab}\n"
+            );
 
             return redirect('/pengelolaan-informasi/sejarah')->with('success', 'Konten berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

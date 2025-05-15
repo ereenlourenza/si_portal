@@ -85,6 +85,11 @@ class LevelController extends Controller
             'level_nama'      => $request->level_nama
         ]);
 
+        // log aktivitas
+        simpanLogAktivitas('Level', 'store', "Menambahkan data: \n"
+            . "{$request->level_nama}\n"
+        );
+
         return redirect('pengelolaan-pengguna/level')->with('success', 'Data level berhasil disimpan');
     }
 
@@ -136,6 +141,11 @@ class LevelController extends Controller
             'level_nama'  => $request->level_nama,
         ]);
 
+        // log aktivitas
+        simpanLogAktivitas('Level', 'update', "Mengubah data: \n"
+            . "{$request->level_nama}\n"
+        );
+
         return redirect('pengelolaan-pengguna/level')->with('success', 'Data level berhasil diubah');
     }
 
@@ -148,6 +158,11 @@ class LevelController extends Controller
 
         try{
             LevelModel::destroy($id); //Hapus data level
+
+            // log aktivitas
+            simpanLogAktivitas('Level', 'destroy', "Menghapus data: \n"
+                . "{$check->level_nama}\n"
+            );
 
             return redirect('pengelolaan-pengguna/level')->with('success', 'Data level berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

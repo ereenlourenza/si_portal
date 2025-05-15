@@ -221,7 +221,7 @@
                     <!-- Tanda Tangan Pelayan 4 -->
                     <div class="form-group">
                         <label for="ttd_pelayan_4_id">Tanda Tangan Digital Pelayan 4</label>
-                        <select name="ttd_pelayan_4_id" id="ttd_pelayan_4_id" class="form-control" required>
+                        <select name="ttd_pelayan_4_id" id="ttd_pelayan_4_id" class="form-control select2" required>
                             <option value="">-- Pilih Pelayan --</option>
                             @foreach($pelayan as $p)
                                 <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
@@ -514,84 +514,59 @@
 {{-- TTD --}}
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 <script>
-    console.log('Script TTD dimulai!');
     document.addEventListener('DOMContentLoaded', function () {
-    console.log("Page is loaded and script is running.");
+        const canvas1 = document.getElementById('ttd_canvas_1');
+        const canvas4 = document.getElementById('ttd_canvas_4');
 
-    // Inisialisasi SignaturePad
-    const canvas1 = document.getElementById('ttd_canvas_1');
-    console.log('Canvas 1:', document.getElementById('ttd_canvas_1'));
-    const signaturePad1 = new SignaturePad(canvas1);
-    console.log('SignaturePad1 initialized:', signaturePad1);
+        console.log("Canvas 1: ", canvas1); // Log untuk memeriksa apakah canvas1 ada
+        console.log("Canvas 4: ", canvas4); // Log untuk memeriksa apakah canvas4 ada
 
-    const canvas4 = document.getElementById('ttd_canvas_4');
-    console.log('Canvas 4:', document.getElementById('ttd_canvas_4'));
-    const signaturePad4 = new SignaturePad(canvas4);
-    console.log('SignaturePad4 initialized:', signaturePad4);
+        // Pastikan canvas1 dan canvas4 ada sebelum melanjutkan
+        if (!canvas1 || !canvas4) {
+            console.error("Canvas tidak ditemukan!");
+            return;
+        }
 
-    console.log('Hidden Input TTD Pelayan 1:', document.getElementById('ttd_pelayan_1'));
-    console.log('Hidden Input TTD Pelayan 4:', document.getElementById('ttd_pelayan_4'));
+        // Versi UMD SignaturePad
+        const signaturePad1 = new window.SignaturePad(canvas1);
+        const signaturePad4 = new window.SignaturePad(canvas4);
 
-    console.log('SignaturePad:', SignaturePad);
+        console.log("TTD Pelayan 1:", signaturePad1.toDataURL());
+        console.log("TTD Pelayan 4:", signaturePad4.toDataURL());
 
-    // Tombol clear untuk kedua canvas
-    document.getElementById('clear_ttd_1').addEventListener('click', () => {
-        signaturePad1.clear();
+        // Clear buttons
+        document.getElementById('clear_ttd_1').addEventListener('click', () => signaturePad1.clear());
+        document.getElementById('clear_ttd_4').addEventListener('click', () => signaturePad4.clear());
+
+        // Tangani submit form
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                // Validasi isi canvas
+                if (signaturePad1.isEmpty()) {
+                    alert('Tanda tangan Pelayan 1 harus diisi.');
+                    e.preventDefault();
+                    return;
+                }
+                if (signaturePad4.isEmpty()) {
+                    alert('Tanda tangan Pelayan 4 harus diisi.');
+                    e.preventDefault();
+                    return;
+                }
+
+                // Simpan base64 ke input hidden
+                document.getElementById('ttd_pelayan_1').value = signaturePad1.toDataURL();
+                document.getElementById('ttd_pelayan_4').value = signaturePad4.toDataURL();
+
+                // Debugging: cek apakah base64 tersimpan dengan benar
+                console.log("TTD Pelayan 1:", signaturePad1.toDataURL());
+                console.log("Base64 Pelayan 1:", document.getElementById('ttd_pelayan_1').value);
+                console.log("TTD Pelayan 4:", signaturePad4.toDataURL());
+                console.log("Base64 Pelayan 4:", document.getElementById('ttd_pelayan_4').value);
+            });
+        }
     });
-    document.getElementById('clear_ttd_4').addEventListener('click', () => {
-        signaturePad4.clear();
-    });
-
-    // Cek form dan pastikan event listener submit terpasang
-    const form = document.querySelector('form');
-    if (form) {
-        console.log("Form element found.");
-        form.addEventListener('submit', function (e) {
-            console.log("Form sedang disubmit");
-
-            // Validasi tanda tangan kosong
-            if (signaturePad1.isEmpty()) {
-                alert('Tanda tangan Pelayan 1 harus diisi.');
-                e.preventDefault();
-                return;
-            }
-            if (signaturePad4.isEmpty()) {
-                alert('Tanda tangan Pelayan 4 harus diisi.');
-                e.preventDefault();
-                return;
-            }
-
-            // Mengambil data URL tanda tangan
-            const ttd1 = signaturePad1.toDataURL();
-            const ttd4 = signaturePad4.toDataURL();
-
-            // Validasi jika tanda tangan gagal diambil
-            if (!ttd1 || !ttd4) {
-                console.error("Tanda tangan tidak dapat dikonversi menjadi data URL.");
-                e.preventDefault();
-                return;
-            }
-
-            // Debug log untuk memastikan data sudah siap
-            console.log('TTD Pelayan 1 (Base64):', ttd1);
-            console.log('TTD Pelayan 4 (Base64):', ttd4);
-
-            // Set nilai pada field input tersembunyi
-            document.getElementById('ttd_pelayan_1').value = ttd1;
-            document.getElementById('ttd_pelayan_4').value = ttd4;
-
-            // Debug log untuk memastikan hidden input diisi
-            console.log('Hidden Input TTD Pelayan 1:', document.getElementById('ttd_pelayan_1').value);
-            console.log('Hidden Input TTD Pelayan 4:', document.getElementById('ttd_pelayan_4').value);
-        });
-    } else {
-        console.log("Form element NOT found.");
-    }
-});
-
 </script>
-    
-    
 {{-- End Script TTD --}}
 
 

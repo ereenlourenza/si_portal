@@ -109,6 +109,11 @@ class PelkatController extends Controller
         // Bersihkan gambar yang tidak digunakan di konten lain
         $this->hapusGambarTidakDipakai('', $kontenBaru, $pelkat->id);
 
+        // log aktivitas
+        simpanLogAktivitas('Pelkat', 'store', "Menambahkan data: \n"
+            . "{$request->pelkat_nama}\n"
+        );
+
         return redirect('/pengelolaan-informasi/pelkat')->with('success', 'Data pelkat berhasil disimpan');
     }
 
@@ -173,6 +178,11 @@ class PelkatController extends Controller
             'deskripsi'        => $request->deskripsi,
         ]);
 
+        // log aktivitas
+        simpanLogAktivitas('Pelkat', 'update', "Mengubah data: \n"
+            . "{$request->pelkat_nama}\n"
+        );
+
         return redirect('/pengelolaan-informasi/pelkat')->with('success', 'Data pelkat berhasil diubah');
     }
 
@@ -217,6 +227,11 @@ class PelkatController extends Controller
         try{
             PelkatModel::destroy($id); //Hapus data level
 
+            // log aktivitas
+            simpanLogAktivitas('Pelkat', 'destroy', "Menghapus data: \n"
+                . "{$check->pelkat_nama}\n"
+            );
+            
             return redirect('/pengelolaan-informasi/pelkat')->with('success', 'Data pelkat berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){
 

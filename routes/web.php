@@ -19,6 +19,7 @@ use App\Http\Controllers\KategoriPersembahan;
 use App\Http\Controllers\KategoriPersembahanController;
 use App\Http\Controllers\KomisiController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\LogAktivitasController;
 use App\Http\Controllers\PelayanController;
 use App\Http\Controllers\PelkatController;
 use App\Http\Controllers\PelkatPengurusController;
@@ -183,6 +184,11 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/{id}', [LevelController::class, 'update']);
             Route::delete('/{id}', [LevelController::class, 'destroy']);
         });
+
+        Route::prefix('log')->group(function () {
+            Route::get('/', [LogAktivitasController::class, 'index'])->name('log.index');
+        });
+
     });
 
     // Modul Pengelolaan Informasi - Hanya Admin

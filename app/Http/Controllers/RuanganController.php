@@ -97,6 +97,11 @@ class RuanganController extends Controller
                 'deskripsi'  => $validatedData['deskripsi'],
                 'foto' => $validatedData['foto'] ?? null,
             ]);
+
+            // log aktivitas
+            simpanLogAktivitas('Ruangan', 'store', "Menambahkan data: \n"
+                . "{$request->ruangan_nama}\n"
+            );
     
             return redirect('pengelolaan-informasi/ruangan')->with('success_ruangan', 'Data ruangan berhasil disimpan');
         } catch(\Exception $e){
@@ -174,6 +179,11 @@ class RuanganController extends Controller
                 'foto'  => $fotoName,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Ruangan', 'update', "Mengubah data: \n"
+                . "{$request->ruangan_nama}\n"
+            );
+
             return redirect('pengelolaan-informasi/ruangan')->with('success_ruangan', 'Data ruangan berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/ruangan')->with('error_ruangan', 'Terjadi kesalahan saat mengubah data: ');
@@ -194,6 +204,11 @@ class RuanganController extends Controller
             }
 
             RuanganModel::destroy($id); //Hapus data ruangan
+
+            // log aktivitas
+            simpanLogAktivitas('Ruangan', 'destroy', "Menghapus data: \n"
+                . "{$check->ruangan_nama}\n"
+            );
 
             return redirect('pengelolaan-informasi/ruangan')->with('success_ruangan', 'Data ruangan berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

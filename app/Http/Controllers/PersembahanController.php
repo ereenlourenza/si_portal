@@ -98,6 +98,11 @@ class PersembahanController extends Controller
                 'atas_nama' => $validatedData['atas_nama'],
                 'barcode' => $validatedData['barcode'] ?? null,
             ]);
+
+            // log aktivitas
+            simpanLogAktivitas('QR Persembahan', 'store', "Menambahkan data: \n"
+                . "{$request->persembahan_nama}\n"
+            );
     
             return redirect('pengelolaan-informasi/persembahan')->with('success_persembahan', 'Data persembahan berhasil disimpan');
         } catch(\Exception $e){
@@ -177,6 +182,11 @@ class PersembahanController extends Controller
                 'barcode'  => $barcodeName,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('QR Persembahan', 'update', "Mengubah data: \n"
+                . "{$request->persembahan_nama}\n"
+            );
+
             return redirect('pengelolaan-informasi/persembahan')->with('success_persembahan', 'Data persembahan berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/persembahan')->with('error_persembahan', 'Terjadi kesalahan saat mengubah data: ');
@@ -197,6 +207,11 @@ class PersembahanController extends Controller
             }
 
             PersembahanModel::destroy($id); //Hapus data persembahan
+
+            // log aktivitas
+            simpanLogAktivitas('QR Persembahan', 'destroy', "Menghapus data: \n"
+                . "{$check->persembahan_nama}\n"
+            );
 
             return redirect('pengelolaan-informasi/persembahan')->with('success_persembahan', 'Data persembahan berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

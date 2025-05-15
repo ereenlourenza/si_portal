@@ -97,6 +97,11 @@ class WartaJemaatController extends Controller
                 'file' => $validatedData['file'] ?? null, // Jika tidak ada file, simpan NULL
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Warta Jemaat', 'store', "Menambahkan data: \n"
+                . "{$request->judul}\n"
+            );
+
             return redirect('pengelolaan-informasi/wartajemaat')->with('success_wartajemaat', 'Data warta jemaat berhasil disimpan');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/wartajemaat')->with('error_wartajemaat', 'Terjadi kesalahan saat menyimpan data. ');
@@ -175,6 +180,11 @@ class WartaJemaatController extends Controller
                 'file'  => $fileName,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Warta Jemaat', 'update', "Mengubah data: \n"
+                . "{$request->judul}\n"
+            );
+
             return redirect('pengelolaan-informasi/wartajemaat')->with('success_wartajemaat', 'Data warta jemaat berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/wartajemaat')->with('error_wartajemaat', 'Terjadi kesalahan saat mengubah data: ');
@@ -195,6 +205,11 @@ class WartaJemaatController extends Controller
             }
 
             WartaJemaatModel::destroy($id); //Hapus data warta jemaat
+
+            // log aktivitas
+            simpanLogAktivitas('Warta Jemaat', 'destroy', "Menghapus data: \n"
+                . "{$check->judul}\n"
+            );
 
             return redirect('pengelolaan-informasi/wartajemaat')->with('success_wartajemaat', 'Data warta jemaat berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

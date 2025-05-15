@@ -102,6 +102,11 @@ class GaleriController extends Controller
                 'deskripsi' => $validatedData['deskripsi'],
                 'foto' => $validatedData['foto']
             ]);
+
+            // log aktivitas
+            simpanLogAktivitas('Galeri', 'store', "Menambahkan data: \n"
+                . "$request->judul"
+            );
     
             return redirect('pengelolaan-informasi/galeri')->with('success_galeri', 'Data galeri berhasil disimpan');
         } catch(\Exception $e){
@@ -182,6 +187,11 @@ class GaleriController extends Controller
                 'foto'  => $fotoName,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Galeri', 'update', "Mengubah data: \n"
+                . "$galeri->judul"
+            );
+
             return redirect('pengelolaan-informasi/galeri')->with('success_galeri', 'Data galeri berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/galeri')->with('error_galeri', 'Terjadi kesalahan saat mengubah data: ');
@@ -202,6 +212,11 @@ class GaleriController extends Controller
             }
             
             GaleriModel::destroy($id); //Hapus data galeri
+
+            // log aktivitas
+            simpanLogAktivitas('Galeri', 'destroy', "Menghapus data: \n"
+                . "$check->judul"
+            );
 
             return redirect('pengelolaan-informasi/galeri')->with('success_galeri', 'Data galeri berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

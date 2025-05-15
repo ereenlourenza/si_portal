@@ -98,6 +98,11 @@ class TataIbadahController extends Controller
                 'deskripsi' => $validatedData['deskripsi'],
                 'file' => $validatedData['file'] ?? null, // Jika tidak ada file, simpan NULL
             ]);
+
+            // log aktivitas
+            simpanLogAktivitas('Tata Ibadah', 'store', "Menambahkan data: \n"
+                . "{$request->judul}\n"
+            );
     
             return redirect('pengelolaan-informasi/tataibadah')->with('success_tataibadah', 'Data tata ibadah berhasil disimpan');
         } catch(\Exception $e){
@@ -177,6 +182,11 @@ class TataIbadahController extends Controller
                 'file'  => $fileName,
             ]);
 
+            // log aktivitas
+            simpanLogAktivitas('Tata Ibadah', 'update', "Mengubah data: \n"
+                . "{$request->judul}\n"
+            );
+
             return redirect('pengelolaan-informasi/tataibadah')->with('success_tataibadah', 'Data tata ibadah berhasil diubah');
         }catch(\Exception $e){
             return redirect('pengelolaan-informasi/tataibadah')->with('error_tataibadah', 'Terjadi kesalahan saat mengubah data: ');
@@ -197,6 +207,11 @@ class TataIbadahController extends Controller
             }
 
             TataIbadahModel::destroy($id); //Hapus data tata ibadah
+
+            // log aktivitas
+            simpanLogAktivitas('Tata Ibadah', 'destroy', "Menghapus data: \n"
+                . "{$check->judul}\n"
+            );
 
             return redirect('pengelolaan-informasi/tataibadah')->with('success_tataibadah', 'Data tata ibadah berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

@@ -284,7 +284,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 md:px-20">
 
         <!-- Card 1: Ibadah Minggu Umum -->
-        <div class="bg-gradient-to-br from-amber-800 to-yellow-600 rounded-2xl text-white shadow-lg p-6">
+        <div class="bg-gradient-to-br from-[#231C0D] to-[#614D24] rounded-2xl text-white shadow-lg p-6">
           <h3 class="text-lg font-bold mb-4 flex items-center">
             <i class="fas fa-church mr-2 text-white/80"></i> Ibadah Minggu Umum
           </h3>
@@ -297,7 +297,7 @@
         </div>
 
         <!-- Card 2: Ibadah Keluarga -->
-        <div class="bg-gradient-to-br from-teal-800 to-green-500 rounded-2xl text-white shadow-lg p-6">
+        <div class="bg-gradient-to-br from-[#231C0D] to-[#614D24] rounded-2xl text-white shadow-lg p-6">
           <h3 class="text-lg font-bold mb-4 flex items-center">
             <i class="fas fa-house-user mr-2 text-white/80"></i> Ibadah Keluarga (Rabu)
           </h3>
@@ -308,7 +308,7 @@
         </div>
 
         <!-- Card 3: Ibadah Pelkat -->
-        <div class="bg-gradient-to-br from-indigo-800 to-purple-500 rounded-2xl text-white shadow-lg p-6">
+        <div class="bg-gradient-to-br from-[#231C0D] to-[#614D24] rounded-2xl text-white shadow-lg p-6">
           <h3 class="text-lg font-bold mb-4 flex items-center">
             <i class="fas fa-users mr-2 text-white/80"></i> Ibadah Pelkat (IMM - Pakisaji)
           </h3>

@@ -86,6 +86,11 @@ class SektorController extends Controller
             'jumlah_jemaat' => $request->jumlah_jemaat,   
             'pelayan_id'    => $request->pelayan_id,   
         ]);
+        
+        // log aktivitas
+        simpanLogAktivitas('Sektor', 'store', "Menambahkan data: \n"
+            . "$request->sektor_nama"
+        );
 
         return redirect('/pengelolaan-informasi/sektor')->with('success', 'Data sektor berhasil disimpan');
     }
@@ -140,10 +145,15 @@ class SektorController extends Controller
             'sektor_nama'      => $request->sektor_nama,
             'deskripsi'          => $request->deskripsi,
             'jumlah_jemaat'      => $request->jumlah_jemaat, 
-            'pelayan_id'      => $request->korsek 
+            'pelayan_id'      => $request->pelayan_id 
         ]);
 
-        return redirect('/pengelolaan-infromasi/sektor')->with('success', 'Data sektor berhasil diubah');
+        // log aktivitas
+        simpanLogAktivitas('Sektor', 'update', "Mengubah data: \n"
+            . "$request->sektor_nama"
+        );
+
+        return redirect('/pengelolaan-informasi/sektor')->with('success', 'Data sektor berhasil diubah');
     }
 
     //Menghapus data user
@@ -155,6 +165,11 @@ class SektorController extends Controller
 
         try{
             SektorModel::destroy($id); //Hapus data level
+
+            // log aktivitas
+            simpanLogAktivitas('Sektor', 'destroy', "Menghapus data: \n"
+                . "$check->sektor_nama"
+            );
 
             return redirect('/pengelolaan-informasi/sektor')->with('success', 'Data sektor berhasil dihapus');
         }catch(\Illuminate\Database\QueryException $e){

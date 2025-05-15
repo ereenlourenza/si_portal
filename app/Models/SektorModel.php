@@ -15,7 +15,7 @@ class SektorModel extends Model
      * 
      * @var array
      */
-    protected $fillable = ['sektor_nama','deskripsi','pelayan_id'];
+    protected $fillable = ['sektor_nama','deskripsi', 'jumlah_jemaat', 'pelayan_id'];
 
     public function pelayan(): BelongsTo{
         return $this->belongsTo(PelayanModel::class, 'pelayan_id', 'pelayan_id');
