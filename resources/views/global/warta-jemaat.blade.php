@@ -33,7 +33,7 @@
         @forelse ($wartaJemaatList as $item)
             <a href="{{ asset('storage/dokumen/wartajemaat/'.$item->file) }}" target="_blank" class="transform transition-transform duration-500 hover:scale-105">
                 <div class="bg-white rounded overflow-hidden shadow-lg">
-                    <img src="{{ asset('images/global/warta-jemaat.webp') }}" alt="Warta Jemaat" class="w-full h-auto object-cover">
+                    <img loading="lazy" src="{{ asset('images/global/warta-jemaat.webp') }}" alt="Warta Jemaat" class="w-full h-auto object-cover">
                     <div class="bg-[#231C0D] text-white px-4 py-3 text-center">
                         <h3 class="text-md font-bold uppercase">Warta Jemaat</h3>
                         <p class="text-sm">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</p>

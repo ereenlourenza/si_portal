@@ -23,7 +23,7 @@
         @foreach($phmjList as $phmj)
             <div class="bg-white hover:-translate-y-1 duration-300 transition rounded-lg shadow-xl hover:shadow-2xl text-center p-4">
                 <div class="aspect-w-3 aspect-h-4 mb-3">
-                    <img 
+                    <img loading="lazy"
                         src="{{ $phmj->pelayan->foto ? asset('storage/images/pelayan/' . $phmj->pelayan->foto) : asset('storage/images/pelayan/avatar.webp') }}" 
                         alt="Foto PHMJ" 
                         class="object-cover w-auto h-48 mx-auto rounded"

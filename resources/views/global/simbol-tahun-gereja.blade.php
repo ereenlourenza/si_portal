@@ -12,7 +12,7 @@
 
         <h2 class="text-xl md:text-2xl font-semibold text-amber-700 mb-4 mt-10">SIKLUS MASA NATAL</h2>
         <div class="text-center px-4 py-4">
-            <img src="/images/global/minggu-adven.webp"
+            <img loading="lazy" src="/images/global/minggu-adven.webp"
                  alt="Minggu Adven"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Minggu Adven (Salib - Jangkar Warna Kuning Gading di Atas Kain Warna Dasar Ungu Muda)</p>
@@ -26,7 +26,7 @@
         </p>
 
         <div class="text-center px-4 py-4">
-            <img src="/images/global/minggu-natal.webp"
+            <img loading="lazy" src="/images/global/minggu-natal.webp"
                  alt="Minggu Natal"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Hari Natal, Sub Oktaf dan Oktaf (Palungan warna kuning emas yang di dalamnya Bayi Yesus diletakkan, dilingkupi pelangi di atas kain warna dasar putih)</p>
@@ -40,7 +40,7 @@
         </p>
 
         <div class="text-center px-4 py-4">
-            <img src="/images/global/minggu-epifani.webp"
+            <img loading="lazy" src="/images/global/minggu-epifani.webp"
                  alt="Minggu Epifani"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Hari dan Minggu Epifani (Bintang segi lima warna putih di dalam lingkaran warna kuning di atas kain warna dasar hijau)</p>
@@ -57,7 +57,7 @@
         <h2 class="text-xl md:text-2xl font-semibold text-amber-700 mb-4 mt-10">SIKLUS MASA PASKAH</h2>
 
         <div class="text-center px-4 py-4">
-            <img src="/images/global/minggu-prapaskah.webp"
+            <img loading="lazy" src="/images/global/minggu-prapaskah.webp"
                  alt="Minggu Prapaskah"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Minggu Prapaskah (gambar ikan warna kuning (Yun. ΙΧΘYΣ = Ichtus) dengan tulisan warna kuning ‘Yesus Kristus, Anak Allah, Juruselamat' diatas kain warna dasar ungu tua)</p>
@@ -71,7 +71,7 @@
         </p>
 
         <div class="text-center px-4 py-4">
-            <img src="/images/global/minggu-paskah.webp"
+            <img loading="lazy" src="/images/global/minggu-paskah.webp"
                  alt="Minggu Paskah"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Minggu Paskah (Tunas warna hijau dan Bunga Lily warna putih emas diatas kain warna dasar putih)</p>
@@ -85,7 +85,7 @@
         </p>
 
         <div class="text-center px-4 py-4">
-            <img src="/images/global/hari-kenaikan.webp"
+            <img loading="lazy" src="/images/global/hari-kenaikan.webp"
                  alt="Hari Kenaikan"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Hari Kenaikan Yesus Kristus ke Surga dan Hari Minggu Pemuliaan Yesus Kristus (Mahkota warna kuning emas dan Salib warna kuning gading di atas kain warna dasar putih)</p>
@@ -99,7 +99,7 @@
         </p>
 
         <div class="text-center px-4 py-4">
-            <img src="/images/global/hari-pentakosta.webp"
+            <img loading="lazy" src="/images/global/hari-pentakosta.webp"
                  alt="Hari Pentakosta"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Hari Pentakosta (Tujuh lidah-lidah api warna oranye kuning dan burung Merpati warna perak diatas kain warna dasar merah - warna keberanian untuk bersaksi)</p>
@@ -113,7 +113,7 @@
         </p>
 
         <div class="text-center px-4 py-4">
-            <img src="/images/global/minggu-trinitas.webp"
+            <img loading="lazy" src="/images/global/minggu-trinitas.webp"
                  alt="Minggu Trinitas"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Hari Minggu Trinitas (Segitiga-triquetra warna merah diatas kain warna dasar putih. Simbol ini merupakan simbol mula-mula ketritunggalan)</p>
@@ -127,7 +127,7 @@
         </p>
 
         <div class="text-center px-4 py-4">
-            <img src="/images/global/sesudah-pentakosta.webp"
+            <img loading="lazy" src="/images/global/sesudah-pentakosta.webp"
                  alt="Minggu Sesudah Pentakosta"
                  class="w-32 md:w-64 h-auto mx-auto my-4 rounded shadow object-contain">
             <p class="text-sm italic text-gray-500">Simbol Minggu Sesudah Pentakosta (Perahu warna putih - logo salib warna hijau, seekor burung merpati warna putih dengan ranting zaitun, pelangi di atas kain warna dasar hijau.</p>

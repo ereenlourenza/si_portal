@@ -18,7 +18,7 @@
                 </ul>
             </div>
             <div class="mt-4 md:mt-0 md:ml-6">
-                <img src="{{ asset('images/logo/pelkat_pt.webp') }}" alt="Logo Pelkat PT" class="w-[150px] md:w-[200px] max-w-none mx-auto">
+                <img loading="lazy" src="{{ asset('images/logo/pelkat_pt.webp') }}" alt="Logo Pelkat PT" class="w-[150px] md:w-[200px] max-w-none mx-auto">
             </div>
         </div>
 

@@ -18,11 +18,11 @@
 
       <!-- Images -->
       <div class="overflow-hidden w-full md:w-full lg:w-full xl:w-full transition-transform duration-500">
-        <div x-show="current === 0" class="w-full mx-auto">
-          <img :src="images[0]" alt="Gereja" class="w-full h-110 object-cover shadow-md">
+        <div x-show="current === 0" class="w-full h-auto mx-auto">
+          <img :src="images[0]" loading="lazy" alt="Gereja" width="1200" height="600" class="w-full h-auto object-cover shadow-md" style="height: 500px; object-position: center;">
         </div>
-        <div x-show="current === 1" class="w-full mx-auto">
-          <img :src="images[1]" alt="Gereja" class="w-full h-110 object-cover shadow-md">
+        <div x-show="current === 1" class="w-full h-auto mx-auto">
+          <img :src="images[1]" loading="lazy" alt="Gereja" width="1200" height="600" class="w-full h-auto object-cover shadow-md" style="height: 500px; object-position: center;">
         </div>
       </div>
 
@@ -101,7 +101,7 @@
           <!-- Card 1 -->
           <a href="{{ route('warta-jemaat') }}" class="transform transition-transform duration-500 hover:scale-105">
             <div class="bg-[#231C0D] rounded-lg shadow-md overflow-hidden hover:bg-[#4f3f1c]">
-                <img src="/images/global/warta-jemaat.webp" alt="Warta Jemaat" class="w-full h-54 object-cover">
+                <img loading="lazy" src="/images/global/warta-jemaat.webp" alt="Warta Jemaat" class="w-full h-54 object-cover">
                 <div class="p-4">
                     <h3 class="text-lg font-bold text-white mb-2">WARTA JEMAAT</h3>
                     <p class="text-white">Kumpulan Informasi Selama Satu Minggu</p>
@@ -112,7 +112,7 @@
           <!-- Card 2 -->
           <a href="{{ route('tata-ibadah') }}" class="transform transition-transform duration-500 hover:scale-105">
             <div class="bg-[#231C0D] rounded-lg shadow-md overflow-hidden hover:bg-[#4f3f1c]">
-                <img src="/images/global/tata-ibadah.webp" alt="Tata Ibadah" class="w-full h-54 object-cover">
+                <img loading="lazy" src="/images/global/tata-ibadah.webp" alt="Tata Ibadah" class="w-full h-54 object-cover">
                 <div class="p-4">
                     <h3 class="text-lg font-bold text-white mb-2">TATA IBADAH</h3>
                     <p class="text-white">Liturgi Ibadah Umum dan Ibadah Lainnya</p>
@@ -123,7 +123,7 @@
           <!-- Card 3 -->
           <a href="{{ route('kanal-youtube') }}" class="transform transition-transform duration-500 hover:scale-105">
             <div class="bg-[#231C0D] rounded-lg shadow-md overflow-hidden hover:bg-[#4f3f1c]">
-                <img src="/images/global/live-streaming.webp" alt="Live Streaming" class="w-full h-54 object-cover">
+                <img loading="lazy" src="/images/global/live-streaming.webp" alt="Live Streaming" class="w-full h-54 object-cover">
                 <div class="p-4">
                     <h3 class="text-lg font-bold text-white mb-2">LIVE STREAMING</h3>
                     <p class="text-white">Ibadah Daring Melalui Kanal Youtube GPIB Immanuel Malang</p>
@@ -134,7 +134,7 @@
           <!-- Card 4 -->
           <a href="{{ route('persembahan') }}" class="transform transition-transform duration-500 hover:scale-105">
             <div class="bg-[#231C0D] rounded-lg shadow-md overflow-hidden hover:bg-[#4f3f1c]">
-                <img src="/images/global/persembahan-digital.webp" alt="Persembahan Digital" class="w-full h-54 object-cover">
+                <img loading="lazy" src="/images/global/persembahan-digital.webp" alt="Persembahan Digital" class="w-full h-54 object-cover">
                 <div class="p-4">
                     <h3 class="text-lg font-bold text-white mb-2">PERSEMBAHAN DIGITAL</h3>
                     <p class=" text-white">Memberikan Persembahan Melalui Platform Digital</p>
@@ -194,7 +194,7 @@
     
         <!-- Gambar -->
         <div>
-          <img src="/images/gereja/foto-5.webp" alt="Gereja Jago" class="w-full h-auto rounded-lg shadow-md object-cover">
+          <img loading="lazy" src="/images/gereja/foto-5.webp" alt="Gereja Jago" class="w-full h-auto rounded-lg shadow-md object-cover">
         </div>
     
       </div>
@@ -209,7 +209,7 @@
         <!-- Card 1 -->
         <a href="{{ route('pa') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
-            <img src="/images/logo/pelkat_pa.webp" alt="PA" class="w-10 h-10 object-contain">
+            <img loading="lazy" src="/images/logo/pelkat_pa.webp" alt="PA" class="w-10 h-10 object-contain">
             <div>
               <h4 class="text-md font-bold text-[#6CC066]">PELAYANAN ANAK</h4>
               <p class="text-[#231C0D] text-sm">Kategori usia Pelkat PA: 0-12 tahun</p>
@@ -220,7 +220,7 @@
         <!-- Card 2 -->
         <a href="{{ route('pt') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
-            <img src="/images/logo/pelkat_pt.webp" alt="PT" class="w-10 h-10 object-contain">
+            <img loading="lazy" src="/images/logo/pelkat_pt.webp" alt="PT" class="w-10 h-10 object-contain">
             <div>
               <h4 class="text-md font-bold text-[#FFE100]">PERSEKUTUAN TERUNA</h4>
               <p class="text-[#231C0D] text-sm">Kategori usia Pelkat PT : 13-17 tahun</p>
@@ -231,7 +231,7 @@
         <!-- Card 3 -->
         <a href="{{ route('gp') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
-            <img src="/images/logo/pelkat_gp.webp" alt="GP" class="w-10 h-10 object-contain">
+            <img loading="lazy" src="/images/logo/pelkat_gp.webp" alt="GP" class="w-10 h-10 object-contain">
             <div>
               <h4 class="text-md font-bold text-[#28166F]">GERAKAN PEMUDA</h4>
               <p class="text-[#231C0D] text-sm">Kategori usia Pelkat GP : 18-35 tahun</p>
@@ -242,7 +242,7 @@
         <!-- Card 4 -->
         <a href="{{ route('pkp') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
-            <img src="/images/logo/pelkat_pkp.webp" alt="PKP" class="w-10 h-10 object-contain">
+            <img loading="lazy" src="/images/logo/pelkat_pkp.webp" alt="PKP" class="w-10 h-10 object-contain">
             <div>
               <h4 class="text-md font-bold text-[#4A2D7A]">PERSEKUTUAN KAUM PEREMPUAN</h4>
               <p class="text-[#231C0D] text-sm">Kategori usia Pelkat PKP: 36-59 tahun</p>
@@ -253,7 +253,7 @@
         <!-- Card 5 -->
         <a href="{{ route('pkb') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
-            <img src="/images/logo/pelkat_pkb.webp" alt="PKB" class="w-10 h-10 object-contain">
+            <img loading="lazy" src="/images/logo/pelkat_pkb.webp" alt="PKB" class="w-10 h-10 object-contain">
             <div>
               <h4 class="text-md font-bold text-[#73706F]">PERSEKUTUAN KAUM BAPAK</h4>
               <p class="text-[#231C0D] text-sm">Kategori usia Pelkat PKB : 36-59 tahun</p>
@@ -264,7 +264,7 @@
         <!-- Card 6 -->
         <a href="{{ route('pklu') }}" class="transform transition-transform duration-500 hover:scale-105">
           <div class="flex items-start gap-4 p-4 rounded-lg shadow-md border-[0.5px] border-[#231C0D]/50">
-            <img src="/images/logo/pelkat_pklu.webp" alt="PKLU" class="w-10 h-10 object-contain">
+            <img loading="lazy" src="/images/logo/pelkat_pklu.webp" alt="PKLU" class="w-10 h-10 object-contain">
             <div>
               <h4 class="text-md font-bold text-[#FF853E]">PERSEKUTUAN KAUM LANJUT USIA</h4>
               <p class="text-[#231C0D] text-sm">Kategori usia Pelkat PKLU : 60 tahun ke atas</p>

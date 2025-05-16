@@ -11,7 +11,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             @forelse ($galeriList as $galeri)
                 <div class="relative group overflow-hidden rounded-lg shadow-lg h-48 w-full">
-                    <img src="{{ asset('storage/images/galeri/' . $galeri->foto) }}"
+                    <img loading="lazy" src="{{ asset('storage/images/galeri/' . $galeri->foto) }}"
                         alt="{{ $galeri->judul }}"
                         class="w-full h-full object-cover transition duration-300 group-hover:brightness-50">
 

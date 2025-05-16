@@ -16,14 +16,14 @@
         <div class="max-w-2xl mx-auto bg-[#231C0D] rounded-xl p-6 shadow-lg text-white flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
             <!-- Ilustrasi HP -->
             <div class="w-full md:w-1/3 flex justify-center">
-                <img src="{{ asset('images/global/qris.webp') }}" alt="QRIS Ilustrasi" class="w-32 md:w-40">
+                <img loading="lazy" src="{{ asset('images/global/qris.webp') }}" alt="QRIS Ilustrasi" class="w-32 md:w-40">
             </div>
 
             <!-- Info QR & Rekening -->
             <div class="w-full md:w-2/3 text-center md:text-left">
                 <p class="text-lg font-bold text-center text-white mb-2 uppercase">{{ $pengucapan_syukur->persembahan_nama }}</p>
                 <div class="my-2 flex justify-center md:justify-start">
-                    <img src="{{ asset('storage/images/barcode/' . $pengucapan_syukur->barcode) }}" alt="QR Pengucapan Syukur" class="mx-auto w-40 h-40 mb-4">
+                    <img loading="lazy" src="{{ asset('storage/images/barcode/' . $pengucapan_syukur->barcode) }}" alt="QR Pengucapan Syukur" class="mx-auto w-40 h-40 mb-4">
                 </div>
                 <p class="text-white text-center font-bold text-base md:text-lg">
                     {{ $pengucapan_syukur->nomor_rekening }}<br>
@@ -48,7 +48,7 @@
         @foreach ($persembahan_lain as $item)
         <div class="border p-4 rounded-xl text-center shadow hover:shadow-lg transition border-[#614D24] bg-white">
             <p class="text-sm font-bold uppercase text-[#614D24] mb-2">{{ $item->persembahan_nama }}</p>
-            <img src="{{ asset('storage/images/barcode/' . $item->barcode) }}" alt="QR {{ $item->persembahan_nama }}" class="mx-auto w-32 h-32 mb-3">
+            <img loading="lazy" src="{{ asset('storage/images/barcode/' . $item->barcode) }}" alt="QR {{ $item->persembahan_nama }}" class="mx-auto w-32 h-32 mb-3">
             <p class="text-[#614D24] text-sm">
                 {{ $item->nomor_rekening }}<br>
                 <span class="text-xs text-[#614D24]">a.n {{ $item->atas_nama }}</span>
