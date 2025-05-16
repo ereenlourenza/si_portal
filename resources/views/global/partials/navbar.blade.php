@@ -80,7 +80,27 @@
       </div>
     </div>
   
-    <header class="bg-white shadow ">
+    <header 
+      id="headerNav"
+      class="bg-white transition-all duration-300"
+      :class="{ 'fixed top-0 left-0 right-0 z-50 transition-all duration-300 shadow bg-white': scrolledPast }"
+      
+      x-data="{ 
+        scrolledPast: false,  
+        open: false,
+        dropdown: null,
+        {{-- dropdownTimeout: null, --}}
+      }"
+      x-init="() => {
+        const nav = document.getElementById('headerNav');
+        const navTop = nav.offsetTop;
+
+        window.addEventListener('scroll', () => {
+          scrolledPast = window.scrollY > navTop;
+        });
+      }"
+      
+    >
       {{-- Baris atas: logo dan sign in --}}
       <div class="max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6 flex justify-between items-center">
         
@@ -108,7 +128,7 @@
     
         {{-- Hamburger untuk mobile --}}
         <div class="md:hidden">
-            <button @click="open = !open">
+            <button @click="open = !open" aria-label="Toggle menu">
                 <svg class="w-6 h-6 text-[#231C0D]" fill="none" stroke="currentColor" stroke-width="2"
                      viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 6h16M4 12h16M4 18h16" />
@@ -122,6 +142,20 @@
       {{-- Baris bawah: Menu navigasi --}}
       <nav class="hidden sticky top-0 z-50 md:flex justify-center space-x-6 lg:space-x-12 xl:space-x-16 items-center text-sm" style="font-family: 'Lato', sans-serif; font-size:11px" 
       x-data="{ open: false, dropdown: null, dropdownTimeout: null }">
+
+      {{-- <nav id="mainNav" class="hidden md:flex justify-center space-x-6 lg:space-x-12 xl:space-x-16 items-center text-sm transition-all duration-300"
+          :class="{ 'fixed top-0 left-0 right-0 z-50 transition-all duration-300 shadow bg-white': scrolledPast }"
+          style="font-family: 'Lato', sans-serif; font-size:11px"
+          x-data="{ scrolledPast: false, dropdown: null, dropdownTimeout: null }"
+          x-init="() => {
+            const nav = document.getElementById('mainNav');
+            const navTop = nav.offsetTop;
+
+            window.addEventListener('scroll', () => {
+              scrolledPast = window.scrollY > navTop;
+            });
+          }"
+      > --}}
         
         <a href="{{ route('beranda') }}" 
           class="px-2 py-3 md:tracking-[2.4px] rounded transition
@@ -327,7 +361,7 @@
       
     
       {{-- Mobile Menu --}}
-      <div x-show="open" x-transition class="md:hidden bg-white px-4 pb-4 space-y-2">
+      <div x-show="open" x-transition class="md:hidden bg-white px-4 pb-4 space-y-2" @click.away="open = false">
         <a href="{{ route('beranda') }}" class="block">Beranda</a>
         <div x-data="{ dropdown: null, subPelayanan: null }">
           <div 

@@ -23,6 +23,18 @@
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
   <link rel="stylesheet" href="{{ asset('js/app.js') }}"> --}}
 
+  <style>
+    body {
+      margin: 0;
+      height: 2000px; /* supaya bisa discroll */
+    }
+    header {
+      width: 100%;
+      background: white;
+      transition: all 0.3s ease;
+    }
+  </style>
+
   @stack('css')
 </head>
 <body class="bg-white text-[#231C0D]">

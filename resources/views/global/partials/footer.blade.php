@@ -79,7 +79,7 @@
     </div>
   </footer>
 
-  <script>
+  {{-- <script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
   </script>
-  
+   --}}
