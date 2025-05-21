@@ -131,7 +131,7 @@ class BeritaAcaraIbadahController extends Controller
     public function store(Request $request)
     {
 
-        // dd($request->all());
+        // dd($request->all('ttd_pelayan_1'));
         // Log::info('Request Data:', $request->all());
 
         $validator = Validator::make($request->all(), [
@@ -141,8 +141,8 @@ class BeritaAcaraIbadahController extends Controller
             'catatan'           => 'nullable|string|max:1000',
             'ttd_pelayan_1_id'  => 'required|exists:t_pelayan,pelayan_id',
             'ttd_pelayan_4_id'  => 'required|exists:t_pelayan,pelayan_id',
-            'ttd_pelayan_1_img'     => 'nullable|string', // base64
-            'ttd_pelayan_4_img'     => 'nullable|string', // base64
+            'ttd_pelayan_1'     => 'nullable|string', // base64
+            'ttd_pelayan_4'     => 'nullable|string', // base64
 
             'petugas'                         => 'required|array|min:1',
             'petugas.*.peran'                => 'required|string|max:255',
@@ -619,6 +619,14 @@ class BeritaAcaraIbadahController extends Controller
 
             // Hapus data persembahan
             BeritaAcaraPersembahanModel::where('berita_acara_ibadah_id', $id)->delete();
+
+            // Hapus file gambar tanda tangan jika ada
+            if ($berita->ttd_pelayan_1_img) {
+                Storage::delete(str_replace('storage/', 'public/', $berita->ttd_pelayan_1_img));
+            }
+            if ($berita->ttd_pelayan_4_img) {
+                Storage::delete(str_replace('storage/', 'public/', $berita->ttd_pelayan_4_img));
+            }
 
             // Hapus data berita acara
             $berita->delete();
