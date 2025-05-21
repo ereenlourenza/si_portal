@@ -7,6 +7,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        playfair: ['Playfair Display', 'serif'],
+        platypi: ['Platypi', 'serif'],
+        lato: ['Lato', 'sans-serif'],
+      },
       colors: {
         custombrown: '#231C0D',
       },
