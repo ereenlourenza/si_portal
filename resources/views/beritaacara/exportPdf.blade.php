@@ -130,15 +130,27 @@
     </table>
 
     <h4 class="section-title">Tanda Tangan</h4>
-    <table style="border: none;">
+    <table style="border: none; width: 100%;">
         <tr>
-            <td style="border: none; width: 50%;">
-                <p>Pelayan 1:</p><br><br>
-                <p>____________________</p>
+            <td style="border: none; width: 50%; text-align: center;">
+                <p>Pelayan 1:</p>
+                @if ($berita->ttd_pelayan_1_img)
+                    <img src="{{ public_path($berita->ttd_pelayan_1_img) }}" alt="TTD Pelayan 1" style="width: 150px; height: auto;">
+                @else
+                    <br><br>
+                    <p>____________________</p>
+                @endif
+                <p style="margin-top: 5px;">({{ $berita->pelayan1 ? $berita->pelayan1->nama : 'Nama Pelayan 1 Tidak Tersedia' }})</p>
             </td>
-            <td style="border: none; width: 50%;">
-                <p>Pelayan 4:</p><br><br>
-                <p>____________________</p>
+            <td style="border: none; width: 50%; text-align: center;">
+                <p>Pelayan 4:</p>
+                @if ($berita->ttd_pelayan_4_img)
+                    <img src="{{ public_path($berita->ttd_pelayan_4_img) }}" alt="TTD Pelayan 4" style="width: 150px; height: auto;">
+                @else
+                    <br><br>
+                    <p>____________________</p>
+                @endif
+                <p style="margin-top: 5px;">({{ $berita->pelayan4 ? $berita->pelayan4->nama : 'Nama Pelayan 4 Tidak Tersedia' }})</p>
             </td>
         </tr>
     </table>

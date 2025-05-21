@@ -512,14 +512,11 @@
 
 
 {{-- TTD --}}
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@5.0.7/dist/signature_pad.umd.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener("DOMContentLoaded", () => {
         const canvas1 = document.getElementById('ttd_canvas_1');
         const canvas4 = document.getElementById('ttd_canvas_4');
-
-        console.log("Canvas 1: ", canvas1); // Log untuk memeriksa apakah canvas1 ada
-        console.log("Canvas 4: ", canvas4); // Log untuk memeriksa apakah canvas4 ada
 
         // Pastikan canvas1 dan canvas4 ada sebelum melanjutkan
         if (!canvas1 || !canvas4) {
@@ -530,41 +527,23 @@
         // Versi UMD SignaturePad
         const signaturePad1 = new window.SignaturePad(canvas1);
         const signaturePad4 = new window.SignaturePad(canvas4);
+        
+        signaturePad1.addEventListener('endStroke', function () {
+            document.getElementById('ttd_pelayan_1').value = signaturePad1.toDataURL();
+            console.log("TTD Pelayan 1 (updated):", signaturePad1.toDataURL());
+        });
+        
+        signaturePad4.addEventListener('endStroke', function () {
+            document.getElementById('ttd_pelayan_4').value = signaturePad4.toDataURL();
+            console.log("TTD Pelayan 4 (updated):", signaturePad4.toDataURL());
+        });
 
-        console.log("TTD Pelayan 1:", signaturePad1.toDataURL());
-        console.log("TTD Pelayan 4:", signaturePad4.toDataURL());
+        console.log("TTD Pelayan 1 (initial):", signaturePad1.toDataURL());
+        console.log("TTD Pelayan 4 (initial):", signaturePad4.toDataURL());
 
         // Clear buttons
         document.getElementById('clear_ttd_1').addEventListener('click', () => signaturePad1.clear());
         document.getElementById('clear_ttd_4').addEventListener('click', () => signaturePad4.clear());
-
-        // Tangani submit form
-        const form = document.querySelector('form');
-        if (form) {
-            form.addEventListener('submit', function (e) {
-                // Validasi isi canvas
-                if (signaturePad1.isEmpty()) {
-                    alert('Tanda tangan Pelayan 1 harus diisi.');
-                    e.preventDefault();
-                    return;
-                }
-                if (signaturePad4.isEmpty()) {
-                    alert('Tanda tangan Pelayan 4 harus diisi.');
-                    e.preventDefault();
-                    return;
-                }
-
-                // Simpan base64 ke input hidden
-                document.getElementById('ttd_pelayan_1').value = signaturePad1.toDataURL();
-                document.getElementById('ttd_pelayan_4').value = signaturePad4.toDataURL();
-
-                // Debugging: cek apakah base64 tersimpan dengan benar
-                console.log("TTD Pelayan 1:", signaturePad1.toDataURL());
-                console.log("Base64 Pelayan 1:", document.getElementById('ttd_pelayan_1').value);
-                console.log("TTD Pelayan 4:", signaturePad4.toDataURL());
-                console.log("Base64 Pelayan 4:", document.getElementById('ttd_pelayan_4').value);
-            });
-        }
     });
 </script>
 {{-- End Script TTD --}}
