@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TataIbadahModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_tataibadah'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'tataibadah_id'; //mendefinisikan primary key dari tabel yang digunakan
     /** 

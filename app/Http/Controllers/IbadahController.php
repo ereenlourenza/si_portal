@@ -170,6 +170,13 @@ class IbadahController extends Controller
 
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
+        $ibadah = IbadahModel::find($id);
+
+        if (!$ibadah) {
+            return redirect('/pengelolaan-informasi/ibadah')
+                ->with('error_ibadah', 'Terjadi kesalahan saat mengubah data: ');
+        }
+
         $request->validate([
             'tanggal' => 'required|date_format:Y-m-d',
             'waktu' => 'required|date_format:H:i',

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LevelModel extends Model
 {
+    use HasFactory;
+
     protected $table = 't_level'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'level_id'; //mendefinisikan primary key dari tabel yang digunakan
     /** 

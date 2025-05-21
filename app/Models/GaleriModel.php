@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GaleriModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_galeri'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'galeri_id'; //mendefinisikan primary key dari tabel yang digunakan
     /** 

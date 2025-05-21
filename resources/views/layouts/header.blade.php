@@ -78,7 +78,7 @@
                     <i class="fas fa-user-circle mr-2"></i> Profile
                 </a> --}}
                 {{-- <div class="dropdown-divider"></div> --}}
-                <form action="{{ route('logout') }}">
+                <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="dropdown-item text-danger">
                         <i class="fas fa-sign-out-alt mr-2"></i> Logout

@@ -136,6 +136,14 @@ class KategoriGaleriController extends Controller
 
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
+        
+        $kategori = KategoriGaleriModel::find($id);
+
+        if (!$kategori) {
+            return redirect('/pengelolaan-informasi/kategorigaleri')
+                ->with('error_kategorigaleri', 'Data Kategori galeri tidak ditemukan');
+        }
+        
         $request->validate([
             'kategorigaleri_kode' => 'required|string|min:3|max:10|unique:t_kategorigaleri,kategorigaleri_kode,'.$id.',kategorigaleri_id',
             'kategorigaleri_nama' => 'required|string|max:50'

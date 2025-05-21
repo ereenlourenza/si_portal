@@ -138,6 +138,13 @@ class KategoriPelayanController extends Controller
 
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
+        $kategori = KategoriPelayanModel::find($id);
+
+        if (!$kategori) {
+            return redirect('/pengelolaan-informasi/kategoripelayan')
+                ->with('error_kategoripelayan', 'Data Kategori Pelayan tidak ditemukan');
+        }
+
         $request->validate([
             'kategoripelayan_kode' => 'required|string|min:3|max:10|unique:t_kategoripelayan,kategoripelayan_kode,'.$id.',kategoripelayan_id',
             'kategoripelayan_nama' => 'required|string|max:50'

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PHMJModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_phmj';
     protected $primaryKey = 'phmj_id';
     protected $fillable = ['pelayan_id', 'jabatan', 'periode_mulai', 'periode_selesai'];

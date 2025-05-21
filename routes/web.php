@@ -145,7 +145,12 @@ Route::get('/galeri', [HomeController::class, 'galeri'])->name('galeri');
 Route::get('/galeri/kategori/{id}', [HomeController::class, 'galeriByKategori'])->name('galeri-kategori');
 Route::get('/kontak', function () { return view('global.kontak');})->name('kontak');
 
-
+if (app()->environment('testing')) {
+    Route::get('/log-aktivitas-test', function () {
+        simpanLogAktivitas('ModulTest', 'AksiTest', 'AktivitasTest');
+        return response()->json(['message' => 'OK']);
+    });
+};
 
 // =================
 // ADMIN
@@ -153,7 +158,7 @@ Route::get('/kontak', function () { return view('global.kontak');})->name('konta
     
 Route::get('/login', [AuthController::class, 'index'])->name('login.index');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -188,6 +193,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('log')->group(function () {
             Route::get('/', [LogAktivitasController::class, 'index'])->name('log.index');
         });
+        
 
     });
 

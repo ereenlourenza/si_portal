@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class IbadahModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_ibadah'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'ibadah_id'; //mendefinisikan primary key dari tabel yang digunakan
     /** 

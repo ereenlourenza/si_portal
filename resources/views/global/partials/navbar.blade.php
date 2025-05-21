@@ -64,16 +64,16 @@
         
         {{-- Sosial Media --}}
         <div class="flex gap-0">
-          <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center text-base hover:bg-[#231C0D] hover:text-white transition">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gpibimmanuelmalang@gmail.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full flex items-center justify-center text-base hover:bg-[#231C0D] hover:text-white transition">
             <i class="fas fa-envelope"></i>
           </a>
-          <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center text-base hover:bg-[#231C0D] hover:text-white transition">
+          <a href="https://wa.me/6281333004480" target="_blank" class="w-8 h-8 rounded-full flex items-center justify-center text-base hover:bg-[#231C0D] hover:text-white transition">
             <i class="fab fa-whatsapp"></i>
           </a>
-          <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center text-base hover:bg-[#231C0D] hover:text-white transition">
+          <a href="https://instagram.com" target="_blank" class="w-8 h-8 rounded-full flex items-center justify-center text-base hover:bg-[#231C0D] hover:text-white transition">
             <i class="fab fa-instagram"></i>
           </a>
-          <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center text-base hover:bg-[#231C0D] hover:text-white transition">
+          <a href="https://youtube.com/@gpibimmanuelmalang?si=91QY_Ti8rhI8nGpF" target="_blank" class="w-8 h-8 rounded-full flex items-center justify-center text-base hover:bg-[#231C0D] hover:text-white transition">
             <i class="fab fa-youtube"></i>
           </a>
         </div>
@@ -82,7 +82,7 @@
   
     <header 
       id="headerNav"
-      class="bg-white transition-all duration-300"
+      class="bg-white transition-all duration-300 shadow-sm"
       :class="{ 'fixed top-0 left-0 right-0 z-50 transition-all duration-300 shadow bg-white': scrolledPast }"
       
       x-data="{ 

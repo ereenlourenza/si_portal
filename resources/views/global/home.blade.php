@@ -19,10 +19,10 @@
       <!-- Images -->
       <div class="overflow-hidden w-full md:w-full lg:w-full xl:w-full transition-transform duration-500">
         <div x-show="current === 0" class="w-full h-auto mx-auto">
-          <img :src="images[0]" loading="lazy" alt="Gereja" width="1200" height="600" class="w-full h-auto object-cover shadow-md" style="height: 500px; object-position: center;">
+          <img :src="images[0]" loading="eager" alt="Gereja" width="1200" height="600" class="w-full h-auto object-cover shadow-md" style="height: 500px; object-position: center;">
         </div>
         <div x-show="current === 1" class="w-full h-auto mx-auto">
-          <img :src="images[1]" loading="lazy" alt="Gereja" width="1200" height="600" class="w-full h-auto object-cover shadow-md" style="height: 500px; object-position: center;">
+          <img :src="images[1]" loading="eager" alt="Gereja" width="1200" height="600" class="w-full h-auto object-cover shadow-md" style="height: 500px; object-position: center;">
         </div>
       </div>
 
@@ -274,14 +274,17 @@
     
       </div>
     </section>
+    {{-- <section class="max-w-full mx-auto px-6 py-16 text-[#231C0D]">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mt-2 text-[#231C0D]">PELAYANAN KATEGORIAL</h2>
+      <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> --}}
 
     {{-- JADWAL IBADAH --}}
-    <section class="mb-20 bg-white">
+    <section class="max-w-full mx-auto px-4 py-8 mb-12 bg-white">
       <!-- Judul -->
       <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 text-[#231C0D]">JADWAL IBADAH RUTIN</h2>
 
       <!-- Grid Card -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 md:px-20">
+      <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-6 md:px-20">
 
         <!-- Card 1: Ibadah Minggu Umum -->
         <div class="bg-gradient-to-br from-[#231C0D] to-[#614D24] rounded-2xl text-white shadow-lg p-6">
@@ -289,10 +292,10 @@
             <i class="fas fa-church mr-2 text-white/80"></i> Ibadah Minggu Umum
           </h3>
           <ul class="text-sm space-y-1">
-            <li><span class="font-semibold">EBED</span> - PK 06.00</li>
-            <li><span class="font-semibold">IMMANUEL</span> - PK 08.00</li>
-            <li><span class="font-semibold">PAKISAJI</span> - PK 09.00</li>
-            <li><span class="font-semibold">IMMANUEL</span> - PK 17.00</li>
+            <li><span class="font-semibold">EBED</span> - pk 06.00</li>
+            <li><span class="font-semibold">IMMANUEL</span> - pk 08.00</li>
+            <li><span class="font-semibold">PAKISAJI</span> - pk 09.00</li>
+            <li><span class="font-semibold">IMMANUEL</span> - pk 17.00</li>
           </ul>
         </div>
 
@@ -302,8 +305,8 @@
             <i class="fas fa-house-user mr-2 text-white/80"></i> Ibadah Keluarga (Rabu)
           </h3>
           <ul class="text-sm space-y-1">
-            <li>Sektor 1–5 & 7–9 - PK 17.00</li>
-            <li>Sektor 6 - PK 18.00</li>
+            <li>Sektor 1–5 & 7–9 - pk 17.00</li>
+            <li>Sektor 6 - pk 18.00</li>
           </ul>
         </div>
 
@@ -313,12 +316,12 @@
             <i class="fas fa-users mr-2 text-white/80"></i> Ibadah Pelkat (IMM - Pakisaji)
           </h3>
           <ul class="text-sm space-y-1">
-            <li><span class="font-semibold">Pelkat PA</span> - Minggu PK 08.00 & 09.00</li>
-            <li><span class="font-semibold">Pelkat PT</span> - Minggu PK 08.00</li>
-            <li><span class="font-semibold">Pelkat GP</span> - Jumat/Sabtu PK 18.30/18.00</li>
-            <li><span class="font-semibold">Pelkat PKP</span> - Selasa PK 17.00</li>
-            <li><span class="font-semibold">Pelkat PKB</span> - Sabtu PK 17.00</li>
-            <li><span class="font-semibold">Pelkat PKLU</span> - Sabtu PK 10.00</li>
+            <li><span class="font-semibold">Pelkat PA</span> - Minggu pk 08.00 & 09.00</li>
+            <li><span class="font-semibold">Pelkat PT</span> - Minggu pk 08.00</li>
+            <li><span class="font-semibold">Pelkat GP</span> - Jumat/Sabtu pk 18.30/18.00</li>
+            <li><span class="font-semibold">Pelkat PKP</span> - Selasa pk 17.00</li>
+            <li><span class="font-semibold">Pelkat PKB</span> - Sabtu pk 17.00</li>
+            <li><span class="font-semibold">Pelkat PKLU</span> - Sabtu pk 10.00</li>
           </ul>
         </div>
       </div>

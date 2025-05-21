@@ -3,7 +3,7 @@
 @section('content')
 
     <section class="max-w-5xl mx-auto px-4 py-12 text-gray-800 leading-relaxed">
-        <h1 class="text-2xl md:text-3xl font-bold text-amber-700 mb-6 bg-amber-100 px-4 py-4 rounded shadow">
+        <h1 class="text-2xl md:text-3xl font-bold text-amber-700 mb-6 bg-amber-100 px-4 py-4 rounded shadow leading-sung">
             Visi Misi GPIB
         </h1>
 

@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserModel extends Authenticatable
 {
+    use HasFactory;
+    
     protected $table = 't_user'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'user_id'; //mendefinisikan primary key dari tabel yang digunakan
     /** 

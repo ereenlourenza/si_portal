@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PelkatModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_pelkat';
     protected $primaryKey = 'pelkat_id'; //mendefinisikan primary key dari tabel yang digunakan
     protected $fillable = ['pelkat_nama', 'deskripsi'];

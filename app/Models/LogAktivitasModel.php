@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class LogAktivitasModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 'log_aktivitas';
 
     protected $fillable = [

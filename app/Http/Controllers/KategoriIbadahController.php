@@ -136,6 +136,13 @@ class KategoriIbadahController extends Controller
 
     //Menyimpan perubahan data level
     public function update(Request $request, string $id){
+        $kategori = KategoriIbadahModel::find($id);
+
+        if (!$kategori) {
+            return redirect('/pengelolaan-informasi/kategoriibadah')
+                ->with('error_kategoriibadah', 'Data Kategori Ibadah tidak ditemukan');
+        }
+
         $request->validate([
             //level kode harus diisi, berupa string, minimal 3 karakter, maksimal 10 karakter
             //dan bernilai unik di tabel m_level kolom level_kode kecuali untuk level dengan id yang sedang diedit

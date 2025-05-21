@@ -17,13 +17,13 @@
             </a>
             <!-- Sosial Media -->
             <div class="flex gap-4 mt-2 text-[#D99841] text-lg">
-                <a href="#" class="hover:text-white transition" aria-label="Facebook">
+                <a href="https://wa.me/6281333004480" target="_blank" class="hover:text-white transition" aria-label="Facebook">
                 <i class="fab fa-whatsapp"></i>
                 </a>
-                <a href="#" class="hover:text-white transition" aria-label="Instagram">
+                <a href="https://instagram.com" target="_blank" class="hover:text-white transition" aria-label="Instagram">
                 <i class="fab fa-instagram"></i>
                 </a>
-                <a href="#" class="hover:text-white transition" aria-label="YouTube">
+                <a href="https://youtube.com/@gpibimmanuelmalang?si=91QY_Ti8rhI8nGpF" target="_blank" class="hover:text-white transition" aria-label="YouTube">
                 <i class="fab fa-youtube"></i>
                 </a>
             </div>

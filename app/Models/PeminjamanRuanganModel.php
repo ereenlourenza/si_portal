@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PeminjamanRuanganModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_peminjamanruangan'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'peminjamanruangan_id'; //mendefinisikan primary key dari tabel yang digunakan
 

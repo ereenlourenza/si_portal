@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class WartaJemaatModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_wartajemaat'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'wartajemaat_id'; //mendefinisikan primary key dari tabel yang digunakan
     /** 

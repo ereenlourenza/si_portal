@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PersembahanLembaranModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_persembahan_lembaran';
     protected $primaryKey = 'persembahan_lembaran_id';
     protected $fillable = [

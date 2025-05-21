@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class KategoriPelayanModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_kategoripelayan'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'kategoripelayan_id'; //mendefinisikan primary key dari tabel yang digunakan
     /** 

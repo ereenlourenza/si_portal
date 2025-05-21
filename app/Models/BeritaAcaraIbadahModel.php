@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BeritaAcaraIbadahModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_berita_acara_ibadah';
     protected $primaryKey = 'berita_acara_ibadah_id';
     protected $fillable = ['ibadah_id', 'bacaan_alkitab', 'jumlah_kehadiran', 'catatan', 'ttd_pelayan_1_id', 'ttd_pelayan_4_id', 'ttd_pelayan_1_img', 'ttd_pelayan_4_img'];

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 
 class BeritaAcaraPersembahanModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 't_berita_acara_persembahan';
     protected $primaryKey = 'berita_acara_persembahan_id';
     protected $fillable = ['berita_acara_ibadah_id', 'kategori_persembahan_id', 'jenis_input', 'total'];
