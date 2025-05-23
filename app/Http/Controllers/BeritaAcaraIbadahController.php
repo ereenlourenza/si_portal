@@ -163,7 +163,8 @@ class BeritaAcaraIbadahController extends Controller
             'persembahan.*.lembaran.jumlah_100'     => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_200'     => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_500'     => 'nullable|integer|min:0',
-            'persembahan.*.lembaran.jumlah_1000'    => 'nullable|integer|min:0',
+            'persembahan.*.lembaran.jumlah_1000_koin'    => 'nullable|integer|min:0',
+            'persembahan.*.lembaran.jumlah_1000_kertas'    => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_2000'    => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_5000'    => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_10000'   => 'nullable|integer|min:0',
@@ -310,7 +311,8 @@ class BeritaAcaraIbadahController extends Controller
                         ($item['lembaran']['jumlah_100'] ?? 0) * 100 +
                         ($item['lembaran']['jumlah_200'] ?? 0) * 200 +
                         ($item['lembaran']['jumlah_500'] ?? 0) * 500 +
-                        ($item['lembaran']['jumlah_1000'] ?? 0) * 1000 +
+                        ($item['lembaran']['jumlah_1000_koin'] ?? 0) * 1000 +
+                        ($item['lembaran']['jumlah_1000_kertas'] ?? 0) * 1000 +
                         ($item['lembaran']['jumlah_2000'] ?? 0) * 2000 +
                         ($item['lembaran']['jumlah_5000'] ?? 0) * 5000 +
                         ($item['lembaran']['jumlah_10000'] ?? 0) * 10000 +
@@ -325,7 +327,8 @@ class BeritaAcaraIbadahController extends Controller
                         'jumlah_100'                  => $item['lembaran']['jumlah_100'] ?? 0,
                         'jumlah_200'                  => $item['lembaran']['jumlah_200'] ?? 0,
                         'jumlah_500'                  => $item['lembaran']['jumlah_500'] ?? 0,
-                        'jumlah_1000'                 => $item['lembaran']['jumlah_1000'] ?? 0,
+                        'jumlah_1000_koin'                 => $item['lembaran']['jumlah_1000_koin'] ?? 0,
+                        'jumlah_1000_kertas'                 => $item['lembaran']['jumlah_1000_kertas'] ?? 0,
                         'jumlah_2000'                 => $item['lembaran']['jumlah_2000'] ?? 0,
                         'jumlah_5000'                 => $item['lembaran']['jumlah_5000'] ?? 0,
                         'jumlah_10000'                => $item['lembaran']['jumlah_10000'] ?? 0,
@@ -489,8 +492,8 @@ class BeritaAcaraIbadahController extends Controller
             'ttd_pelayan_4_id'  => 'required|exists:t_pelayan,pelayan_id',
             // TTDs are not submitted from edit, so validation is not strictly needed here
             // but keeping them nullable in case of future changes.
-            'ttd_pelayan_1'     => 'required|string',
-            'ttd_pelayan_4'     => 'required|string',
+            'ttd_pelayan_1'     => 'nullable|string',
+            'ttd_pelayan_4'     => 'nullable|string',
 
             'petugas'                         => 'sometimes|array', // Can be empty if no changes
             'petugas.*.id'                   => 'nullable|integer',
@@ -517,7 +520,8 @@ class BeritaAcaraIbadahController extends Controller
             'persembahan.*.lembaran.jumlah_100'         => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_200'         => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_500'         => 'nullable|integer|min:0',
-            'persembahan.*.lembaran.jumlah_1000'        => 'nullable|integer|min:0',
+            'persembahan.*.lembaran.jumlah_1000_koin'        => 'nullable|integer|min:0',
+            'persembahan.*.lembaran.jumlah_1000_kertas'        => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_2000'        => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_5000'        => 'nullable|integer|min:0',
             'persembahan.*.lembaran.jumlah_10000'       => 'nullable|integer|min:0',
@@ -631,22 +635,37 @@ class BeritaAcaraIbadahController extends Controller
                     if ($item['jenis_input'] === 'langsung') {
                         $currentPersembahanTotal = $item['total'] ?? 0;
                     } elseif ($item['jenis_input'] === 'lembaran' && isset($item['lembaran'])) {
-                        $lembaranTotal = 0;
-                        $denominations = [100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
-                        $lembaranDataToStore = [
-                            'berita_acara_ibadah_id'  => $berita->berita_acara_ibadah_id, // Tautkan ke BA utama
-                            'kategori_persembahan_id' => $item['kategori_persembahan_id'],
-                        ];
-                        foreach ($denominations as $nom) {
-                            $jumlah_denom = $item['lembaran']["jumlah_{$nom}"] ?? 0;
-                            $lembaranTotal += $jumlah_denom * $nom;
-                            $lembaranDataToStore["jumlah_{$nom}"] = $jumlah_denom;
-                        }
-                        $lembaranDataToStore['total_persembahan'] = $lembaranTotal;
+                        $lembaranTotal = (
+                            ($item['lembaran']['jumlah_100'] ?? 0) * 100 +
+                            ($item['lembaran']['jumlah_200'] ?? 0) * 200 +
+                            ($item['lembaran']['jumlah_500'] ?? 0) * 500 +
+                            ($item['lembaran']['jumlah_1000_koin'] ?? 0) * 1000 +
+                            ($item['lembaran']['jumlah_1000_kertas'] ?? 0) * 1000 +
+                            ($item['lembaran']['jumlah_2000'] ?? 0) * 2000 +
+                            ($item['lembaran']['jumlah_5000'] ?? 0) * 5000 +
+                            ($item['lembaran']['jumlah_10000'] ?? 0) * 10000 +
+                            ($item['lembaran']['jumlah_20000'] ?? 0) * 20000 +
+                            ($item['lembaran']['jumlah_50000'] ?? 0) * 50000 +
+                            ($item['lembaran']['jumlah_100000'] ?? 0) * 100000
+                        );
                         $currentPersembahanTotal = $lembaranTotal;
-                        // Lembaran disimpan terpisah, bukan langsung di bawah BeritaAcaraPersembahanModel dalam struktur ini
-                        // Jadi, kita perbarui atau buat PersembahanLembaranModel
-                        // Mengasumsikan satu entri lembaran per pasangan (berita_acara_ibadah_id, kategori_persembahan_id)
+
+                        $lembaranDataToStore = [
+                            // berita_acara_ibadah_id dan kategori_persembahan_id akan digunakan di updateOrCreate sebagai kondisi
+                            'jumlah_100'              => $item['lembaran']['jumlah_100'] ?? 0,
+                            'jumlah_200'              => $item['lembaran']['jumlah_200'] ?? 0,
+                            'jumlah_500'              => $item['lembaran']['jumlah_500'] ?? 0,
+                            'jumlah_1000_koin'        => $item['lembaran']['jumlah_1000_koin'] ?? 0,
+                            'jumlah_1000_kertas'      => $item['lembaran']['jumlah_1000_kertas'] ?? 0,
+                            'jumlah_2000'             => $item['lembaran']['jumlah_2000'] ?? 0,
+                            'jumlah_5000'             => $item['lembaran']['jumlah_5000'] ?? 0,
+                            'jumlah_10000'            => $item['lembaran']['jumlah_10000'] ?? 0,
+                            'jumlah_20000'            => $item['lembaran']['jumlah_20000'] ?? 0,
+                            'jumlah_50000'            => $item['lembaran']['jumlah_50000'] ?? 0,
+                            'jumlah_100000'           => $item['lembaran']['jumlah_100000'] ?? 0,
+                            'total_persembahan'       => $lembaranTotal,
+                        ];
+
                         PersembahanLembaranModel::updateOrCreate(
                             [
                                 'berita_acara_ibadah_id'  => $berita->berita_acara_ibadah_id,
@@ -655,9 +674,10 @@ class BeritaAcaraIbadahController extends Controller
                             $lembaranDataToStore
                         );
                         Log::info("Updated/Created Lembaran for Persembahan [{$index}]:", $lembaranDataToStore);
-                    }
 
-                    $persembahanData['total'] = $currentPersembahanTotal; // Set total awal (untuk langsung/lembaran)
+                    } // Pastikan kurung kurawal penutup yang benar, bukan };
+
+                    $persembahanData['total'] = $currentPersembahanTotal;  // Set total awal (untuk langsung/lembaran)
 
                     // Update or Create Item Persembahan
                     if (!empty($item['id'])) {

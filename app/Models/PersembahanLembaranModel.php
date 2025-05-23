@@ -13,7 +13,7 @@ class PersembahanLembaranModel extends Model
     protected $primaryKey = 'persembahan_lembaran_id';
     protected $fillable = [
         'berita_acara_ibadah_id', 'kategori_persembahan_id', 
-        'jumlah_100','jumlah_200','jumlah_500','jumlah_1000','jumlah_2000','jumlah_5000',
+        'jumlah_100','jumlah_200','jumlah_500','jumlah_1000_koin', 'jumlah_1000_kertas','jumlah_2000','jumlah_5000',
         'jumlah_10000','jumlah_20000','jumlah_50000','jumlah_100000',
         'total_persembahan'
     ];

@@ -146,7 +146,8 @@
                                                     $total_100 = 100 * $lembaran->jumlah_100;
                                                     $total_200 = 200 * $lembaran->jumlah_200;
                                                     $total_500 = 500 * $lembaran->jumlah_500;
-                                                    $total_1000 = 1000 * $lembaran->jumlah_1000;
+                                                    $total_1000_koin = 1000 * $lembaran->jumlah_1000_koin;
+                                                    $total_1000_kertas = 1000 * $lembaran->jumlah_1000_kertas;
                                                     $total_2000 = 2000 * $lembaran->jumlah_2000;
                                                     $total_5000 = 5000 * $lembaran->jumlah_5000;
                                                     $total_10000 = 10000 * $lembaran->jumlah_10000;
@@ -154,7 +155,7 @@
                                                     $total_50000 = 50000 * $lembaran->jumlah_50000;
                                                     $total_100000 = 100000 * $lembaran->jumlah_100000;
 
-                                                    $total_persembahan = $total_100 + $total_200 + $total_500 + $total_1000 + $total_2000 +
+                                                    $total_persembahan = $total_100 + $total_200 + $total_500 + $total_1000_koin + $total_1000_kertas + $total_2000 +
                                                                         $total_5000 + $total_10000 + $total_20000 + $total_50000 + $total_100000;
                                                 @endphp
 
@@ -171,7 +172,8 @@
                                                             <tr><td>100</td><td>{{ $lembaran->jumlah_100 }}</td><td class="text-right">{{ number_format($total_100, 0, ',', '.') }}</td></tr>
                                                             <tr><td>200</td><td>{{ $lembaran->jumlah_200 }}</td><td class="text-right">{{ number_format($total_200, 0, ',', '.') }}</td></tr>
                                                             <tr><td>500</td><td>{{ $lembaran->jumlah_500 }}</td><td class="text-right">{{ number_format($total_500, 0, ',', '.') }}</td></tr>
-                                                            <tr><td>1.000</td><td>{{ $lembaran->jumlah_1000 }}</td><td class="text-right">{{ number_format($total_1000, 0, ',', '.') }}</td></tr>
+                                                            <tr><td>1.000 (koin)</td><td>{{ $lembaran->jumlah_1000_koin }}</td><td class="text-right">{{ number_format($total_1000_koin, 0, ',', '.') }}</td></tr>
+                                                            <tr><td>1.000 (kertas)</td><td>{{ $lembaran->jumlah_1000_kertas }}</td><td class="text-right">{{ number_format($total_1000_kertas, 0, ',', '.') }}</td></tr>
                                                             <tr><td>2.000</td><td>{{ $lembaran->jumlah_2000 }}</td><td class="text-right">{{ number_format($total_2000, 0, ',', '.') }}</td></tr>
                                                             <tr><td>5.000</td><td>{{ $lembaran->jumlah_5000 }}</td><td class="text-right">{{ number_format($total_5000, 0, ',', '.') }}</td></tr>
                                                             <tr><td>10.000</td><td>{{ $lembaran->jumlah_10000 }}</td><td class="text-right">{{ number_format($total_10000, 0, ',', '.') }}</td></tr>

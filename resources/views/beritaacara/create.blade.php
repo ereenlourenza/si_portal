@@ -308,9 +308,26 @@
             } else if (jenis === 'lembaran') {
                 html = `<div class="form-lembaran">
                     <div class="row">
-                        @foreach([100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000] as $nom)
+                        {{-- Koin --}}
+                        @foreach([100, 200, 500] as $nom)
                         <div class="col-md-2">
-                            <label>Rp{{ number_format($nom, 0, ',', '.') }}</label>
+                            <label>Rp{{ number_format($nom, 0, ',', '.') }} (Koin)</label>
+                            <input type="number" min="0" name="persembahan[${idx}][lembaran][jumlah_{{ $nom }}]" class="form-control" value="0">
+                        </div>
+                        @endforeach
+                        <div class="col-md-2">
+                            <label>Rp1.000 (Koin)</label>
+                            <input type="number" min="0" name="persembahan[${idx}][lembaran][jumlah_1000_koin]" class="form-control" value="0">
+                        </div>
+
+                        {{-- Kertas --}}
+                        <div class="col-md-2">
+                            <label>Rp1.000 (Kertas)</label>
+                            <input type="number" min="0" name="persembahan[${idx}][lembaran][jumlah_1000_kertas]" class="form-control" value="0">
+                        </div>
+                        @foreach([2000, 5000, 10000, 20000, 50000, 100000] as $nom)
+                        <div class="col-md-2">
+                            <label>Rp{{ number_format($nom, 0, ',', '.') }} (Kertas)</label>
                             <input type="number" min="0" name="persembahan[${idx}][lembaran][jumlah_{{ $nom }}]" class="form-control" value="0">
                         </div>
                         @endforeach
@@ -429,7 +446,7 @@
             } else {
                 // If this row was previously Pelayan 1 and set ttd_pelayan_1_id,
                 // and now it's not Pelayan 1, we might need to clear ttd_pelayan_1_id
-                // if $('#ttd_pelayan_1_id').val() was set by this specific row.
+                // if ($('#ttd_pelayan_1_id').val() was set by this specific row.
                 // This requires more complex state tracking. For now, we only set.
             }
 

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->unsignedInteger('jumlah_100')->default(0);
             $table->unsignedInteger('jumlah_200')->default(0);
             $table->unsignedInteger('jumlah_500')->default(0);
-            $table->unsignedInteger('jumlah_1000')->default(0);
+            $table->unsignedInteger('jumlah_1000_koin')->default(0);
+            $table->unsignedInteger('jumlah_1000_kertas')->default(0);
             $table->unsignedInteger('jumlah_2000')->default(0);
             $table->unsignedInteger('jumlah_5000')->default(0);
             $table->unsignedInteger('jumlah_10000')->default(0);

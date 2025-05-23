@@ -171,9 +171,32 @@
                                         {{-- <pre>{{ var_dump($persembahan) }}</pre> --}}
                                             <div class="form-lembaran">
                                                 <div class="row">
-                                                    @foreach([100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000] as $nom)
+                                                    {{-- Koin --}}
+                                                    @foreach([100, 200, 500] as $nom)
                                                         <div class="col-md-2">
-                                                            <label>Rp{{ number_format($nom, 0, ',', '.') }}</label>
+                                                            <label>Rp{{ number_format($nom, 0, ',', '.') }} (Koin)</label>
+                                                            <input type="number" min="0" name="persembahan[{{ $index }}][lembaran][jumlah_{{ $nom }}]" 
+                                                                class="form-control" 
+                                                                value="{{ old("persembahan.$index.lembaran.jumlah_$nom", $persembahan->lembaran->first()->{'jumlah_'.$nom} ?? 0) }}">
+                                                        </div>
+                                                    @endforeach
+                                                    <div class="col-md-2">
+                                                        <label>Rp1.000 (Koin)</label>
+                                                        <input type="number" min="0" name="persembahan[{{ $index }}][lembaran][jumlah_1000_koin]" 
+                                                            class="form-control" 
+                                                            value="{{ old("persembahan.$index.lembaran.jumlah_1000_koin", $persembahan->lembaran->first()->jumlah_1000_koin ?? 0) }}">
+                                                    </div>
+
+                                                    {{-- Kertas --}}
+                                                    <div class="col-md-2">
+                                                        <label>Rp1.000 (Kertas)</label>
+                                                        <input type="number" min="0" name="persembahan[{{ $index }}][lembaran][jumlah_1000_kertas]" 
+                                                            class="form-control" 
+                                                            value="{{ old("persembahan.$index.lembaran.jumlah_1000_kertas", $persembahan->lembaran->first()->jumlah_1000_kertas ?? 0) }}">
+                                                    </div>
+                                                    @foreach([2000, 5000, 10000, 20000, 50000, 100000] as $nom)
+                                                        <div class="col-md-2">
+                                                            <label>Rp{{ number_format($nom, 0, ',', '.') }} (Kertas)</label>
                                                             <input type="number" min="0" name="persembahan[{{ $index }}][lembaran][jumlah_{{ $nom }}]" 
                                                                 class="form-control" 
                                                                 value="{{ old("persembahan.$index.lembaran.jumlah_$nom", $persembahan->lembaran->first()->{'jumlah_'.$nom} ?? 0) }}">
@@ -417,12 +440,32 @@
                         <input type="number" name="persembahan[${pIndex}][total]" class="form-control" placeholder="Total Persembahan">
                     </div>`;
             } else if (selectedJenis === 'lembaran') {
-                const denominations = [100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
                 let lembaranHtml = '<div class="form-lembaran"><div class="row">';
-                denominations.forEach(nom => {
+                
+                // Koin
+                [100, 200, 500].forEach(nom => {
                     lembaranHtml += `
                         <div class="col-md-2">
-                            <label>Rp${nom.toLocaleString('id-ID')}</label>
+                            <label>Rp${nom.toLocaleString('id-ID')} (Koin)</label>
+                            <input type="number" min="0" name="persembahan[${pIndex}][lembaran][jumlah_${nom}]" class="form-control" value="0">
+                        </div>`;
+                });
+                lembaranHtml += `
+                        <div class="col-md-2">
+                            <label>Rp1.000 (Koin)</label>
+                            <input type="number" min="0" name="persembahan[${pIndex}][lembaran][jumlah_1000_koin]" class="form-control" value="0">
+                        </div>`;
+
+                // Kertas
+                lembaranHtml += `
+                        <div class="col-md-2">
+                            <label>Rp1.000 (Kertas)</label>
+                            <input type="number" min="0" name="persembahan[${pIndex}][lembaran][jumlah_1000_kertas]" class="form-control" value="0">
+                        </div>`;
+                [2000, 5000, 10000, 20000, 50000, 100000].forEach(nom => {
+                    lembaranHtml += `
+                        <div class="col-md-2">
+                            <label>Rp${nom.toLocaleString('id-ID')} (Kertas)</label>
                             <input type="number" min="0" name="persembahan[${pIndex}][lembaran][jumlah_${nom}]" class="form-control" value="0">
                         </div>`;
                 });
