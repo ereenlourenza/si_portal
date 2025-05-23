@@ -23,7 +23,7 @@
                         <!-- Pilih Ibadah -->
                         <div class="form-group">
                             <label for="ibadah_id">Ibadah</label>
-                            <select name="ibadah_id" id="ibadah_id" class="form-control" required>
+                            <select name="ibadah_id" id="ibadah_id" class="form-control select2" required>
                                 <option value="">-- Pilih Ibadah --</option>
                                 @foreach($ibadah as $item)
                                     <option value="{{ $item->ibadah_id }}"
@@ -158,7 +158,7 @@
                                     <div class="jenis-input-wrapper mt-2">
                                         @if ($persembahan->jenis_input === 'langsung')
                                             <div class="form-langsung">
-                                                <input type="number" name="persembahan[{{ $index }}][total]" class="form-control" value="{{ old("persembahan[$index][total]", $persembahan->total) }}" placeholder="Total Persembahan">
+                                                <input type="number" name="persembahan[{{ $index }}][total]" class="form-control" value="{{ old("persembahan.$index.total", $persembahan->total) }}" placeholder="Total Persembahan">
                                             </div>
                                         @elseif ($persembahan->jenis_input === 'lembaran')
                                         {{-- <pre>{{ var_dump($persembahan) }}</pre> --}}
@@ -169,30 +169,36 @@
                                                             <label>Rp{{ number_format($nom, 0, ',', '.') }}</label>
                                                             <input type="number" min="0" name="persembahan[{{ $index }}][lembaran][jumlah_{{ $nom }}]" 
                                                                 class="form-control" 
-                                                                value="{{ old("persembahan[$index][lembaran][jumlah_$nom]", $persembahan->lembaran1[0]["jumlah_$nom"] ?? 0) }}">
+                                                                value="{{ old("persembahan.$index.lembaran.jumlah_$nom", $persembahan->lembaran->first()->{'jumlah_'.$nom} ?? 0) }}">
                                                         </div>
                                                     @endforeach
                                                 </div>
                                             </div>
                                         @elseif ($persembahan->jenis_input === 'amplop')
                                             <div class="form-amplop">
-                                                <div class="row">
-                                                    @foreach ($persembahan->amplop as $amplopIndex => $amplop)
-                                                        <div class="col-md-4">
-                                                            <input type="text" name="persembahan[{{ $index }}][amplop][{{ $amplopIndex }}][no_amplop]" class="form-control" value="{{ old("persembahan[$index][amplop][$amplopIndex][no_amplop]", $amplop['no_amplop']) }}" placeholder="No Amplop">
+                                                @foreach ($persembahan->amplop as $amplopIndex => $amplop)
+                                                    <div class="amplop-item row mb-2">
+                                                        <input type="hidden" name="persembahan[{{ $index }}][amplop][{{ $amplopIndex }}][id]" value="{{ $amplop->berita_acara_persembahan_amplop_id }}">
+                                                        <input type="hidden" name="persembahan[{{ $index }}][amplop][{{ $amplopIndex }}][hapus]" value="false" class="input-amplop-hapus">
+                                                        <div class="col-md-3">
+                                                            <input type="text" name="persembahan[{{ $index }}][amplop][{{ $amplopIndex }}][no_amplop]" class="form-control" value="{{ old("persembahan.$index.amplop.$amplopIndex.no_amplop", $amplop->no_amplop) }}" placeholder="No Amplop">
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <input type="text" name="persembahan[{{ $index }}][amplop][{{ $amplopIndex }}][nama_pengguna_amplop]" class="form-control" value="{{ old("persembahan[$index][amplop][$amplopIndex][nama_pengguna_amplop]", $amplop['nama_pengguna_amplop']) }}" placeholder="Nama Pengguna">
+                                                            <input type="text" name="persembahan[{{ $index }}][amplop][{{ $amplopIndex }}][nama_pengguna_amplop]" class="form-control" value="{{ old("persembahan.$index.amplop.$amplopIndex.nama_pengguna_amplop", $amplop->nama_pengguna_amplop) }}" placeholder="Nama Pengguna">
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <input type="number" name="persembahan[{{ $index }}][amplop][{{ $amplopIndex }}][jumlah]" class="form-control" value="{{ old("persembahan[$index][amplop][$amplopIndex][jumlah]", $amplop['jumlah']) }}" placeholder="Jumlah">
+                                                        <div class="col-md-3">
+                                                            <input type="number" name="persembahan[{{ $index }}][amplop][{{ $amplopIndex }}][jumlah]" class="form-control" value="{{ old("persembahan.$index.amplop.$amplopIndex.jumlah", $amplop->jumlah) }}" placeholder="Jumlah">
                                                         </div>
-                                                    @endforeach
-                                                </div>
+                                                        <div class="col-md-2">
+                                                            <button type="button" class="btn btn-danger btn-sm btn-hapus-amplop">✕</button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
+                                            <button type="button" class="btn btn-success btn-sm mt-2 btn-tambah-amplop">+ Amplop</button>
                                         @endif
                                     </div>
-                                    <button type="button" class="btn btn-danger btn-sm mt-2 btn-hapus">Hapus</button>
+                                    <button type="button" class="btn btn-danger btn-sm mt-2 btn-hapus">Hapus Persembahan</button>
                                 </div>
                             @endforeach
                         </div>
@@ -217,55 +223,26 @@
                             @enderror
                         </div>
 
-                        <input type="hidden" name="ttd_pelayan_1" id="ttd_pelayan_1">
-                        <input type="hidden" name="ttd_pelayan_4" id="ttd_pelayan_4">      
-
                         <!-- Tanda Tangan Pelayan 1 -->
                         <div class="form-group">
-                            <label for="ttd_pelayan_1_id">Tanda Tangan Digital Pelayan 1</label>
-                            <select name="ttd_pelayan_1_id" class="form-control" required>
-                                <option value="">-- Pilih Pelayan --</option>
-                                @foreach($pelayan as $p)
-                                    <option value="{{ $p->pelayan_id }}" {{ old('ttd_pelayan_1_id', $berita->ttd_pelayan_1_id) == $p->pelayan_id ? 'selected' : '' }}>{{ $p->nama }}</option>
-                                @endforeach
-                            </select>
+                            <label>Pelayan 1 (Penanda Tangan)</label>
+                            <input type="text" class="form-control" value="{{ $berita->pelayan1->nama ?? 'Tidak ada data' }}" readonly>
+                            <input type="hidden" name="ttd_pelayan_1_id" value="{{ $berita->ttd_pelayan_1_id }}">
 
                             @error('ttd_pelayan_1_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
-
-                            <!-- Canvas untuk tanda tangan digital -->
-                            <div style="display: flex; flex-direction: column; align-items: center;">
-                                <canvas id="ttd_canvas_1" width="300" height="100" style="border: 1px solid #ccc;"></canvas>
-
-                                @error('ttd_canvas_1')
-                                    <small class="form-text text-danger">{{ $message }}</small>
-                                @enderror
-                                <button type="button" id="clear_ttd_1" class="btn btn-warning btn-sm mt-2">Clear</button>
-                            </div>
                         </div>
 
                         <!-- Tanda Tangan Pelayan 4 -->
                         <div class="form-group">
-                            <label for="ttd_pelayan_4_id">Tanda Tangan Digital Pelayan 4</label>
-                            <select name="ttd_pelayan_4_id" class="form-control" required>
-                                <option value="">-- Pilih Pelayan --</option>
-                                @foreach($pelayan as $p)
-                                    <option value="{{ $p->pelayan_id }}" {{ old('ttd_pelayan_4_id', $berita->ttd_pelayan_4_id) == $p->pelayan_id ? 'selected' : '' }}>{{ $p->nama }}</option>
-                                @endforeach
-                            </select>
+                            <label>Pelayan 4 (Penanda Tangan)</label>
+                            <input type="text" class="form-control" value="{{ $berita->pelayan4->nama ?? 'Tidak ada data' }}" readonly>
+                            <input type="hidden" name="ttd_pelayan_4_id" value="{{ $berita->ttd_pelayan_4_id }}">
+
                             @error('ttd_pelayan_4_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
-
-                            <!-- Canvas untuk tanda tangan digital -->
-                            <div style="display: flex; flex-direction: column; align-items: center;">
-                                <canvas id="ttd_canvas_4" width="300" height="100" style="border: 1px solid #ccc;"></canvas>
-                                @error('ttd_canvas_4')
-                                    <small class="form-text text-danger">{{ $message }}</small>
-                                @enderror
-                                <button type="button" id="clear_ttd_4" class="btn btn-warning btn-sm mt-2">Clear</button>
-                            </div>
                         </div>
 
         
@@ -333,6 +310,7 @@
         // Inisialisasi Select2 untuk elemen dengan kelas 'select2'
         $('.select2').select2({
             placeholder: 'Pilih...',
+            tags: true,
             width: '100%' // Sesuaikan dengan lebar form
         });
 
@@ -340,6 +318,7 @@
         function reinitializeSelect2() {
             $('.select2').select2({
                 placeholder: 'Pilih...',
+                tags: true,
                 width: '100%'
             });
         }
@@ -354,137 +333,204 @@
 
 <script>
     // ========== Script Dynamic Form Persembahan ==========
-    let index = 1;
-    document.getElementById('btn-tambah').addEventListener('click', function () {
-        const container = document.getElementById('form-persembahan');
-        const item = document.createElement('div');
-        item.classList.add('persembahan-item', 'mb-3', 'border', 'p-3');
-        item.innerHTML = `
-            <!-- Tambahkan input hidden untuk ID kosong -->
-            <input type="hidden" name="persembahan[${index}][id]" value="">
-            <input type="hidden" name="persembahan[${index}][hapus]" value="false"> <!-- Menandakan apakah item ini dihapus -->
+    document.addEventListener('DOMContentLoaded', function () {
+        let persembahanNextIndex = {{ $berita->persembahan->count() }};
+        const formPersembahan = document.getElementById('form-persembahan');
 
-            <select name="persembahan[${index}][kategori_persembahan_id]" class="form-select">
-                @foreach($kategoriPersembahan as $kategori)
-                    <option value="{{ $kategori->kategori_persembahan_id }}">{{ $kategori->kategori_persembahan_nama }}</option>
-                @endforeach
-            </select>
-            <select name="persembahan[${index}][jenis_input]" class="form-select mt-2 jenis-input">
-                <option value="langsung">Langsung</option>
-                <option value="lembaran">Lembaran</option>
-                <option value="amplop">Amplop</option>
-            </select>
-            <div class="jenis-input-wrapper mt-2">
-                <div class="form-langsung">
-                    <input type="number" name="persembahan[${index}][total]" class="form-control" placeholder="Total Persembahan">
-                </div>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm mt-2 btn-hapus">Hapus</button>
-        `;
-        container.appendChild(item);
-        index++;
-    });
-    // End of Dynamic Form Persembahan
+        function getPersembahanIndex(element) {
+            const persembahanItem = element.closest('.persembahan-item');
+            if (!persembahanItem) return null;
 
-    // hapus item
-    document.addEventListener('click', function (e) {
-        if (e.target && e.target.classList.contains('btn-hapus')) {
-            const item = e.target.closest('.persembahan-item');
-            // Temukan input hidden yang menunjukkan apakah item ini dihapus
-            const hiddenInput = item.querySelector('input[name$="[hapus]"]');
-            if (hiddenInput) {
-                hiddenInput.value = 'true'; // Tandai item ini sebagai dihapus
+            const nameInput = persembahanItem.querySelector('[name^="persembahan["]');
+            if (nameInput) {
+                const match = nameInput.name.match(/persembahan\\[(\d+)\\]/);
+                if (match && match[1] !== undefined) return parseInt(match[1]);
             }
-            item.remove();  // Hapus elemen dari DOM
-        }
-    });
-
-    // jenis input dinamis
-    document.addEventListener('change', function (e) {
-        if (e.target && e.target.classList.contains('jenis-input')) {
-            const jenis = e.target.value;
-            const wrapper = e.target.closest('.persembahan-item').querySelector('.jenis-input-wrapper');
-            const idx = [...document.querySelectorAll('.jenis-input')].indexOf(e.target);
-            let html = '';
-
-            if (jenis === 'langsung') {
-                html = `<div class="form-langsung">
-                    <input type="number" name="persembahan[${idx}][total]" class="form-control" placeholder="Total Persembahan">
-                </div>`;
-            } else if (jenis === 'lembaran') {
-                html = `<div class="form-lembaran">
-                    <div class="row">
-                        @foreach([100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000] as $nom)
-                        <div class="col-md-2">
-                            <label>Rp{{ number_format($nom, 0, ',', '.') }}</label>
-                            <input type="number" min="0" name="persembahan[${idx}][lembaran][jumlah_{{ $nom }}]" 
-                                class="form-control" 
-                                value="0">
-                        </div>
-                        @endforeach
-                    </div>
-                </div>`;
-            } else if (jenis === 'amplop') {
-                html = `<div class="form-amplop">
-                    <div class="row amplop-item mb-1">
-                        <div class="col-4">
-                            <input type="text" name="persembahan[${idx}][amplop][0][no_amplop]" class="form-control" placeholder="No Amplop">
-                        </div>
-                        <div class="col-4">
-                            <input type="text" name="persembahan[${idx}][amplop][0][nama_pengguna_amplop]" class="form-control" placeholder="Nama Pengguna">
-                        </div>
-                        <div class="col-3">
-                            <input type="number" name="persembahan[${idx}][amplop][0][jumlah]" class="form-control" placeholder="Jumlah">
-                        </div>
-                        <div class="col-1 d-flex justify-content-center align-items-center mb-3">
-                            <button type="button" class="btn btn-danger btn-sm btn-hapus-amplop">✕</button>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-success btn-tambah-amplop mt-2">+ Amplop</button>
-
-                </div>`;
+            // For newly added items that might not have inputs yet or if parsing fails
+            if (persembahanItem.dataset.index !== undefined) {
+                return parseInt(persembahanItem.dataset.index);
             }
-
-            wrapper.innerHTML = html;
+            return null;
         }
-    });
 
-    // Tambah dan hapus amplop dinamis
-    document.addEventListener('click', function (e) {
-        // Tambah amplop
-        if (e.target && e.target.classList.contains('btn-tambah-amplop')) {
-            const amplopContainer = e.target.closest('.form-amplop');
-            const amplopItems = amplopContainer.querySelectorAll('.amplop-item');
-            const idx = amplopItems.length; // Index amplop baru
-            const persembahanIdx = [...document.querySelectorAll('.jenis-input')].indexOf(
-                amplopContainer.closest('.persembahan-item').querySelector('.jenis-input')
-            );
+        function getNextAmplopIndex(persembahanItem) {
+            return persembahanItem.querySelectorAll('.amplop-item').length;
+        }
+
+        function addAmplopRow(formAmplopContainer, pIndex, amplopData = null) {
+            const aIndex = getNextAmplopIndex(formAmplopContainer.closest('.persembahan-item'));
+            const amplopId = amplopData ? amplopData.id : '';
+            const noAmplop = amplopData ? amplopData.no_amplop : '';
+            const namaPengguna = amplopData ? amplopData.nama_pengguna_amplop : '';
+            const jumlah = amplopData ? amplopData.jumlah : '';
 
             const amplopItem = document.createElement('div');
-            amplopItem.classList.add('row', 'amplop-item', 'mb-1');
+            amplopItem.classList.add('amplop-item', 'row', 'mb-2');
             amplopItem.innerHTML = `
-                <div class="col-4">
-                    <input type="text" name="persembahan[${persembahanIdx}][amplop][${idx}][no_amplop]" class="form-control" placeholder="No Amplop">
+                <input type="hidden" name="persembahan[${pIndex}][amplop][${aIndex}][id]" value="${amplopId}">
+                <input type="hidden" name="persembahan[${pIndex}][amplop][${aIndex}][hapus]" value="false" class="input-amplop-hapus">
+                <div class="col-md-3">
+                    <input type="text" name="persembahan[${pIndex}][amplop][${aIndex}][no_amplop]" class="form-control" placeholder="No Amplop" value="${noAmplop}">
                 </div>
-                <div class="col-4">
-                    <input type="text" name="persembahan[${persembahanIdx}][amplop][${idx}][nama_pengguna_amplop]" class="form-control" placeholder="Nama Pengguna">
+                <div class="col-md-4">
+                    <input type="text" name="persembahan[${pIndex}][amplop][${aIndex}][nama_pengguna_amplop]" class="form-control" placeholder="Nama Pengguna" value="${namaPengguna}">
                 </div>
-                <div class="col-3">
-                    <input type="number" name="persembahan[${persembahanIdx}][amplop][${idx}][jumlah]" class="form-control" placeholder="Jumlah">
+                <div class="col-md-3">
+                    <input type="number" name="persembahan[${pIndex}][amplop][${aIndex}][jumlah]" class="form-control" placeholder="Jumlah" value="${jumlah}">
                 </div>
-                <div class="col-1 d-flex justify-content-center align-items-center mb-3">
+                <div class="col-md-2">
                     <button type="button" class="btn btn-danger btn-sm btn-hapus-amplop">✕</button>
                 </div>
             `;
-            amplopContainer.insertBefore(amplopItem, e.target);
+            // If there's a "+ Amplop" button, insert before it, otherwise append to container
+            const tambahAmplopButton = formAmplopContainer.parentElement.querySelector('.btn-tambah-amplop');
+            if(tambahAmplopButton){
+                formAmplopContainer.insertBefore(amplopItem, null); // insert at the end of .form-amplop div
+            } else {
+                formAmplopContainer.appendChild(amplopItem);
+            }
         }
 
-        // Hapus amplop
-        if (e.target && e.target.classList.contains('btn-hapus-amplop')) {
-            e.target.closest('.amplop-item').remove();
+        function renderJenisInputFields(jenisInputSelect) {
+            const selectedJenis = jenisInputSelect.value;
+            const persembahanItem = jenisInputSelect.closest('.persembahan-item');
+            const wrapper = persembahanItem.querySelector('.jenis-input-wrapper');
+            const pIndex = getPersembahanIndex(jenisInputSelect);
+
+            if (pIndex === null) {
+                console.error('Could not determine persembahan index for', jenisInputSelect);
+                return;
+            }
+
+            wrapper.innerHTML = ''; // Clear previous inputs
+
+            if (selectedJenis === 'langsung') {
+                wrapper.innerHTML = `
+                    <div class="form-langsung">
+                        <input type="number" name="persembahan[${pIndex}][total]" class="form-control" placeholder="Total Persembahan">
+                    </div>`;
+            } else if (selectedJenis === 'lembaran') {
+                const denominations = [100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
+                let lembaranHtml = '<div class="form-lembaran"><div class="row">';
+                denominations.forEach(nom => {
+                    lembaranHtml += `
+                        <div class="col-md-2">
+                            <label>Rp${nom.toLocaleString('id-ID')}</label>
+                            <input type="number" min="0" name="persembahan[${pIndex}][lembaran][jumlah_${nom}]" class="form-control" value="0">
+                        </div>`;
+                });
+                lembaranHtml += '</div></div>';
+                wrapper.innerHTML = lembaranHtml;
+            } else if (selectedJenis === 'amplop') {
+                wrapper.innerHTML = `
+                    <div class="form-amplop">
+                        <!-- Amplop items will be added here -->
+                    </div>
+                    <button type="button" class="btn btn-success btn-sm mt-2 btn-tambah-amplop">+ Amplop</button>
+                `;
+                addAmplopRow(wrapper.querySelector('.form-amplop'), pIndex); // Add the first amplop row
+            }
+        }
+
+        if (formPersembahan) {
+            formPersembahan.addEventListener('click', function(e) {
+                // Hapus Persembahan Item
+                if (e.target.classList.contains('btn-hapus')) { // Assuming 'btn-hapus' is for persembahan item
+                    const persembahanItem = e.target.closest('.persembahan-item');
+                    if (!persembahanItem) return;
+                    const idInput = persembahanItem.querySelector('input[name$="[id]"]');
+                    const hapusInput = persembahanItem.querySelector('input[name$="[hapus]"]'); // Should be input-persembahan-hapus
+
+                    if (hapusInput) {
+                        hapusInput.value = 'true';
+                    }
+                    if (idInput && idInput.value) {
+                        persembahanItem.style.display = 'none';
+                    } else {
+                        persembahanItem.remove();
+                    }
+                }
+
+                // Tambah Amplop Item
+                if (e.target.classList.contains('btn-tambah-amplop')) {
+                    const persembahanItem = e.target.closest('.persembahan-item');
+                    const pIndex = getPersembahanIndex(e.target);
+                    const formAmplopContainer = persembahanItem.querySelector('.form-amplop');
+                    if (pIndex !== null && formAmplopContainer) {
+                        addAmplopRow(formAmplopContainer, pIndex);
+                    }
+                }
+
+                // Hapus Amplop Item
+                if (e.target.classList.contains('btn-hapus-amplop')) {
+                    const amplopItem = e.target.closest('.amplop-item');
+                    if (!amplopItem) return;
+                    const idInput = amplopItem.querySelector('input[name$="[id]"]');
+                    const hapusInput = amplopItem.querySelector('.input-amplop-hapus');
+
+                    if (hapusInput) {
+                        hapusInput.value = 'true';
+                    }
+
+                    if (idInput && idInput.value) {
+                        amplopItem.style.display = 'none';
+                    } else {
+                        amplopItem.remove();
+                    }
+                }
+            });
+
+            formPersembahan.addEventListener('change', function(e) {
+                if (e.target.classList.contains('jenis-input')) {
+                    renderJenisInputFields(e.target);
+                }
+            });
+        }
+
+        const btnTambahPersembahan = document.getElementById('btn-tambah');
+        if (btnTambahPersembahan) {
+            btnTambahPersembahan.addEventListener('click', function () {
+                const container = formPersembahan;
+                const newItem = document.createElement('div');
+                newItem.classList.add('persembahan-item', 'mb-3', 'border', 'p-3');
+                newItem.dataset.index = persembahanNextIndex; 
+
+                let kategoriOptions = '';
+                @foreach($kategoriPersembahan as $kategori)
+                    kategoriOptions += `<option value="{{ $kategori->kategori_persembahan_id }}">{{ $kategori->kategori_persembahan_nama }}</option>`;
+                @endforeach
+
+                newItem.innerHTML = `
+                    <input type="hidden" name="persembahan[${persembahanNextIndex}][id]" value="">
+                    <input type="hidden" name="persembahan[${persembahanNextIndex}][hapus]" value="false" class="input-persembahan-hapus">
+                    
+                    <select name="persembahan[${persembahanNextIndex}][kategori_persembahan_id]" class="form-select">
+                        ${kategoriOptions}
+                    </select>
+                    <select name="persembahan[${persembahanNextIndex}][jenis_input]" class="form-select mt-2 jenis-input">
+                        <option value="langsung" selected>Langsung</option>
+                        <option value="lembaran">Lembaran</option>
+                        <option value="amplop">Amplop</option>
+                    </select>
+                    <div class="jenis-input-wrapper mt-2">
+                        <!-- Fields will be rendered here -->
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm mt-2 btn-hapus">Hapus Persembahan</button>
+                `;
+                if (container) {
+                    container.appendChild(newItem);
+                }
+                
+                const newJenisInputSelect = newItem.querySelector('.jenis-input');
+                if (newJenisInputSelect) {
+                    renderJenisInputFields(newJenisInputSelect);
+                }
+                
+                persembahanNextIndex++;
+            });
         }
     });
-    // End of amplop dinamis
+    // End of Script Dynamic Form Persembahan
 </script>
 
 {{-- Script Otomatis Nama Pelayan Firman --}}
@@ -513,100 +559,8 @@
 {{-- End Script otomatis --}}
 
 
-{{-- TTD --}}
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-<script>
-    console.log('Script TTD dimulai!');
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log("Page is loaded and script is running.");
-
-        // Inisialisasi SignaturePad
-        const canvas1 = document.getElementById('ttd_canvas_1');
-        console.log('Canvas 1:', document.getElementById('ttd_canvas_1'));
-        const signaturePad1 = new SignaturePad(canvas1);
-        console.log('SignaturePad1 initialized:', signaturePad1);
-
-        const canvas4 = document.getElementById('ttd_canvas_4');
-        console.log('Canvas 4:', document.getElementById('ttd_canvas_4'));
-        const signaturePad4 = new SignaturePad(canvas4);
-        console.log('SignaturePad4 initialized:', signaturePad4);
-
-        console.log('Hidden Input TTD Pelayan 1:', document.getElementById('ttd_pelayan_1'));
-        console.log('Hidden Input TTD Pelayan 4:', document.getElementById('ttd_pelayan_4'));
-
-        console.log('SignaturePad:', SignaturePad);
-
-        // Tombol clear untuk kedua canvas
-        document.getElementById('clear_ttd_1').addEventListener('click', () => {
-            signaturePad1.clear();
-        });
-        document.getElementById('clear_ttd_4').addEventListener('click', () => {
-            signaturePad4.clear();
-        });
-
-        // Cek form dan pastikan event listener submit terpasang
-        const form = document.querySelector('form');
-        if (form) {
-            console.log("Form element found.");
-            form.addEventListener('submit', function (e) {
-                console.log("Form sedang disubmit");
-
-                // Validasi tanda tangan kosong
-                if (signaturePad1.isEmpty()) {
-                    alert('Tanda tangan Pelayan 1 harus diisi.');
-                    e.preventDefault();
-                    return;
-                }
-                if (signaturePad4.isEmpty()) {
-                    alert('Tanda tangan Pelayan 4 harus diisi.');
-                    e.preventDefault();
-                    return;
-                }
-
-                // Mengambil data URL tanda tangan
-                const ttd1 = signaturePad1.toDataURL();
-                const ttd4 = signaturePad4.toDataURL();
-
-                // Validasi jika tanda tangan gagal diambil
-                if (!ttd1 || !ttd4) {
-                    console.error("Tanda tangan tidak dapat dikonversi menjadi data URL.");
-                    e.preventDefault();
-                    return;
-                }
-
-                // Debug log untuk memastikan data sudah siap
-                console.log('TTD Pelayan 1 (Base64):', ttd1);
-                console.log('TTD Pelayan 4 (Base64):', ttd4);
-
-                // Set nilai pada field input tersembunyi
-                document.getElementById('ttd_pelayan_1').value = ttd1;
-                document.getElementById('ttd_pelayan_4').value = ttd4;
-
-                // Debug log untuk memastikan hidden input diisi
-                console.log('Hidden Input TTD Pelayan 1:', document.getElementById('ttd_pelayan_1').value);
-                console.log('Hidden Input TTD Pelayan 4:', document.getElementById('ttd_pelayan_4').value);
-            });
-        } else {
-            console.log("Form element NOT found.");
-        }
-    });
-
-</script>
-    
-    
-{{-- End Script TTD --}}
-
-
 {{-- Pelayan Firman ketik & dropdown --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-{{-- <script>
-    $(document).ready(function() {
-        $('#pelayan_firman').select2({
-            placeholder: 'Pilih pelayan firman...',
-            width: '100%' // Sesuaikan dengan lebar form
-        });
-    });
-</script> --}}
 <script>
     let petugasIndex = {{ count($berita->petugas) }};
     function addPetugas() {
@@ -619,6 +573,19 @@
                         <option value="Pelayan 1">Pelayan 1</option>
                         <option value="Pelayan 2">Pelayan 2</option>
                         <option value="Pelayan 3">Pelayan 3</option>
+                        <option value="Pelayan 4">Pelayan 4</option>
+                        <option value="Pelayan 5">Pelayan 5</option>
+                        <option value="Pelayan 6">Pelayan 6</option>
+                        <option value="Pelayan 7">Pelayan 7</option>
+                        <option value="Pelayan 8">Pelayan 8</option>
+                        <option value="Pelayan 9">Pelayan 9</option>
+                        <option value="Kolektan">Kolektan</option>
+                        <option value="Pemandu Lagu">Pemandu Lagu</option>
+                        <option value="Paduan Suara/VG">Paduan Suara/VG</option>
+                        <option value="Organis/Pianis/Keyboardis">Organis/Pianis/Keyboardis</option>
+                        <option value="Operator LCD">Operator LCD</option>
+                        <option value="Operator Sound">Operator Sound</option>
+                        <option value="Operator CCTV">Operator CCTV</option>
                     </select>
                 </div>
                 <div class="col-4">

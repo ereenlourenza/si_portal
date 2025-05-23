@@ -47,65 +47,21 @@
                             value="" readonly>
                     </div>
 
+                    {{-- Petugas Ibadah --}}
                     <div class="form-group">
                         <label>Petugas Ibadah</label>
-                        <div id="petugas-wrapper">
-                            <div class="form-row mb-2 align-items-center">
-                                <div class="col-3">
-                                    <select name="petugas[0][peran]" class="form-control peran-dropdown" required>
-                                        <option value="">-- Pilih Peran --</option>
-                                        <option value="Pelayan 1">Pelayan 1</option>
-                                        <option value="Pelayan 2">Pelayan 2</option>
-                                        <option value="Pelayan 3">Pelayan 3</option>
-                                        <option value="Pelayan 4">Pelayan 4</option>
-                                        <option value="Pelayan 5">Pelayan 5</option>
-                                        <option value="Pelayan 6">Pelayan 6</option>
-                                        <option value="Pelayan 7">Pelayan 7</option>
-                                        <option value="Pelayan 8">Pelayan 8</option>
-                                        <option value="Pelayan 9">Pelayan 9</option>
-                                        <option value="Kolektan">Kolektan</option>
-                                        <option value="Pemandu Lagu">Pemandu Lagu</option>
-                                        <option value="Kantoria">Kantoria</option>
-                                        <option value="Paduan Suara/VG">Paduan Suara/VG</option>
-                                        <option value="Organis/Pianis/Keyboardis">Organis/Pianis/Keyboardis</option>
-                                        <option value="Operator LCD">Operator LCD</option>
-                                        <option value="Operator Sound">Operator Sound</option>
-                                        <option value="Operator CCTV">Operator CCTV</option>
-                                    </select>
-
-                                    @error('peran')
-                                        <small class="form-text text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                <div class="col-4">
-                                    <select name="petugas[0][pelayan_id_jadwal]" class="form-control select2" required>
-                                        <option value="">-- Jadwal Petugas --</option>
-                                        @foreach($pelayan as $p)
-                                            <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @error('pelayan_id_jadwal')
-                                        <small class="form-text text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                <div class="col-4">
-                                    <select name="petugas[0][pelayan_id_hadir]" class="form-control select2">
-                                        <option value="">-- Petugas Hadir --</option>
-                                        @foreach($pelayan as $p)
-                                            <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('pelayan_id_hadir')
-                                        <small class="form-text text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                <div class="col-1 d-flex justify-content-center align-items-center mb-2">
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="removePetugas(this)">✕</button>
-                                </div>
-                            </div>
+                        <!-- Header Row -->
+                        <div class="form-row mb-1">
+                            <div class="col-3"><label>Peran</label></div>
+                            <div class="col-4"><label>Petugas Jadwal</label></div>
+                            <div class="col-4"><label>Petugas Hadir</label></div>
+                            <div class="col-1" style="text-align: center;"><label>Aksi</label></div>
                         </div>
-                        <div class="d-flex justify-content-end">
+                        <!-- Wrapper for dynamic rows -->
+                        <div id="petugas-wrapper">
+                            {{-- Dynamic petugas rows will be added here by JavaScript --}}
+                        </div>
+                        <div class="d-flex justify-content-end mt-2">
                             <button type="button" class="btn btn-sm btn-success" onclick="addPetugas()">+ Tambah Petugas</button>
                         </div>
                     </div>
@@ -301,31 +257,6 @@
 </script>
 
 <script>
-    // ========== Script Select2 ==========
-    document.addEventListener('DOMContentLoaded', function () {
-        // Inisialisasi Select2 untuk elemen dengan kelas 'select2'
-        $('.select2').select2({
-            placeholder: 'Pilih...',
-            width: '100%' // Sesuaikan dengan lebar form
-        });
-
-        // Re-inisialisasi Select2 jika elemen baru ditambahkan secara dinamis
-        function reinitializeSelect2() {
-            $('.select2').select2({
-                placeholder: 'Pilih...',
-                width: '100%'
-            });
-        }
-
-        // Tambahkan event listener untuk tombol "Tambah Petugas"
-        document.querySelector('button[onclick="addPetugas()"]').addEventListener('click', function () {
-            setTimeout(reinitializeSelect2, 100); // Tunggu elemen baru dirender sebelum inisialisasi ulang
-        });
-    });
-    // End of Select2
-</script>
-
-<script>
     // ========== Script Dynamic Form Persembahan ==========
     let index = 1;
     document.getElementById('btn-tambah').addEventListener('click', function () {
@@ -469,43 +400,64 @@
 <script>
     // ========== Script Dropdown Otomatis ID Pelayan 1 Pelayan 4 ==========
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.peran-dropdown').forEach(function (dropdown) {
-            dropdown.addEventListener('change', function () {
-                const selectedPeran = this.value; // Ambil peran yang dipilih
-                const pelayanDropdown = this.closest('.form-row').querySelector('[name^="petugas"][name$="[pelayan_id_hadir]"]'); // Dropdown Petugas Hadir
-                
-                console.log('Dropdown Petugas Hadir:', pelayanDropdown);
+        $('#petugas-wrapper').on('change', '.peran-dropdown', function () {
+            const selectedPeran = this.value;
+            const $row = $(this).closest('.petugas-row');
+            const pelayanHadirSelect = $row.find('.petugas-hadir-select'); // Target by class
 
-                // Pastikan dropdown Petugas Hadir ditemukan
-                if (!pelayanDropdown) {
-                    console.warn('Dropdown Petugas Hadir tidak ditemukan.');
-                    return;
+            if (!pelayanHadirSelect.length) {
+                console.warn('Dropdown Petugas Hadir tidak ditemukan dalam baris ini.');
+                return;
+            }
+
+            const pelayanHadirValue = pelayanHadirSelect.val(); // This will be the text or ID
+
+            // If Petugas Hadir is not selected, or if it's a new tag (not an ID from a pre-loaded option),
+            // the backend will handle creation. This script primarily links existing ones if IDs were used.
+            // For tags:true, pelayanHadirValue will be the string name.
+            // We need to decide if TTD should be linked if it's a new name or only if an existing ID was somehow selected.
+            // For now, assume any value means we try to link, but if it's not an ID, TTD won't find it.
+            // Or, more safely, only link if it's numeric (an ID).
+
+            let pelayanIdToLink = null;
+            if (pelayanHadirValue && !isNaN(parseInt(pelayanHadirValue))) { // Check if it's a numeric ID
+                pelayanIdToLink = parseInt(pelayanHadirValue);
+            }
+
+            if (selectedPeran === 'Pelayan 1') {
+                $('#ttd_pelayan_1_id').val(pelayanIdToLink).trigger('change');
+            } else {
+                // If this row was previously Pelayan 1 and set ttd_pelayan_1_id,
+                // and now it's not Pelayan 1, we might need to clear ttd_pelayan_1_id
+                // if $('#ttd_pelayan_1_id').val() was set by this specific row.
+                // This requires more complex state tracking. For now, we only set.
+            }
+
+            if (selectedPeran === 'Pelayan 4') {
+                $('#ttd_pelayan_4_id').val(pelayanIdToLink).trigger('change');
+            } else {
+                // Similar logic for Pelayan 4 if needed.
+            }
+
+            // If pelayanHadirValue is a new tag (string), pelayanIdToLink will be null, effectively clearing TTD.
+            if (!pelayanIdToLink) {
+                 if (selectedPeran === 'Pelayan 1') {
+                    $('#ttd_pelayan_1_id').val(null).trigger('change');
                 }
-
-                // Ambil nilai dari Select2
-                const pelayanId = $(pelayanDropdown).val(); // Gunakan Select2 untuk mengambil nilai
-
-                console.log('Peran yang dipilih:', selectedPeran);
-                console.log('ID Pelayan yang dipilih:', pelayanId);
-
-                // Jika dropdown Petugas Hadir kosong, jangan lanjutkan
-                if (!pelayanId) {
-                    console.warn('Petugas Hadir belum dipilih.');
-                    return;
-                }
-
-                // Jika peran adalah Pelayan 1, isi dropdown TTD Pelayan 1
-                if (selectedPeran === 'Pelayan 1') {
-                    console.log('Mengisi TTD Pelayan 1 dengan:', pelayanId);
-                    document.getElementById('ttd_pelayan_1_id').value = pelayanId;
-                }
-
-                // Jika peran adalah Pelayan 4, isi dropdown TTD Pelayan 4
                 if (selectedPeran === 'Pelayan 4') {
-                    console.log('Mengisi TTD Pelayan 4 dengan:', pelayanId);
-                    document.getElementById('ttd_pelayan_4_id').value = pelayanId;
+                    $('#ttd_pelayan_4_id').val(null).trigger('change');
                 }
-            });
+            }
+        });
+
+        // Also listen to changes on Petugas Hadir directly, as it might change without Peran changing.
+        $('#petugas-wrapper').on('change', '.petugas-hadir-select', function() {
+            const $row = $(this).closest('.petugas-row');
+            const selectedPeran = $row.find('.peran-dropdown').val();
+            // Trigger a change on the peran dropdown to re-evaluate TTD linking
+            if (selectedPeran) {
+                 $row.find('.peran-dropdown').trigger('change');
+            }
         });
     });
 </script>
@@ -551,161 +503,111 @@
 
 {{-- Pelayan Firman ketik & dropdown --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-{{-- <script>
-    $(document).ready(function() {
-        $('#pelayan_firman').select2({
-            placeholder: 'Pilih pelayan firman...',
-            width: '100%' // Sesuaikan dengan lebar form
-        });
-    });
-</script> --}}
+
 <script>
-    let petugasIndex = 1;
+$(document).ready(function() {
+    // Initialize standard Select2 elements (non-tags)
+    $('#ibadah_id, #ttd_pelayan_1_id, #ttd_pelayan_4_id').select2({
+        placeholder: 'Pilih...',
+        width: '100%'
+    });
+    // Add any other non-tag Select2 initializations here if needed.
 
-    function addPetugas() {
-        const wrapper = document.getElementById('petugas-wrapper');
-        const html = `
-            <div class="form-row mb-2 align-items-center">
+    let petugasCounter = 0; // Counter for unique IDs for new rows
+
+    // Function to add a new petugas row
+    window.addPetugas = function() {
+        const wrapper = $('#petugas-wrapper');
+        const currentRowId = petugasCounter; // Use counter for unique name attributes
+
+        const newRowHtml = `
+            <div class="form-row mb-2 align-items-center petugas-row" data-row-id="${currentRowId}">
                 <div class="col-3">
-                    <select name="petugas[${petugasIndex}][peran]" class="form-control peran-dropdown" required>
+                    <select name="petugas[${currentRowId}][peran]" class="form-control peran-dropdown" required>
                         <option value="">-- Pilih Peran --</option>
-                        <option value="Pelayan 1">Pelayan 1</option>
-                        <option value="Pelayan 2">Pelayan 2</option>
-                        <option value="Pelayan 3">Pelayan 3</option>
-                        <option value="Pelayan 4">Pelayan 4</option>
-                        <option value="Pelayan 5">Pelayan 5</option>
-                        <option value="Pelayan 6">Pelayan 6</option>
-                        <option value="Pelayan 7">Pelayan 7</option>
-                        <option value="Pelayan 8">Pelayan 8</option>
-                        <option value="Pelayan 9">Pelayan 9</option>
+                        <option value="Pelayan 1">Pelayan 1 (PF)</option>
+                        <option value="Pelayan 2">Pelayan 2 (L)</option>
+                        <option value="Pelayan 3">Pelayan 3 (P)</option>
+                        <option value="Pelayan 4">Pelayan 4 (M)</option>
+                        <option value="Pelayan 5">Pelayan 5 (Pr)</option>
+                        <option value="Pelayan 6">Pelayan 6 (K)</option>
+                        <option value="Pelayan 7">Pelayan 7 (Pn)</option>
+                        <option value="Pelayan 8">Pelayan 8 (PK)</option>
+                        <option value="Pelayan 9">Pelayan 9 (PS)</option>
+                        <option value="Pemusik">Pemusik</option>
+                        <option value="Prokantor">Prokantor</option>
                         <option value="Kolektan">Kolektan</option>
-                        <option value="Pemandu Lagu">Pemandu Lagu</option>
-                        <option value="Paduan Suara/VG">Paduan Suara/VG</option>
-                        <option value="Organis/Pianis/Keyboardis">Organis/Pianis/Keyboardis</option>
-                        <option value="Operator LCD">Operator LCD</option>
+                        <option value="Penyambut Jemaat">Penyambut Jemaat</option>
+                        <option value="Pengedar Kantong">Pengedar Kantong</option>
                         <option value="Operator Sound">Operator Sound</option>
-                        <option value="Operator CCTV">Operator CCTV</option>
+                        <option value="Operator LCD">Operator LCD</option>
+                        <option value="Paduan Suara/VG">Paduan Suara/VG</option>
+                        <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
                 <div class="col-4">
-                    <select name="petugas[${petugasIndex}][pelayan_id_jadwal]" class="form-control select2" required>
-                        <option value="">-- Jadwal Petugas --</option>
-                        @foreach($pelayan as $p)
-                            <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
-                        @endforeach
+                    <select name="petugas[${currentRowId}][pelayan_id_jadwal]" class="form-control petugas-jadwal-select" required>
+                        {{-- Options will be populated by Select2 tags or typed by user --}}
                     </select>
                 </div>
                 <div class="col-4">
-                    <select name="petugas[${petugasIndex}][pelayan_id_hadir]" class="form-control select2">
-                        <option value="">-- Petugas Hadir --</option>
-                        @foreach($pelayan as $p)
-                            <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
-                        @endforeach
+                    <select name="petugas[${currentRowId}][pelayan_id_hadir]" class="form-control petugas-hadir-select">
+                        {{-- Options will be populated by Select2 tags or typed by user --}}
                     </select>
                 </div>
-                <div class="col-1 d-flex justify-content-center align-items-center mb-2">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removePetugas(this)">✕</button>
+                <div class="col-1 d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-danger btn-sm btn-remove-petugas">✕</button>
                 </div>
             </div>
         `;
-        wrapper.insertAdjacentHTML('beforeend', html);
-        petugasIndex++;
-    }
-    
-    function addPetugas() {
-        const wrapper = document.getElementById('petugas-wrapper');
-        const html = `
-            <div class="form-row mb-2 align-items-center">
-                <div class="col-3">
-                    <select name="petugas[${petugasIndex}][peran]" class="form-control peran-dropdown" required>
-                        <option value="">-- Pilih Peran --</option>
-                        <option value="Pelayan 1">Pelayan 1</option>
-                        <option value="Pelayan 2">Pelayan 2</option>
-                        <option value="Pelayan 3">Pelayan 3</option>
-                        <option value="Pelayan 4">Pelayan 4</option>
-                        <option value="Pelayan 5">Pelayan 5</option>
-                        <option value="Pelayan 6">Pelayan 6</option>
-                        <option value="Pelayan 7">Pelayan 7</option>
-                        <option value="Pelayan 8">Pelayan 8</option>
-                        <option value="Pelayan 9">Pelayan 9</option>
-                        <option value="Kolektan">Kolektan</option>
-                        <option value="Pemandu Lagu">Pemandu Lagu</option>
-                        <option value="Paduan Suara/VG">Paduan Suara/VG</option>
-                        <option value="Organis/Pianis/Keyboardis">Organis/Pianis/Keyboardis</option>
-                        <option value="Operator LCD">Operator LCD</option>
-                        <option value="Operator Sound">Operator Sound</option>
-                        <option value="Operator CCTV">Operator CCTV</option>
-                    </select>
-                </div>
-                <div class="col-4">
-                    <select name="petugas[${petugasIndex}][pelayan_id_jadwal]" class="form-control select2" required>
-                        <option value="">-- Jadwal Petugas --</option>
-                        @foreach($pelayan as $p)
-                            <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-4">
-                    <select name="petugas[${petugasIndex}][pelayan_id_hadir]" class="form-control select2">
-                        <option value="">-- Petugas Hadir --</option>
-                        @foreach($pelayan as $p)
-                            <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-1 d-flex justify-content-center align-items-center mb-2">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removePetugas(this)">✕</button>
-                </div>
-            </div>
-        `;
-        wrapper.insertAdjacentHTML('beforeend', html);
+        wrapper.append(newRowHtml);
 
-        // Tambahkan event listener ke elemen baru
-        const newDropdown = wrapper.querySelector(`select[name="petugas[${petugasIndex}][peran]"]`);
-        newDropdown.addEventListener('change', function () {
-            const selectedPeran = this.value; // Ambil peran yang dipilih
-            const pelayanDropdown = this.closest('.form-row').querySelector('[name^="petugas"][name$="[pelayan_id_hadir]"]'); // Dropdown Petugas Hadir
-            
-            console.log('Dropdown Petugas Hadir:', pelayanDropdown);
+        const newRow = wrapper.find(`.petugas-row[data-row-id="${currentRowId}"]`);
 
-            // Pastikan dropdown Petugas Hadir ditemukan
-            if (!pelayanDropdown) {
-                console.warn('Dropdown Petugas Hadir tidak ditemukan.');
-                return;
-            }
-
-            // Ambil nilai dari Select2
-            const pelayanId = $(pelayanDropdown).val(); // Gunakan Select2 untuk mengambil nilai
-
-            console.log('Peran yang dipilih:', selectedPeran);
-            console.log('ID Pelayan yang dipilih:', pelayanId);
-
-            // Jika dropdown Petugas Hadir kosong, jangan lanjutkan
-            if (!pelayanId) {
-                console.warn('Petugas Hadir belum dipilih.');
-                return;
-            }
-
-            // Jika peran adalah Pelayan 1, isi dropdown TTD Pelayan 1
-            if (selectedPeran === 'Pelayan 1') {
-                console.log('Mengisi TTD Pelayan 1 dengan:', pelayanId);
-                document.getElementById('ttd_pelayan_1_id').value = pelayanId;
-            }
-
-            // Jika peran adalah Pelayan 4, isi dropdown TTD Pelayan 4
-            if (selectedPeran === 'Pelayan 4') {
-                console.log('Mengisi TTD Pelayan 4 dengan:', pelayanId);
-                document.getElementById('ttd_pelayan_4_id').value = pelayanId;
+        newRow.find('.petugas-jadwal-select').select2({
+            tags: true,
+            placeholder: 'Ketik atau pilih nama',
+            width: '100%',
+            language: {
+                noResults: function () {
+                    return "Ketik nama untuk menambah baru";
+                }
             }
         });
 
-        petugasIndex++;
+        newRow.find('.petugas-hadir-select').select2({
+            tags: true,
+            placeholder: 'Ketik atau pilih nama',
+            width: '100%',
+            language: {
+                noResults: function () {
+                    return "Ketik nama untuk menambah baru";
+                }
+            }
+        });
+
+        petugasCounter++; // Increment counter for the next row
     }
-    
-    function removePetugas(button) {
-        button.closest('.form-row').remove();
-    }
-    </script>
-      
-    
+
+    // Event delegation for removing a petugas row
+    $('#petugas-wrapper').on('click', '.btn-remove-petugas', function() {
+        const row = $(this).closest('.petugas-row');
+        // Destroy Select2 instances before removing the row to prevent memory leaks
+        row.find('.petugas-jadwal-select, .petugas-hadir-select').each(function() {
+            if ($(this).data('select2')) {
+                $(this).select2('destroy');
+            }
+        });
+        row.remove();
+        // Note: petugasCounter is not decremented. Indices sent to backend will be based on
+        // the order of rows, not necessarily sequential if rows are deleted from the middle.
+        // Laravel handles associative arrays from form data well, so gapped indices are usually fine.
+    });
+
+    // Add one petugas row by default when the page loads
+    addPetugas();
+
+});
+</script>
+
 @endpush

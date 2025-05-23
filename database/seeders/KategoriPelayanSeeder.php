@@ -93,6 +93,12 @@ class KategoriPelayanSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'kategoripelayan_kode' => 'DLL',
+                'kategoripelayan_nama' => 'Lain-lain',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ];
         DB::table('t_kategoripelayan')->insert($data);
     }

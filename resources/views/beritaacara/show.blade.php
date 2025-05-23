@@ -113,7 +113,7 @@
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th>No Amplop</th>
-                                                                <th>Nama Pengguna</th>
+                                                                <th>Nama</th>
                                                                 <th>Jumlah (Rp)</th>
                                                             </tr>
                                                         </thead>
@@ -198,6 +198,42 @@
                     </table>
                 </div>
             @endempty
+
+            {{-- Tanda Tangan Pelayan --}}
+            @if(!empty($berita))
+            <div class="row mt-5 mb-5">
+                <div class="col-md-6 text-center">
+                    <p>Pelayan 1,</p>
+                    @if ($berita->ttd_pelayan_1_img)
+                        <img src="{{ asset($berita->ttd_pelayan_1_img) }}" alt="TTD Pelayan 1" style="width: 150px; height: auto;">
+                    @else
+                        <br><br>
+                        <p>____________________</p>
+                    @endif
+                    <br>
+                    <p>
+                        <strong style="margin-top: 5px;text-decoration: underline;">
+                            ({{ $berita->pelayan1 ? $berita->pelayan1->nama : 'Nama Pelayan 1 Tidak Tersedia' }})
+                        </strong>
+                    </p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <p>Pelayan 4,</p>
+                    @if ($berita->ttd_pelayan_4_img)
+                        <img src="{{ asset($berita->ttd_pelayan_4_img) }}" alt="TTD Pelayan 4" style="width: 150px; height: auto;">
+                    @else
+                        <br><br>
+                        <p>____________________</p>
+                    @endif
+                    <br>
+                    <p>
+                        <strong style="margin-top: 5px;text-decoration: underline;">
+                            ({{ $berita->pelayan4 ? $berita->pelayan4->nama : 'Nama Pelayan 4 Tidak Tersedia' }})
+                        </strong>
+                    </p>
+                </div>
+            </div>
+            @endif
             
             <a href="{{ url('pengelolaan-berita-acara/berita-acara') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
         </div>
