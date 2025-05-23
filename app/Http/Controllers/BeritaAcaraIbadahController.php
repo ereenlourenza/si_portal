@@ -137,8 +137,8 @@ class BeritaAcaraIbadahController extends Controller
 
         $validator = Validator::make($request->all(), [
             'ibadah_id'         => 'required|exists:t_ibadah,ibadah_id',
-            'bacaan_alkitab'    => 'nullable|string|max:255',
-            'jumlah_kehadiran'  => 'nullable|integer|min:0',
+            'bacaan_alkitab'    => 'required|string|max:255',
+            'jumlah_kehadiran'  => 'required|integer|min:0',
             'catatan'           => 'nullable|string|max:1000',
             'ttd_pelayan_1_id'  => 'required|exists:t_pelayan,pelayan_id',
             'ttd_pelayan_4_id'  => 'required|exists:t_pelayan,pelayan_id',
@@ -430,7 +430,11 @@ class BeritaAcaraIbadahController extends Controller
     public function edit(string $id)
     {
 
-        $berita = BeritaAcaraIbadahModel::findOrFail($id);
+        $berita = BeritaAcaraIbadahModel::with([
+            'petugas.pelayanJadwal', // Eager load pelayanJadwal for each petugas
+            'petugas.pelayanHadir'   // Eager load pelayanHadir for each petugas
+            // ... other relations ...
+        ])->findOrFail($id);
 
         // // Filter hanya data dengan jenis_input = 'lembaran'
         // $berita->persembahan = $berita->persembahan->map(function ($item) {
@@ -478,15 +482,15 @@ class BeritaAcaraIbadahController extends Controller
 
         $validator = Validator::make($request->all(), [
             'ibadah_id'         => 'required|exists:t_ibadah,ibadah_id',
-            'bacaan_alkitab'    => 'nullable|string|max:255',
-            'jumlah_kehadiran'  => 'nullable|integer|min:0',
-            'catatan'           => 'nullable|string|max:1000',
+            'bacaan_alkitab'    => 'required|string|max:255',
+            'jumlah_kehadiran'  => 'required|integer|min:0',
+            'catatan'           => 'required|string|max:1000',
             'ttd_pelayan_1_id'  => 'required|exists:t_pelayan,pelayan_id',
             'ttd_pelayan_4_id'  => 'required|exists:t_pelayan,pelayan_id',
             // TTDs are not submitted from edit, so validation is not strictly needed here
             // but keeping them nullable in case of future changes.
-            'ttd_pelayan_1'     => 'nullable|string',
-            'ttd_pelayan_4'     => 'nullable|string',
+            'ttd_pelayan_1'     => 'required|string',
+            'ttd_pelayan_4'     => 'required|string',
 
             'petugas'                         => 'sometimes|array', // Can be empty if no changes
             'petugas.*.id'                   => 'nullable|integer',

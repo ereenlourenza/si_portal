@@ -58,6 +58,13 @@
 
                         <div class="form-group">
                             <label>Petugas Ibadah</label>
+                            <!-- Header Row -->
+                            <div class="form-row mb-1">
+                                <div class="col-3"><label>Peran</label></div>
+                                <div class="col-4"><label>Petugas Jadwal</label></div>
+                                <div class="col-4"><label>Petugas Hadir</label></div>
+                                <div class="col-1" style="text-align: center;"><label>Aksi</label></div>
+                            </div>
                             <div id="petugas-wrapper">
                                 @foreach ($berita->petugas as $index => $petugas)
                                     <div class="form-row mb-2 align-items-center">

@@ -525,24 +525,22 @@ $(document).ready(function() {
                 <div class="col-3">
                     <select name="petugas[${currentRowId}][peran]" class="form-control peran-dropdown" required>
                         <option value="">-- Pilih Peran --</option>
-                        <option value="Pelayan 1">Pelayan 1 (PF)</option>
-                        <option value="Pelayan 2">Pelayan 2 (L)</option>
-                        <option value="Pelayan 3">Pelayan 3 (P)</option>
-                        <option value="Pelayan 4">Pelayan 4 (M)</option>
-                        <option value="Pelayan 5">Pelayan 5 (Pr)</option>
-                        <option value="Pelayan 6">Pelayan 6 (K)</option>
-                        <option value="Pelayan 7">Pelayan 7 (Pn)</option>
-                        <option value="Pelayan 8">Pelayan 8 (PK)</option>
-                        <option value="Pelayan 9">Pelayan 9 (PS)</option>
-                        <option value="Pemusik">Pemusik</option>
-                        <option value="Prokantor">Prokantor</option>
+                        <option value="Pelayan 1">Pelayan 1</option>
+                        <option value="Pelayan 2">Pelayan 2</option>
+                        <option value="Pelayan 3">Pelayan 3</option>
+                        <option value="Pelayan 4">Pelayan 4</option>
+                        <option value="Pelayan 5">Pelayan 5</option>
+                        <option value="Pelayan 6">Pelayan 6</option>
+                        <option value="Pelayan 7">Pelayan 7</option>
+                        <option value="Pelayan 8">Pelayan 8</option>
+                        <option value="Pelayan 9">Pelayan 9</option>
                         <option value="Kolektan">Kolektan</option>
-                        <option value="Penyambut Jemaat">Penyambut Jemaat</option>
-                        <option value="Pengedar Kantong">Pengedar Kantong</option>
-                        <option value="Operator Sound">Operator Sound</option>
-                        <option value="Operator LCD">Operator LCD</option>
+                        <option value="Pemandu Lagu">Pemandu Lagu</option>
                         <option value="Paduan Suara/VG">Paduan Suara/VG</option>
-                        <option value="Lainnya">Lainnya</option>
+                        <option value="Organis/Pianis/Keyboardis">Organis/Pianis/Keyboardis</option>
+                        <option value="Operator LCD">Operator LCD</option>
+                        <option value="Operator Sound">Operator Sound</option>
+                        <option value="Operator CCTV">Operator CCTV</option>
                     </select>
                 </div>
                 <div class="col-4">

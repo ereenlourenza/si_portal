@@ -20,11 +20,11 @@ class BeritaAcaraPetugasModel extends Model
 
     public function pelayanJadwal()
     {
-        return $this->belongsTo(PelayanModel::class, 'pelayan_id_jadwal');
+        return $this->belongsTo(PelayanModel::class, 'pelayan_id_jadwal', 'pelayan_id');
     }
 
     public function pelayanHadir()
     {
-        return $this->belongsTo(PelayanModel::class, 'pelayan_id_hadir');
+        return $this->belongsTo(PelayanModel::class, 'pelayan_id_hadir', 'pelayan_id');
     }
 }
