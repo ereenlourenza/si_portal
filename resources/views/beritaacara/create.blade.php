@@ -545,12 +545,18 @@ $(document).ready(function() {
                 </div>
                 <div class="col-4">
                     <select name="petugas[${currentRowId}][pelayan_id_jadwal]" class="form-control petugas-jadwal-select" required>
-                        {{-- Options will be populated by Select2 tags or typed by user --}}
+                        <option value="">-- Jadwal Petugas --</option>
+                        @foreach($pelayan as $p)
+                            <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-4">
                     <select name="petugas[${currentRowId}][pelayan_id_hadir]" class="form-control petugas-hadir-select">
-                        {{-- Options will be populated by Select2 tags or typed by user --}}
+                        <option value="">-- Petugas Hadir --</option>
+                        @foreach($pelayan as $p)
+                            <option value="{{ $p->pelayan_id }}">{{ $p->nama }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-1 d-flex justify-content-center align-items-center">
