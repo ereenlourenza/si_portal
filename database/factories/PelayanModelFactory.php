@@ -21,9 +21,11 @@ class PelayanModelFactory extends Factory
         return [
             'nama' => $this->faker->name(),
             'kategoripelayan_id' => KategoriPelayanModel::factory(), // relasi
-            'pelkat_id' => PelkatModel::factory(), // relasi
-            'masa_jabatan_mulai' => 2022,
-            'masa_jabatan_selesai' => 2024,
+            'pelkat_id' => PelkatModel::factory(), // Ensure PelkatModel is always created
+            'masa_jabatan_mulai' => $this->faker->numberBetween(2020, 2023),
+            'masa_jabatan_selesai' => $this->faker->numberBetween(2024, 2026),
+            // 'masa_jabatan_mulai' => $this->faker->numberBetween(2020, 2023),
+            // 'masa_jabatan_selesai' => $this->faker->numberBetween(2024, 2026),
             'foto' => null, // default null kecuali diset manual di test
             'keterangan' => $this->faker->sentence(),
         ];

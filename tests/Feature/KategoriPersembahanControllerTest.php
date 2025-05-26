@@ -35,7 +35,7 @@ class KategoriPersembahanControllerTest extends TestCase
         ]);
     }
 
-    public function testIndex()
+    public function test_index()
     {
         $this->actingAs($this->adminUser);
 
@@ -50,7 +50,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $response->assertViewHas('notifUser');
     }
 
-    public function testList()
+    public function test_list()
     {
         $this->actingAs($this->adminUser);
 
@@ -74,7 +74,7 @@ class KategoriPersembahanControllerTest extends TestCase
         ]);
     }
 
-    public function testCreate()
+    public function test_create()
     {
         $this->actingAs($this->adminUser);
 
@@ -90,7 +90,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $response->assertViewHas('notifUser');
     }
 
-    public function testStoreSuccess()
+    public function test_store_success()
     {
         $this->actingAs($this->adminUser);
 
@@ -105,7 +105,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $this->assertDatabaseHas('t_kategori_persembahan', $data);
     }
 
-    public function testStoreValidationError()
+    public function test_store_validation_error()
     {
         $this->actingAs($this->adminUser);
 
@@ -119,7 +119,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $response->assertSessionHasErrors('kategori_persembahan_nama');
     }
 
-    public function testShow()
+    public function test_show()
     {
         $this->actingAs($this->adminUser);
 
@@ -136,7 +136,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $response->assertViewHas('notifUser');
     }
 
-    public function testEdit()
+    public function test_edit()
     {
         $this->actingAs($this->adminUser);
 
@@ -153,7 +153,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $response->assertViewHas('notifUser');
     }
 
-    public function testUpdateSuccess()
+    public function test_update_success()
     {
         $this->actingAs($this->adminUser);
 
@@ -169,7 +169,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $this->assertDatabaseHas('t_kategori_persembahan', $updatedData + ['kategori_persembahan_id' => $kategori->kategori_persembahan_id]);
     }
 
-    public function testUpdateValidationError()
+    public function test_update_validation_error()
     {
         $this->actingAs($this->adminUser);
 
@@ -184,7 +184,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $response->assertSessionHasErrors('kategori_persembahan_nama');
     }
 
-    public function testDestroySuccess()
+    public function test_destroy_success()
     {
         $this->actingAs($this->adminUser);
 
@@ -197,7 +197,7 @@ class KategoriPersembahanControllerTest extends TestCase
         $this->assertDatabaseMissing('t_kategori_persembahan', ['kategori_persembahan_id' => $kategori->kategori_persembahan_id]);
     }
 
-    public function testDestroyNotFound()
+    public function test_destroy_not_found()
     {
         $this->actingAs($this->adminUser);
 

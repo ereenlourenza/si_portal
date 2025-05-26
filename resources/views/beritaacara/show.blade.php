@@ -48,6 +48,10 @@
                         <th>Jumlah Kehadiran</th>
                         <td>{{ $berita->jumlah_kehadiran }} orang</td>
                     </tr>
+                    <tr>
+                        <th>Catatan</th>
+                        <td>{{ $berita->catatan }}</td>
+                    </tr>
                 </table>
 
                 <h5 class="mt-4">Daftar Pelayan</h5>
