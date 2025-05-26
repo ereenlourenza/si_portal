@@ -116,7 +116,7 @@ class SektorController extends Controller
     //Menampilkan halaman form edit user
     public function edit(string $id){
         $sektor = SektorModel::find($id);
-        $pelayan = PelayanModel::all();
+        $pelayan = PelayanModel::whereIn('kategoripelayan_id', [3, 4])->get();
 
         $breadcrumb = (object)[
             'title' => 'Edit Sektor',

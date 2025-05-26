@@ -5,7 +5,9 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
+                @if (auth()->user()->level->level_kode == 'PHM' || auth()->user()->level->level_kode == 'MLJ') {
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('pengelolaan-berita-acara/berita-acara/create') }}">Tambah Berita Acara Ibadah</a>
+                @endif
             </div>
         </div>
         <div class="card-body">

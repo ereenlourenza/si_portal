@@ -77,7 +77,7 @@ class TataIbadahController extends Controller
             'tanggal' => 'required|date_format:Y-m-d',
             'judul' => 'required|string|min:3|max:50',
             'deskripsi' => 'nullable|string',
-            'file' => 'nullable|mimes:pdf|max:2048'
+            'file' => 'required|mimes:pdf|max:2048'
         ]);
         
         try{

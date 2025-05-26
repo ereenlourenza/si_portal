@@ -76,7 +76,7 @@ class WartaJemaatController extends Controller
             'tanggal' => 'required|date_format:Y-m-d',
             'judul' => 'required|string|min:3|max:50',
             'deskripsi' => 'nullable|string',
-            'file' => 'nullable|mimes:pdf'
+            'file' => 'required|mimes:pdf'
         ]);
         try{
             if ($request->hasFile('file')) {

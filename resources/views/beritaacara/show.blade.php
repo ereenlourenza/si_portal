@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="text-right">
-                @if (auth()->user()->level->level_kode == 'ADM' || auth()->user()->level->level_kode == 'PHM')
+                @if (auth()->user()->level->level_kode == 'ADM')
                     <a href="{{ route('berita-acara.exportPdf', $berita->berita_acara_ibadah_id) }}" class="btn btn-sm btn-danger mb-3" target="_blank">
                         <i class="fas fa-file-pdf"></i> Export PDF
                     </a>

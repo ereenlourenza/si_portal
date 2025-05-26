@@ -12,9 +12,9 @@
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang Anda cari tidak ditemukan.
                 </div>
-                <a href="{{ url('pengelolaan-pengguna/kategoriibadah') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+                <a href="{{ url('pengelolaan-informasi/kategoriibadah') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
             @else
-                <form method="POST" action="{{ url('pengelolaan-pengguna/kategoriibadah/'.$kategoriibadah->kategoriibadah_id) }}" class="form-horizontal">
+                <form method="POST" action="{{ url('pengelolaan-informasi/kategoriibadah/'.$kategoriibadah->kategoriibadah_id) }}" class="form-horizontal">
                     @csrf {!! method_field('PUT') !!} <!-- tambahkan baris ini untuk proses edit yang butuh method PUT -->
                     <div class="form-group row align-items-center">
                         <label class="col-md-1 control-label col-form-label">Kategori Ibadah Kode<span class="text-danger">*</span></label>

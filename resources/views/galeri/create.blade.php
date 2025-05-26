@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="form-group row d-align-items-center">
-                    <label class="col-md-1 control-label col-form-label">Foto</label>
+                    <label class="col-md-1 control-label col-form-label">Foto<span class="text-danger">*</span></label>
                     <div class="col-md-11">
                         <input type="file" class="form-control" id="foto" name="foto" accept=".jpg,.jpeg,.png" value="{{ old('foto') }}">
                         
