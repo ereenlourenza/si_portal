@@ -55,14 +55,21 @@ class PeminjamanRuanganController extends Controller
             })
             ->editColumn('status', function ($peminjamanruangan) {
                 if ($peminjamanruangan->status == 1) {
-                    return '<span class="text-success font-weight-bold"><em><i class="fas fa-thumbs-up nav-icon"></i> Disetujui</em></span>';
+                    return '<span class="badge badge-success"><em><i class="fas fa-thumbs-up nav-icon"></i> Disetujui</span></em>';
                 } elseif ($peminjamanruangan->status == 2) {
-                    return '<span class="text-danger font-weight-bold"><em><i class="fas fa-ban nav-icon"></i> Ditolak</em></span>';
+                    return '<span class="badge badge-danger"><em><i class="fas fa-ban nav-icon"></i> Ditolak</span></em>';
                 } else {
-                    return '<span class="text-warning font-weight-bold"><em><i class="fas fa-exclamation nav-icon"></i> Menunggu Konfirmasi...</em></span>';
+                    return '<span class="badge badge-warning"><em><i class="fas fa-exclamation nav-icon"></i> Menunggu</span></em>';
                 }
             })
-            
+            ->addColumn('aksi_status', function ($peminjamanruangan) {
+                $btn = '<a href="'.url('/pengelolaan-informasi/peminjamanruangan/' . $peminjamanruangan->peminjamanruangan_id).'" class="btn btn-success btn-sm">Lihat</a> ';
+                $btn .= '<form class="d-inline-block" method="POST" action="'. url('/pengelolaan-informasi/peminjamanruangan/'.$peminjamanruangan->peminjamanruangan_id).'">'. csrf_field() . method_field('DELETE') . 
+                '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>'; 
+                
+                return $btn;
+
+            })
             ->addColumn('aksi', function ($peminjamanruangan) { // menambahkan kolom aksi
                 $btn = '<a href="'.url('/pengelolaan-informasi/peminjamanruangan/updateValidation/' . $peminjamanruangan->peminjamanruangan_id ).'" class="btn btn-dark btn-sm">'.($peminjamanruangan->status == 0 ? 'Setujui' : 'Batalkan' ).'</a> ';
 
@@ -94,13 +101,10 @@ class PeminjamanRuanganController extends Controller
                         </div>
                     </div>';
                 }
-
-                $btn .= '<form class="d-inline-block" method="POST" action="'. url('/pengelolaan-informasi/peminjamanruangan/'.$peminjamanruangan->peminjamanruangan_id).'">'. csrf_field() . method_field('DELETE') . 
-                '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>'; 
                 
                 return $btn;
             })
-            ->rawColumns(['status','aksi']) // memberitahu bahwa kolom aksi adalah html
+            ->rawColumns(['status','aksi_status','aksi']) // memberitahu bahwa kolom aksi adalah html
             ->make(true);
     }
 
@@ -287,5 +291,86 @@ class PeminjamanRuanganController extends Controller
             //jika terjadi error ketika menghapus data, redirect kembali ke halaman dengan membawa pesan error
             return redirect('pengelolaan-informasi/peminjamanruangan')->with('error_peminjamanruangan', 'Data peminjaman ruangan gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
+    }
+
+    public function show(string $id)
+    {
+        $peminjamanRuangan = PeminjamanRuanganModel::with('ruangan')->find($id);
+
+        if (!$peminjamanRuangan) {
+            return redirect('pengelolaan-informasi/peminjamanruangan')->with('error_peminjamanruangan', 'Data peminjaman ruangan tidak ditemukan.');
+        }
+
+        $breadcrumb = (object)[
+            'title' => 'Detail Peminjaman Ruangan',
+            'list' => ['Pengelolaan Informasi', 'Peminjaman Ruangan', 'Detail']
+        ];
+
+        $page = (object)[
+            'title' => 'Detail Peminjaman Ruangan'
+        ];
+
+        $activeMenu = 'peminjamanruangan';
+
+        return view('peminjamanruangan.show', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'peminjamanRuangan' => $peminjamanRuangan,
+            'activeMenu' => $activeMenu,
+            'notifUser' => UserModel::all()
+        ]);
+    }
+
+    public function cetakLaporan(Request $request)
+    {
+        $breadcrumb = (object)[
+            'title' => 'Laporan Peminjaman Ruangan',
+            'list' => ['Pengelolaan Informasi', 'Peminjaman Ruangan', 'Cetak Laporan']
+        ];
+
+        $page = (object)[
+            'title' => 'Laporan Peminjaman Ruangan'
+        ];
+
+        $activeMenu = 'peminjamanruangan';
+
+        $query = PeminjamanRuanganModel::with('ruangan')->select(
+            'peminjamanruangan_id',
+            'peminjam_nama',
+            'peminjam_telepon',
+            'tanggal',
+            'waktu_mulai',
+            'waktu_selesai',
+            'ruangan_id',
+            'keperluan',
+            'status',
+            'alasan_penolakan' // Pastikan kolom ini ada di model dan tabel jika digunakan
+        );
+
+        if ($request->filled('tanggal')) {
+            $query->whereDate('tanggal', '=', $request->tanggal);
+        }
+        // if ($request->filled('tanggal_selesai')) {
+        //     $query->whereDate('tanggal', '<=', $request->tanggal_selesai);
+        // }
+        if ($request->filled('status_filter') && $request->status_filter !== '') {
+            $query->where('status', $request->status_filter);
+        }
+        if ($request->filled('ruangan_filter')) {
+            $query->where('ruangan_id', $request->ruangan_filter);
+        }
+
+        $peminjamanRuangans = $query->orderBy('tanggal', 'asc')->get();
+        $ruangans = RuanganModel::all(); // Untuk filter dropdown
+
+        return view('peminjamanruangan.report', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'peminjamanRuangans' => $peminjamanRuangans,
+            'activeMenu' => $activeMenu,
+            'notifUser' => UserModel::all(),
+            'ruangans' => $ruangans,
+            'request' => $request
+        ]);
     }
 }

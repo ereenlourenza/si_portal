@@ -371,10 +371,11 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('peminjamanruangan')->group(function () {
             Route::get('/', [PeminjamanRuanganController::class, 'index'])->name('peminjamanruangan.index');
             Route::post('/list', [PeminjamanRuanganController::class, 'list']);
-            Route::get('/updateValidation/{id}', [PeminjamanRuanganController::class, 'updateValidation']);
-            Route::match(['get', 'post'],'/rejectPeminjaman/{id}', [PeminjamanRuanganController::class, 'rejectPeminjaman']);
+            Route::get('/cetak-laporan', [PeminjamanRuanganController::class, 'cetakLaporan'])->name('peminjamanruangan.cetakLaporan'); // Moved and ensured this is before /{id}
             Route::get('/create', [PeminjamanRuanganController::class, 'create']);
             Route::post('/', [PeminjamanRuanganController::class, 'store']);
+            Route::get('/updateValidation/{id}', [PeminjamanRuanganController::class, 'updateValidation']);
+            Route::match(['get', 'post'],'/rejectPeminjaman/{id}', [PeminjamanRuanganController::class, 'rejectPeminjaman']);
             Route::get('/{id}', [PeminjamanRuanganController::class, 'show']);
             Route::get('/{id}/edit', [PeminjamanRuanganController::class, 'edit']);
             Route::put('/{id}', [PeminjamanRuanganController::class, 'update']);

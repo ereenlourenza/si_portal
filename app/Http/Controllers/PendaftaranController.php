@@ -68,11 +68,11 @@ class PendaftaranController extends Controller
             })
             ->editColumn('status', function ($pendaftaran) {
                 if ($pendaftaran->status == 1) {
-                    return '<span class="text-success font-weight-bold"><em><i class="fas fa-thumbs-up nav-icon"></i> Disetujui</em></span>';
+                    return '<span class="text-success font-weight-bold"><em><span class="badge badge-success"><i class="fas fa-thumbs-up nav-icon"></i> Disetujui</span></em></span>';
                 } elseif ($pendaftaran->status == 2) {
-                    return '<span class="text-danger font-weight-bold"><em><i class="fas fa-ban nav-icon"></i> Ditolak</em></span>';
+                    return '<span class="text-danger font-weight-bold"><em><span class="badge badge-danger"><i class="fas fa-ban nav-icon"></i> Ditolak</span></em></span>';
                 } else {
-                    return '<span class="text-warning font-weight-bold"><em><i class="fas fa-exclamation nav-icon"></i> Menunggu Konfirmasi...</em></span>';
+                    return '<span class="text-warning font-weight-bold"><em><span class="badge badge-warning"><i class="fas fa-exclamation nav-icon"></i> Menunggu</span></em></span>';
                 }
             })
             ->addColumn('aksi_status', function ($pendaftaran) {

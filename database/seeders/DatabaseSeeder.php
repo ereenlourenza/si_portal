@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             WartaJemaatSeeder::class,
             SejarahSeeder::class,
             SektorSeeder::class,
+            KomisiSeeder::class,
             PeminjamanRuanganSeeder::class,
             PHMJSeeder::class,
         ]);

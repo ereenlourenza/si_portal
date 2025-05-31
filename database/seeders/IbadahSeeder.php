@@ -20,7 +20,7 @@ class IbadahSeeder extends Seeder
                 'kategoriibadah_id' => 1, // Ibadah Minggu
                 'tanggal' => '2025-03-16',
                 'waktu' => '09:00:00',
-                'tempat' => 'GPIB Immanuel Malang',
+                'tempat' => 'Immanuel',
                 'lokasi' => null,
                 'sektor' => null,
                 'nama_pelkat' => null,

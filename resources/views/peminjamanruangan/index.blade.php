@@ -6,6 +6,7 @@
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('pengelolaan-informasi/peminjamanruangan/create') }}">Tambah Peminjaman</a>
+                <a class="btn btn-sm btn-info mt-1" href="{{ route('peminjamanruangan.cetakLaporan') }}">Cetak Laporan</a>
             </div>
         </div>
         <div class="card-body">
@@ -40,6 +41,7 @@
                         <th>Keperluan</th>
                         <th>Status</th>
                         <th>Aksi</th>
+                        <th>Aksi Status</th>
                     </tr>
                 </thead>
             </table>
@@ -121,6 +123,12 @@
                     },
                     {
                         data: "aksi", 
+                        className: "",
+                        orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                        searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+                    },
+                    {
+                        data: "aksi_status", 
                         className: "",
                         orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
                         searchable: false // searchable: true, jika ingin kolom ini bisa dicari

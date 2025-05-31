@@ -217,12 +217,7 @@ class PelayanController extends Controller
     public function update(Request $request, string $id){
         $request->validate([
             // 'nama' => 'required|string|min:3|max:100',
-            'nama' => ['required', 
-                        Rule::unique('t_pelayan')->where(function ($query) use ($request) {
-                            return $query->where('masa_jabatan_mulai', $request->masa_jabatan_mulai)
-                                        ->where('masa_jabatan_selesai', $request->masa_jabatan_selesai);
-                        })
-            ],
+            'nama'  => 'required|string|min:3|unique:t_pelayan,nama,'.$id.',pelayan_id',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'masa_jabatan_mulai' => 'required|date_format:Y',
             'masa_jabatan_selesai' => 'required|date_format:Y|after_or_equal:masa_jabatan_mulai',

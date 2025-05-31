@@ -22,6 +22,7 @@ use App\Models\TataIbadahModel;
 use App\Models\WartaJemaatModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class HomeController extends Controller
