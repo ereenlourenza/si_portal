@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf; // Import PDF facade
 
 
 class PendaftaranController extends Controller
@@ -118,7 +119,10 @@ class PendaftaranController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['status','aksi_status','aksi'])
+            ->addColumn('export_pdf', function ($pendaftaran) {
+                return url('/pengelolaan-informasi/pendaftaran/' . $pendaftaran->pendaftaran_id . '/export-pdf?jenis=' . $pendaftaran->jenis_pendaftaran);
+            })
+            ->rawColumns(['status','aksi_status','aksi', 'export_pdf'])
             ->make(true);
     }
     
@@ -704,6 +708,33 @@ class PendaftaranController extends Controller
         return redirect('pengelolaan-informasi/pendaftaran')->with('success_pendaftaran', 'Data pendaftaran berhasil dihapus.');
     }
 
+    public function exportPdf(Request $request, $id)
+    {
+        $jenis = $request->jenis;
+        $pendaftaran = null;
+        $viewName = '';
 
+        if ($jenis == 'baptis') {
+            $pendaftaran = BaptisModel::find($id);
+            $viewName = 'pendaftaran.export.baptis_pdf';
+        } elseif ($jenis == 'sidi') {
+            $pendaftaran = KatekisasiModel::find($id);
+            $viewName = 'pendaftaran.export.sidi_pdf';
+        } elseif ($jenis == 'pernikahan') {
+            $pendaftaran = PernikahanModel::find($id);
+            $viewName = 'pendaftaran.export.pernikahan_pdf';
+        } else {
+            return redirect('pengelolaan-informasi/pendaftaran')->with('error_pendaftaran', 'Jenis pendaftaran tidak valid untuk PDF.');
+        }
 
+        if (!$pendaftaran) {
+            return redirect('pengelolaan-informasi/pendaftaran')->with('error_pendaftaran', 'Data pendaftaran tidak ditemukan untuk PDF.');
+        }
+
+        // log aktivitas
+        simpanLogAktivitas('Pendaftaran Sakramen', 'export PDF', "Mengekspor PDF untuk data: {$jenis} dengan ID: {$id}");
+
+        $pdf = Pdf::loadView($viewName, compact('pendaftaran', 'jenis'));
+        return $pdf->download('pendaftaran_' . $jenis . '_' . $id . '.pdf');
+    }
 }

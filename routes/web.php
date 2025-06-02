@@ -390,6 +390,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/updateValidation/{id}', [PendaftaranController::class, 'updateValidation']);
             Route::match(['get', 'post'],'/rejectPendaftaran/{id}', [PendaftaranController::class, 'rejectPendaftaran']);
             Route::get('/{id}', [PendaftaranController::class, 'show']);
+            Route::get('/{id}/export-pdf', [PendaftaranController::class, 'exportPdf'])->name('berita-acara.exportPdf');
             Route::get('/{id}/edit', [PendaftaranController::class, 'edit']);
             Route::put('/{id}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
             Route::delete('/{id}', [PendaftaranController::class, 'destroy']);

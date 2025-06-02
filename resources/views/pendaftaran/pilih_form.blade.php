@@ -141,7 +141,15 @@
                 { data: "dilayani" },
                 { data: "status" },
                 { data: "aksi" },
-                { data: "aksi_status" }
+                { data: "aksi_status" },
+                { 
+                    data: "export_pdf",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row) {
+                        return `<a href="${data}" class="btn btn-danger btn-sm" target="_blank"><i class="fas fa-file-pdf"></i> PDF</a>`;
+                    }
+                }
             ];
             headers = `
                 <tr>
@@ -153,6 +161,7 @@
                     <th>Status</th>
                     <th>Aksi</th>
                     <th>Aksi Status</th>
+                    <th>Export</th>
                 </tr>`;
         } else if (jenis === 'sidi') {
             columns = [
@@ -163,7 +172,15 @@
                 { data: "is_baptis" },
                 { data: "status" },
                 { data: "aksi" },
-                { data: "aksi_status" }
+                { data: "aksi_status" },
+                { 
+                    data: "export_pdf",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row) {
+                        return `<a href="${data}" class="btn btn-danger btn-sm" target="_blank"><i class="fas fa-file-pdf"></i> PDF</a>`;
+                    }
+                }
             ];
             headers = `
                 <tr>
@@ -175,6 +192,7 @@
                     <th>Status</th>
                     <th>Aksi</th>
                     <th>Aksi Status</th>
+                    <th>Export</th>
                 </tr>`;
         } else if (jenis === 'pernikahan') {
             columns = [
@@ -186,7 +204,15 @@
                 { data: "dilayani" },
                 { data: "status" },
                 { data: "aksi" },
-                { data: "aksi_status" }
+                { data: "aksi_status" },
+                { 
+                    data: "export_pdf",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row) {
+                        return `<a href="${data}" class="btn btn-danger btn-sm" target="_blank"><i class="fas fa-file-pdf"></i> PDF</a>`;
+                    }
+                }
             ];
             headers = `
                 <tr>
@@ -199,6 +225,7 @@
                     <th>Status</th>
                     <th>Aksi</th>
                     <th>Aksi Status</th>
+                    <th>Export</th>
                 </tr>`;
         }
 
