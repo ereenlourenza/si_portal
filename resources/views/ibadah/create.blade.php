@@ -159,10 +159,10 @@
                 // $('#sektor').closest('.form-group').show();
                 // $('#nama_pelkat').closest('.form-group').show();
                 // $('#ruang').closest('.form-group').show();
-            } else if (kategoriIbadah == 2 || kategoriIbadah == 4 || kategoriIbadah == 5) { // Ibadah Keluarga
+            } else if (kategoriIbadah == 2 || kategoriIbadah == 3 || kategoriIbadah == 4) { // Ibadah Keluarga
                 $('#lokasi').closest('.form-group').show();
                 $('#sektor').closest('.form-group').show();
-            } else if (kategoriIbadah == 3) { // Ibadah Keluarga
+            } else if (kategoriIbadah == 5) { // Ibadah Keluarga
                 $('#nama_pelkat').closest('.form-group').show();
                 $('#ruang').closest('.form-group').show();
             } 
