@@ -23,7 +23,7 @@ Sebelah Utara, berbatasan dengan Sektor 2, mulai Jl. Pucang ke Barat sampai pert
 Sebelah Barat, berbatasan dengan Sektor 3, mulai dari pertigaan Jl.Pucang dengan Jl.S.Supriadi ke Selatan sampai batas Kab.Malang dan Kab.Blitar
 Sebelah Selatan, mulai dari Sendangbiru mengikuti pantai Selatan sampai batas Kabupaten Malang dan Kabupaten Blitar',
                 'jumlah_jemaat' => 60,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -35,7 +35,7 @@ Sebelah Utara, berbatasan dengan Sektor 8 dan Sektor 9
 Sebelah Barat, berbatasan dengan Sektor 4 dan Sektor 3
 Sebelah Selatan, berbatasan Sektor 1, mulai dari Jl.Pucang ke Timur sampai pertigaan Jl.Kol.Sugiono',
                 'jumlah_jemaat' => 90,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -46,7 +46,7 @@ Sebelah Selatan, berbatasan Sektor 1, mulai dari Jl.Pucang ke Timur sampai perti
 Sebelah Barat, batas Kab.Malang
 Sebelah Selatan, sampai batas Kec.Wagir dan Kec.Panjen',
                 'jumlah_jemaat' => 120,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -58,7 +58,7 @@ Sebelah Utara, berbatasan dengan Sektor 5, dimulai dari Jembatan Jl.Kahuripan ke
 Sebelah Barat, sampai batas Kabupaten Malang
 Sebelah Selatan, berbatasan dengan Sektor 3, mulai dari pertigaan Jl.Arif Margono dan Jl.Brigjen Katamso ke Barat sampai Jedong',
                 'jumlah_jemaat' => 180,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -70,7 +70,7 @@ Sebelah Utara, berbatasan dengan Sektor 7 dan Sektor 6, mulai dari jembatan Jl.J
 Sebelah Barat, sampai perbatasan Kabupaten Malang dan Kabupaten Blitar
 Sebelah Selatan, berbatasan dengan Sektor 4, mulai dari perempatan Jl.Basuki Rachmad dan Jl.Semeru terus ke sampai batas Kabupaten Malang dan Kabupaten Blitar',
                 'jumlah_jemaat' => 105,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -81,7 +81,7 @@ Sebelah Selatan, berbatasan dengan Sektor 4, mulai dari perempatan Jl.Basuki Rac
 Sebelah Utara, berbatasan dengan GPIB Getsemani mulai dari perempatan Jl.Bungur dan Jl.Kalpataru ke Barat sampai S.Brantas.
 Sebelah Barat/Selatan, mulai dari pertemuan Jl.Pisang Kipas dan S.Brantas ke Selatan sampai pertemuan antara S.Brantas dengan Jl.Lembang',
                 'jumlah_jemaat' => 98,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -93,7 +93,7 @@ Sebelah Utara, berbatasan dengan GPIB Getsemani mulai dari ujung Jl.Ciliwung ke 
 Sebelah Barat, berbatasan dengan Sektor 6, mulai dari perempatan Jl.Kalpataru dan Jl.Cengger Ayam ke Selatan sampai S.Brantas
 Sebelah Selatan, berbatasan dengan Sektor 5, mjulai pertemuan Jl.Lembang dengan S.Brantas ke Timur sampai jembatan Jl.Jaksa Agung Suprapto',
                 'jumlah_jemaat' => 135,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -105,7 +105,7 @@ Sebelah Utara, berbatasan dengan GPIB Getsemani mulai dari pertemuan kali kecil 
 Sebelah Barat, berbatasan dengan Sektor 9 mulai dari pertemuan kali kecil dengan Jl.Letjen Sunandar Priyosudarmo ke Selatan sampai jembatan S.Brantas
 Sebelah Selatan, mulai dari jembatan Brantas mengikuti sungai Brantas sampai pertemuan dengan kali kecil',
                 'jumlah_jemaat' => 79,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
@@ -117,7 +117,7 @@ Sebelah Utara, berbatasan dengan Sektor 7, mulai dari perempatan Jl.P.Sudirman d
 Sebelah Barat, berbatasan dengan Sektor 7 dan Sektor 6 mulai dari perempatan Jl.Jaksa Agung Suprapto ke Selatan sampai perempatan Jl.Semeru dan Jl.Basuki Rachmad
 Sebelah Selatan, berbatasan dengan Sektor 4 dan Sektor 2, mulai dari perempatan Jl.Semeru dan Jl.Basuki Rachmad ke Timur sampai jembatan Brantas',
                 'jumlah_jemaat' => 118,
-                'pelayan_id' => 24,
+                'pelayan_id' => 3,
                 'created_at'    => Carbon::now(),
                 'updated_at'    => Carbon::now(),
             ],
