@@ -50,16 +50,37 @@ class WelcomeController extends Controller
             ->whereColumn('t_ibadah.ibadah_id', 't_berita_acara_ibadah.ibadah_id'), 'asc');
 
         // Ambil data
-        $data = $query->get()->map(function ($item) {
+        // $data = $query->get()->map(function ($item) {
+        //     return [
+        //         'tanggal' => $item->ibadah->tanggal, // Ambil tanggal dari IbadahModel
+        //         'jumlah_kehadiran' => $item->jumlah_kehadiran, // Ambil jumlah kehadiran
+        //         'total_persembahan' => $item->persembahan->sum('total'), // Total persembahan
+        //         'kategori_persembahan' => $item->persembahan->groupBy('kategori.kategori_persembahan_nama') // Kelompokkan berdasarkan kategori
+        //             ->map(function ($group) {
+        //                 return $group->sum('total'); // Hitung total per kategori
+        //             }),
+        //     ];
+        // });
+
+        // Ambil data sekali untuk semua pemrosesan
+        $beritaAcaraItems = $query->get();
+
+        // Ambil data untuk grafik kehadiran dan persembahan per tanggal
+        $data = $beritaAcaraItems->map(function ($item) {
             return [
                 'tanggal' => $item->ibadah->tanggal, // Ambil tanggal dari IbadahModel
                 'jumlah_kehadiran' => $item->jumlah_kehadiran, // Ambil jumlah kehadiran
                 'total_persembahan' => $item->persembahan->sum('total'), // Total persembahan
-                'kategori_persembahan' => $item->persembahan->groupBy('kategori.kategori_persembahan_nama') // Kelompokkan berdasarkan kategori
-                    ->map(function ($group) {
-                        return $group->sum('total'); // Hitung total per kategori
-                    }),
+                // Kategori persembahan per item tidak lagi diproses di sini untuk chart agregat
             ];
+        });
+
+        // Hitung total persembahan per kategori untuk semua data yang difilter
+        $totalKategoriPersembahan = $beritaAcaraItems->flatMap(function ($item) {
+            return $item->persembahan; // Dapatkan semua item persembahan
+        })->groupBy('kategori.kategori_persembahan_nama') // Kelompokkan berdasarkan nama kategori
+        ->map(function ($group) {
+            return $group->sum('total'); // Jumlahkan total untuk setiap kategori
         });
 
         // Distribusi persembahan berdasarkan minggu
@@ -71,7 +92,7 @@ class WelcomeController extends Controller
             })->sum('total');
         });
 
-        return view('beranda.index', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu, 'data' => $data, 'persembahanMinggu' => $persembahanMinggu, 'hari' => $hari,'bulan' => $bulan, 'tahun' => $tahun]);
+        return view('beranda.index', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu, 'data' => $data, 'totalKategoriPersembahan' => $totalKategoriPersembahan, 'persembahanMinggu' => $persembahanMinggu, 'hari' => $hari,'bulan' => $bulan, 'tahun' => $tahun]);
     }
 
 }

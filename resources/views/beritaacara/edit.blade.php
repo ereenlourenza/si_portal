@@ -73,7 +73,7 @@
                                                 <option value="">-- Pilih Peran --</option>
                                                 @foreach ([
                                                     'Pelayan 1', 'Pelayan 2', 'Pelayan 3', 'Pelayan 4', 'Pelayan 5',
-                                                    'Pelayan 6', 'Pelayan 7', 'Pelayan 8', 'Pelayan 9', 'Kolektan',
+                                                    'Pelayan 6', 'Pelayan 7', 'Pelayan 8', 'Pelayan 9', 'Penerima Tamu', 'Kolektan',
                                                     'Pemandu Lagu', 'Kantoria', 'Paduan Suara/VG', 'Organis/Pianis/Keyboardis',
                                                     'Operator LCD', 'Operator Sound', 'Operator CCTV'
                                                 ] as $peran)

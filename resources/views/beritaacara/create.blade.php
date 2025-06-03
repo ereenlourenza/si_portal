@@ -551,6 +551,7 @@ $(document).ready(function() {
                         <option value="Pelayan 7">Pelayan 7</option>
                         <option value="Pelayan 8">Pelayan 8</option>
                         <option value="Pelayan 9">Pelayan 9</option>
+                        <option value="Penerima Tamu">Penerima Tamu</option>
                         <option value="Kolektan">Kolektan</option>
                         <option value="Pemandu Lagu">Pemandu Lagu</option>
                         <option value="Paduan Suara/VG">Paduan Suara/VG</option>

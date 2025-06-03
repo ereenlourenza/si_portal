@@ -34,6 +34,10 @@
                     )
                 ) !!}                
             </div>
+
+            <div class="text-left py-4">
+                <p class="text-sm italic text-gray-500"><b>Koordinator Sektor:</b> {{ $item->pelayan->nama }}</p>
+            </div>
             
         @endforeach
 

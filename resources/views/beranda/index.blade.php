@@ -158,6 +158,7 @@
 <script>
     // Langkah ke-2: Kirim data dari controller ke JavaScript
     var dataBeritaAcara = @json($data);
+    var totalKategoriPersembahanData = @json($totalKategoriPersembahan); // Data agregat baru
 
     document.addEventListener('DOMContentLoaded', function () {
         const labels = dataBeritaAcara.map(item => item.tanggal);
@@ -212,8 +213,8 @@
         });
 
         // Grafik Kategori Persembahan
-        const kategoriLabels = Object.keys(dataBeritaAcara[0].kategori_persembahan || {});
-        const kategoriData = Object.values(dataBeritaAcara[0].kategori_persembahan || {});
+        const kategoriLabels = Object.keys(totalKategoriPersembahanData || {}); // Gunakan data agregat
+        const kategoriData = Object.values(totalKategoriPersembahanData || {}); // Gunakan data agregat
 
         const ctxKategoriPersembahan = document.getElementById('grafikKategoriPersembahan').getContext('2d');
         new Chart(ctxKategoriPersembahan, {
@@ -221,7 +222,7 @@
             data: {
                 labels: kategoriLabels, // Nama kategori
                 datasets: [{
-                    label: 'Kategori Persembahan',
+                    label: 'Total Persembahan per Kategori', // Label diperbarui
                     data: kategoriData, // Total persembahan per kategori
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
