@@ -41,10 +41,10 @@
                             <option value="Ketua 3">Ketua 3</option>
                             <option value="Ketua 4">Ketua 4</option>
                             <option value="Ketua 5">Ketua 5</option>
-                            <option value="Sekretaris Umum">Sekretaris Umum</option>
+                            <option value="Sekretaris Umum">Sekretaris</option>
                             <option value="Sekretaris 1">Sekretaris 1</option>
                             <option value="Sekretaris 2">Sekretaris 2</option>
-                            <option value="Bendahara 1">Bendahara 1</option>
+                            <option value="Bendahara 1">Bendahara</option>
                             <option value="Bendahara 2">Bendahara 2</option>
                         </select>
                         @error('jabatan')
