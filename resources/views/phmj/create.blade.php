@@ -45,7 +45,7 @@
                             <option value="Sekretaris 1">Sekretaris 1</option>
                             <option value="Sekretaris 2">Sekretaris 2</option>
                             <option value="Bendahara 1">Bendahara</option>
-                            <option value="Bendahara 2">Bendahara 2</option>
+                            <option value="Bendahara 2">Bendahara 1</option>
                         </select>
                         @error('jabatan')
                             <small class="form-text text-danger">{{ $message }}</small>
