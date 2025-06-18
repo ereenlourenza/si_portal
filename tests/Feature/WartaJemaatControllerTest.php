@@ -40,9 +40,10 @@ class WartaJemaatControllerTest extends TestCase
     {
         $this->actingAs($this->adminUser);
 
-        WartaJemaatModel::factory()->count(3)->create(); // Changed model
+        // Store the created warta jemaat to iterate and compare later
+        $wartaJemaats = WartaJemaatModel::factory()->count(3)->create(); 
 
-        $response = $this->postJson('/pengelolaan-informasi/wartajemaat/list'); // Changed route
+        $response = $this->postJson('/pengelolaan-informasi/wartajemaat/list'); 
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -52,15 +53,53 @@ class WartaJemaatControllerTest extends TestCase
             'data' => [
                 '*' => [
                     'DT_RowIndex',
-                    'wartajemaat_id', // Changed field
-                    'tanggal',       // Changed field
-                    'judul',         // Changed field
-                    'deskripsi',     // Changed field
-                    'file',          // Changed field
+                    'wartajemaat_id', 
+                    'tanggal',       
+                    'judul',         
+                    'deskripsi',     
+                    'file',          // This might be an HTML link or filename
                     'aksi',
                 ]
             ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($wartaJemaats->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($wartaJemaats as $wartaJemaat) {
+            // Cari data warta jemaat yang sesuai dalam respons berdasarkan wartajemaat_id
+            $responseWartaJemaat = collect($responseData)->firstWhere('wartajemaat_id', $wartaJemaat->wartajemaat_id);
+
+            $this->assertNotNull($responseWartaJemaat, "Warta Jemaat dengan ID {$wartaJemaat->wartajemaat_id} tidak ditemukan dalam respons.");
+
+            if ($responseWartaJemaat) {
+                $this->assertEquals($wartaJemaat->wartajemaat_id, $responseWartaJemaat['wartajemaat_id']);
+                $this->assertEquals($wartaJemaat->tanggal, $responseWartaJemaat['tanggal']); // Assuming tanggal is returned as Y-m-d
+                $this->assertEquals($wartaJemaat->judul, $responseWartaJemaat['judul']);
+                $this->assertEquals($wartaJemaat->deskripsi, $responseWartaJemaat['deskripsi']);
+
+                // Untuk kolom 'file', periksa apakah itu tag <a> yang berisi URL yang benar
+                // atau jika itu hanya nama file, sesuaikan.
+                // Asumsi controller mengembalikan tag <a> untuk file jika ada.
+                if ($wartaJemaat->file) {
+                    $this->assertStringContainsString(Storage::url('dokumen/wartajemaat/' . $wartaJemaat->file), $responseWartaJemaat['file']);
+                    $this->assertStringContainsString('<a href', $responseWartaJemaat['file']);
+                } else {
+                    // Handle kasus jika file mungkin tidak ada atau direpresentasikan berbeda
+                    // Misalnya, jika controller mengembalikan string kosong atau placeholder
+                    $this->assertEquals('Tidak Ada File', $responseWartaJemaat['file']); // Sesuaikan dengan output aktual Anda
+                }
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/wartajemaat/' . $wartaJemaat->wartajemaat_id), $responseWartaJemaat['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/wartajemaat/' . $wartaJemaat->wartajemaat_id . '/edit'), $responseWartaJemaat['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/wartajemaat/'.$wartaJemaat->wartajemaat_id), $responseWartaJemaat['aksi']);
+            }
+        }
     }
 
     public function test_create()

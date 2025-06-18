@@ -55,18 +55,52 @@ class KategoriGaleriControllerTest extends TestCase
 
     public function test_list_returns_json()
     {
-        $kategori = KategoriGaleriModel::factory()->create([
-            'kategorigaleri_kode' => 'FOT01',
-            'kategorigaleri_nama' => 'Foto Baptis'
-        ]);
+        // Buat beberapa data kategori untuk pengujian
+        $kategoris = KategoriGaleriModel::factory()->count(3)->create();
 
         $response = $this->postJson('/pengelolaan-informasi/kategorigaleri/list');
 
         $response->assertStatus(200);
-        $response->assertJsonFragment([
-            'kategorigaleri_kode' => 'FOT01',
-            'kategorigaleri_nama' => 'Foto Baptis',
+        // Perbarui struktur JSON untuk mencerminkan output DataTables yang sebenarnya
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'DT_RowIndex',
+                    'kategorigaleri_id',
+                    'kategorigaleri_kode',
+                    'kategorigaleri_nama',
+                    'aksi', // Kolom aksi yang ditambahkan oleh DataTables
+                ]
+            ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($kategoris->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($kategoris as $kategori) {
+            // Cari data kategori yang sesuai dalam respons berdasarkan kategorigaleri_id
+            $responseKategori = collect($responseData)->firstWhere('kategorigaleri_id', $kategori->kategorigaleri_id);
+
+            $this->assertNotNull($responseKategori, "Kategori Galeri dengan ID {$kategori->kategorigaleri_id} tidak ditemukan dalam respons.");
+
+            if ($responseKategori) {
+                $this->assertEquals($kategori->kategorigaleri_id, $responseKategori['kategorigaleri_id']);
+                $this->assertEquals($kategori->kategorigaleri_kode, $responseKategori['kategorigaleri_kode']);
+                $this->assertEquals($kategori->kategorigaleri_nama, $responseKategori['kategorigaleri_nama']);
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/kategorigaleri/' . $kategori->kategorigaleri_id), $responseKategori['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/kategorigaleri/' . $kategori->kategorigaleri_id . '/edit'), $responseKategori['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/kategorigaleri/'.$kategori->kategorigaleri_id), $responseKategori['aksi']);
+            }
+        }
     }
 
     public function test_create_returns_view()

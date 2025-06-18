@@ -63,7 +63,7 @@ class SejarahControllerTest extends TestCase
     {
         $this->actingAs($this->adminUser);
 
-        SejarahModel::factory()->count(3)->create();
+        $sejarahs = SejarahModel::factory()->count(3)->create();
 
         $response = $this->postJson('/pengelolaan-informasi/sejarah/list');
 
@@ -77,11 +77,54 @@ class SejarahControllerTest extends TestCase
                     'DT_RowIndex',
                     'sejarah_id',
                     'judul_subbab',
-                    'isi_konten',
+                    'isi_konten', // Ini akan berisi HTML
                     'aksi',
                 ]
             ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($sejarahs->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($sejarahs as $sejarah) {
+            // Cari data sejarah yang sesuai dalam respons berdasarkan sejarah_id
+            $responseSejarah = collect($responseData)->firstWhere('sejarah_id', $sejarah->sejarah_id);
+
+            $this->assertNotNull($responseSejarah, "Sejarah dengan ID {$sejarah->sejarah_id} tidak ditemukan dalam respons.");
+
+            if ($responseSejarah) {
+                $this->assertEquals($sejarah->sejarah_id, $responseSejarah['sejarah_id']);
+                $this->assertEquals($sejarah->judul_subbab, $responseSejarah['judul_subbab']);
+                
+                // Assertions for the transformed 'isi_konten'
+                // 1. Check for the wrapper div and that it contains a <p> tag
+                $this->assertStringStartsWith('<div class="isi-konten-table"><p>', $responseSejarah['isi_konten']);
+                $this->assertStringEndsWith('</p></div>', $responseSejarah['isi_konten']);
+                
+                // 2. Check for truncation indicator (ellipsis) within the paragraph tag
+                //    This regex looks for <p> followed by any characters, then three dots, then </p>
+                $this->assertMatchesRegularExpression('/<p>.*?\.{3}<\/p>/s', $responseSejarah['isi_konten']);
+
+                // 3. Check that the beginning of the original content's text is present in the response's text
+                //    (after stripping tags from both for a simpler text comparison)
+                //    We take a short snippet from the beginning of the original text.
+                $originalTextStripped = strip_tags($sejarah->isi_konten);
+                $expectedTextFragment = substr($originalTextStripped, 0, 50); // Adjust length as needed, e.g., first 50 chars
+                
+                $responseTextStripped = strip_tags($responseSejarah['isi_konten']); // Strip tags from response for text comparison
+                
+                $this->assertStringContainsString($expectedTextFragment, $responseTextStripped);
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/sejarah/' . $sejarah->sejarah_id), $responseSejarah['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/sejarah/' . $sejarah->sejarah_id . '/edit'), $responseSejarah['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/sejarah/'.$sejarah->sejarah_id), $responseSejarah['aksi']);
+            }
+        }
     }
 
     public function test_create()

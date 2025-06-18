@@ -61,29 +61,81 @@ class IbadahControllerTest extends TestCase
     {
         $kategori = KategoriIbadahModel::factory()->create();
         
-        $ibadah = IbadahModel::factory()->create([
+        // Buat beberapa data ibadah untuk pengujian
+        $ibadahs = IbadahModel::factory()->count(3)->create([
             'kategoriibadah_id' => $kategori->kategoriibadah_id,
-            'tanggal' => '2025-05-20',
-            'waktu' => '10:00',
-            'tempat' => 'Gereja Utama',
-            'lokasi' => 'Jl. Mawar 1',
-            'sektor' => 1,
-            'nama_pelkat' => 'Pemuda',
-            'ruang' => 'Aula',
-            'pelayan_firman' => 'Pdt. Yohanes'
+            // Anda bisa menambahkan override field lain di sini jika diperlukan untuk variasi data
         ]);
 
         $response = $this->postJson('/pengelolaan-informasi/ibadah/list');
 
         $response->assertStatus(200);
-        $response->assertJsonFragment([
-            'tanggal' => '2025-05-20',
-            'waktu' => '10:00',
-            'tempat' => 'Gereja Utama',
-            'lokasi' => 'Jl. Mawar 1',
-            'pelayan_firman' => 'Pdt. Yohanes',
-            'nama_pelkat' => 'Pemuda',
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'DT_RowIndex',
+                    'ibadah_id',
+                    'tanggal',
+                    'waktu',
+                    'tempat',
+                    'lokasi',
+                    'sektor',
+                    'nama_pelkat',
+                    'ruang',
+                    'pelayan_firman',
+                    'kategoriibadah_id',
+                    'kategoriibadah' => [ // Data dari relasi yang di-load
+                        'kategoriibadah_id',
+                        'kategoriibadah_kode',
+                        'kategoriibadah_nama',
+                    ],
+                    'aksi', // Kolom aksi yang ditambahkan oleh DataTables
+                ]
+            ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($ibadahs->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($ibadahs as $ibadah) {
+            // Cari data ibadah yang sesuai dalam respons berdasarkan ibadah_id
+            $responseIbadah = collect($responseData)->firstWhere('ibadah_id', $ibadah->ibadah_id);
+
+            $this->assertNotNull($responseIbadah, "Ibadah dengan ID {$ibadah->ibadah_id} tidak ditemukan dalam respons.");
+
+            if ($responseIbadah) {
+                $this->assertEquals($ibadah->ibadah_id, $responseIbadah['ibadah_id']);
+                $this->assertEquals($ibadah->tanggal, $responseIbadah['tanggal']); // Tanggal mungkin perlu format khusus jika diubah controller
+                $this->assertEquals(substr($ibadah->waktu, 0, 5), substr($responseIbadah['waktu'], 0, 5)); // Bandingkan H:i
+                $this->assertEquals($ibadah->tempat, $responseIbadah['tempat']);
+                $this->assertEquals($ibadah->lokasi, $responseIbadah['lokasi']);
+                $this->assertEquals($ibadah->sektor, $responseIbadah['sektor']);
+                $this->assertEquals($ibadah->nama_pelkat, $responseIbadah['nama_pelkat']);
+                $this->assertEquals($ibadah->ruang, $responseIbadah['ruang']);
+                $this->assertEquals($ibadah->pelayan_firman, $responseIbadah['pelayan_firman']);
+                $this->assertEquals($ibadah->kategoriibadah_id, $responseIbadah['kategoriibadah_id']);
+
+                // Membandingkan data dari relasi kategoriibadah
+                $this->assertNotNull($responseIbadah['kategoriibadah'], "Data kategoriibadah tidak ada untuk ibadah ID {$ibadah->ibadah_id}");
+                if ($responseIbadah['kategoriibadah']) {
+                    $this->assertEquals($ibadah->kategoriibadah->kategoriibadah_id, $responseIbadah['kategoriibadah']['kategoriibadah_id']);
+                    $this->assertEquals($ibadah->kategoriibadah->kategoriibadah_kode, $responseIbadah['kategoriibadah']['kategoriibadah_kode']);
+                    $this->assertEquals($ibadah->kategoriibadah->kategoriibadah_nama, $responseIbadah['kategoriibadah']['kategoriibadah_nama']);
+                }
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/ibadah/' . $ibadah->ibadah_id), $responseIbadah['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/ibadah/' . $ibadah->ibadah_id . '/edit'), $responseIbadah['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/ibadah/'.$ibadah->ibadah_id), $responseIbadah['aksi']);
+            }
+        }
     }
 
     public function test_create_returns_view()

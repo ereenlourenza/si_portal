@@ -16,6 +16,7 @@ use Database\Seeders\UserSeeder;
 use Database\Seeders\KategoriPelayanSeeder;
 use Database\Seeders\PelkatSeeder; // Added PelkatSeeder
 use Database\Seeders\PelayanSeeder;
+use Illuminate\Support\Facades\Storage;
 
 class SektorControllerTest extends TestCase
 {
@@ -72,17 +73,18 @@ class SektorControllerTest extends TestCase
         $this->actingAs($this->adminUser);
 
         // Create SektorModels with associated PelayanModels that have all necessary attributes
-        SektorModel::factory()->count(3)->for(
+        // Store the created sectors to iterate and compare later
+        $sektors = SektorModel::factory()->count(3)->for(
             PelayanModel::factory()->state(function (array $attributes) {
                 // Ensure PelayanModel has all fields expected by the JSON structure
                 return [
-                    'nama' => fake()->name(), // Changed to use global fake() helper
+                    'nama' => fake()->name(), 
                     'kategoripelayan_id' => KategoriPelayanModel::factory(), 
                     'pelkat_id' => PelkatModel::factory(), 
-                    'masa_jabatan_mulai' => fake()->year(), // Changed to use global fake() helper
-                    'masa_jabatan_selesai' => fake()->year(), // Changed to use global fake() helper
-                    'foto' => 'test.jpg',
-                    'keterangan' => fake()->sentence(), // Changed to use global fake() helper
+                    'masa_jabatan_mulai' => fake()->year(), 
+                    'masa_jabatan_selesai' => fake()->year(), 
+                    'foto' => 'test.jpg', // Assuming 'test.jpg' is a placeholder or handled by the controller
+                    'keterangan' => fake()->sentence(), 
                 ];
             }),
             'pelayan' // This is the relationship name in SektorModel
@@ -120,6 +122,53 @@ class SektorControllerTest extends TestCase
                 ]
             ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($sektors->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($sektors as $sektor) {
+            // Cari data sektor yang sesuai dalam respons berdasarkan sektor_id
+            $responseSektor = collect($responseData)->firstWhere('sektor_id', $sektor->sektor_id);
+
+            $this->assertNotNull($responseSektor, "Sektor dengan ID {$sektor->sektor_id} tidak ditemukan dalam respons.");
+
+            if ($responseSektor) {
+                $this->assertEquals($sektor->sektor_id, $responseSektor['sektor_id']);
+                $this->assertEquals($sektor->sektor_nama, $responseSektor['sektor_nama']);
+                $this->assertEquals($sektor->deskripsi, $responseSektor['deskripsi']);
+                $this->assertEquals($sektor->jumlah_jemaat, $responseSektor['jumlah_jemaat']);
+                $this->assertEquals($sektor->pelayan_id, $responseSektor['pelayan_id']);
+
+                // Membandingkan data dari relasi pelayan
+                $this->assertNotNull($responseSektor['pelayan'], "Data pelayan tidak ada untuk sektor ID {$sektor->sektor_id}");
+                if ($responseSektor['pelayan']) {
+                    $this->assertEquals($sektor->pelayan->pelayan_id, $responseSektor['pelayan']['pelayan_id']);
+                    $this->assertEquals($sektor->pelayan->kategoripelayan_id, $responseSektor['pelayan']['kategoripelayan_id']);
+                    $this->assertEquals($sektor->pelayan->pelkat_id, $responseSektor['pelayan']['pelkat_id']);
+                    $this->assertEquals($sektor->pelayan->nama, $responseSektor['pelayan']['nama']);
+                    
+                    // Handle 'foto' comparison - if it's an HTML img tag or just filename
+                    if (str_contains($responseSektor['pelayan']['foto'], '<img')) {
+                        $this->assertStringContainsString(Storage::url($sektor->pelayan->foto), $responseSektor['pelayan']['foto']);
+                    } else {
+                         $this->assertEquals($sektor->pelayan->foto, $responseSektor['pelayan']['foto']);
+                    }
+
+                    $this->assertEquals($sektor->pelayan->masa_jabatan_mulai, $responseSektor['pelayan']['masa_jabatan_mulai']);
+                    $this->assertEquals($sektor->pelayan->masa_jabatan_selesai, $responseSektor['pelayan']['masa_jabatan_selesai']);
+                    $this->assertEquals($sektor->pelayan->keterangan, $responseSektor['pelayan']['keterangan']);
+                }
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/sektor/' . $sektor->sektor_id), $responseSektor['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/sektor/' . $sektor->sektor_id . '/edit'), $responseSektor['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/sektor/'.$sektor->sektor_id), $responseSektor['aksi']);
+            }
+        }
     }
 
     public function test_create()

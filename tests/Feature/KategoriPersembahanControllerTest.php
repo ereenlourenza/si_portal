@@ -54,7 +54,7 @@ class KategoriPersembahanControllerTest extends TestCase
     {
         $this->actingAs($this->adminUser);
 
-        KategoriPersembahanModel::factory()->count(3)->create();
+        $kategoris = KategoriPersembahanModel::factory()->count(3)->create();
 
         $response = $this->postJson('/pengelolaan-berita-acara/kategoripersembahan/list');
 
@@ -72,6 +72,30 @@ class KategoriPersembahanControllerTest extends TestCase
                 ]
             ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($kategoris->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($kategoris as $kategori) {
+            // Cari data kategori yang sesuai dalam respons berdasarkan kategori_persembahan_id
+            $responseKategori = collect($responseData)->firstWhere('kategori_persembahan_id', $kategori->kategori_persembahan_id);
+
+            $this->assertNotNull($responseKategori, "Kategori Persembahan dengan ID {$kategori->kategori_persembahan_id} tidak ditemukan dalam respons.");
+
+            if ($responseKategori) {
+                $this->assertEquals($kategori->kategori_persembahan_id, $responseKategori['kategori_persembahan_id']);
+                $this->assertEquals($kategori->kategori_persembahan_nama, $responseKategori['kategori_persembahan_nama']);
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-berita-acara/kategoripersembahan/' . $kategori->kategori_persembahan_id), $responseKategori['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-berita-acara/kategoripersembahan/' . $kategori->kategori_persembahan_id . '/edit'), $responseKategori['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-berita-acara/kategoripersembahan/'.$kategori->kategori_persembahan_id), $responseKategori['aksi']);
+            }
+        }
     }
 
     public function test_create()

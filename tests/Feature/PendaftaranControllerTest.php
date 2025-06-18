@@ -59,11 +59,13 @@ class PendaftaranControllerTest extends TestCase
 
     public function test_list_pendaftaran_baptis()
     {
-        BaptisModelFactory::new()->count(3)->create();
+        // Create records with specific statuses to test different action buttons
+        $baptisMenunggu = BaptisModelFactory::new()->create(['status' => 0]); // 0: Menunggu Konfirmasi
+        $baptisDisetujui = BaptisModelFactory::new()->create(['status' => 1]); // 1: Disetujui
+        $baptisDitolak = BaptisModelFactory::new()->create(['status' => 2]);   // 2: Ditolak
 
-        // If you are still getting a 302 redirect here,
-        // please double-check your `checklevel:ADM` middleware
-        // and ensure the test user is correctly recognized as an admin.
+        $allBaptisRecords = collect([$baptisMenunggu, $baptisDisetujui, $baptisDitolak]);
+
         $response = $this->postJson('/pengelolaan-informasi/pendaftaran/list?jenis=baptis');
 
         $response->assertStatus(200);
@@ -73,24 +75,105 @@ class PendaftaranControllerTest extends TestCase
             'recordsFiltered',
             'data' => [
                 '*' => [
-                    'pendaftaran_id',
+                    'pendaftaran_id', // Maps to baptis_id
                     'nama_lengkap',
                     'jenis_pendaftaran',
-                    'status',
-                    'aksi_status',
-                    'aksi'
+                    'status',          // HTML badge for status
+                    'aksi_status',     // HTML for "Lihat", "Ubah", "Hapus" buttons
+                    'aksi',            // HTML for "Setujui/Batalkan", "Tolak" buttons + Modal
+                    'export_pdf'       // URL string for PDF export
                 ]
             ]
         ]);
-        $response->assertJsonCount(3, 'data');
-        if (count($response->json('data')) > 0) {
-            $response->assertJsonPath('data.0.jenis_pendaftaran', 'baptis');
+        $response->assertJsonCount($allBaptisRecords->count(), 'data');
+        
+        $responseData = $response->json('data');
+
+        // Define the expected HTML for status badges (matches controller output)
+        $statusBadgeMap = [
+            0 => '<span class="text-warning font-weight-bold"><em><span class="badge badge-warning"><i class="fas fa-exclamation nav-icon"></i> Menunggu</span></em></span>',
+            1 => '<span class="text-success font-weight-bold"><em><span class="badge badge-success"><i class="fas fa-thumbs-up nav-icon"></i> Disetujui</span></em></span>',
+            2 => '<span class="text-danger font-weight-bold"><em><span class="badge badge-danger"><i class="fas fa-ban nav-icon"></i> Ditolak</span></em></span>',
+        ];
+
+        foreach ($allBaptisRecords as $baptis) {
+            $responseBaptis = collect($responseData)->firstWhere('pendaftaran_id', $baptis->baptis_id);
+
+            $this->assertNotNull($responseBaptis, "Data Baptis dengan ID {$baptis->baptis_id} tidak ditemukan dalam respons.");
+
+            if ($responseBaptis) {
+                $this->assertEquals($baptis->baptis_id, $responseBaptis['pendaftaran_id']);
+                $this->assertEquals($baptis->nama_lengkap, $responseBaptis['nama_lengkap']);
+                $this->assertEquals('baptis', $responseBaptis['jenis_pendaftaran']);
+
+                // 1. Assert 'status' column (HTML Badge)
+                if (isset($statusBadgeMap[$baptis->status])) {
+                    $this->assertEquals($statusBadgeMap[$baptis->status], $responseBaptis['status'], "HTML badge di 'status' tidak cocok untuk status {$baptis->status}.");
+                } else {
+                    $this->fail("Status badge HTML tidak terdefinisi untuk status: {$baptis->status}");
+                }
+
+                // 2. Assert 'aksi_status' column (Lihat, Ubah, Hapus buttons)
+                $aksiStatusHtml = $responseBaptis['aksi_status'];
+                $showUrl = url("/pengelolaan-informasi/pendaftaran/{$baptis->baptis_id}?jenis=baptis");
+                $editUrl = url("/pengelolaan-informasi/pendaftaran/{$baptis->baptis_id}/edit?jenis=baptis");
+                $deleteUrl = url("/pengelolaan-informasi/pendaftaran/{$baptis->baptis_id}?jenis=baptis");
+
+                // 2.1. Tombol Lihat (Controller uses "Lihat")
+                $this->assertStringContainsString("href=\"{$showUrl}\"", $aksiStatusHtml, "Tombol 'Lihat' URL tidak ditemukan di aksi_status untuk status {$baptis->status}.");
+                $this->assertStringContainsString('>Lihat</a>', $aksiStatusHtml, "Teks tombol 'Lihat' tidak ditemukan di aksi_status untuk status {$baptis->status}.");
+
+                // 2.2. Tombol Ubah (Controller uses "Ubah" - always present in aksi_status as per controller)
+                $this->assertStringContainsString("href=\"{$editUrl}\"", $aksiStatusHtml, "Tombol 'Ubah' URL seharusnya selalu ada di aksi_status.");
+                $this->assertStringContainsString('>Ubah</a>', $aksiStatusHtml, "Teks tombol 'Ubah' seharusnya selalu ada di aksi_status.");
+
+                // 2.3. Tombol Hapus (always present in aksi_status as per controller)
+                $this->assertStringContainsString("action=\"{$deleteUrl}\"", $aksiStatusHtml, "Form 'Hapus' action seharusnya selalu ada di aksi_status.");
+                $this->assertStringContainsString("method=\"POST\"", $aksiStatusHtml, "Form 'Hapus' method POST tidak ditemukan di aksi_status.");
+                $this->assertStringContainsString("<input type=\"hidden\" name=\"_method\" value=\"DELETE\">", $aksiStatusHtml, "Input _method DELETE tidak ditemukan di aksi_status.");
+                $this->assertStringContainsString('>Hapus</button>', $aksiStatusHtml, "Teks tombol 'Hapus' seharusnya selalu ada di aksi_status.");
+
+                // 3. Assert 'aksi' column (Setujui/Batalkan, Tolak buttons + Modal)
+                $aksiHtml = $responseBaptis['aksi'];
+                $validateUrl = url("/pengelolaan-informasi/pendaftaran/updateValidation/{$baptis->baptis_id}?jenis=baptis");
+                $rejectFormActionUrl = url("/pengelolaan-informasi/pendaftaran/rejectPendaftaran/{$baptis->baptis_id}?jenis=baptis");
+
+                // 3.1. Tombol Setujui / Batalkan Persetujuan (Link selalu ada, teks berubah)
+                $this->assertStringContainsString("href=\"{$validateUrl}\"", $aksiHtml, "Tombol 'Setujui/Batalkan' URL tidak ditemukan di aksi untuk status {$baptis->status}.");
+                if ($baptis->status == 0) { // Teks "Setujui"
+                    $this->assertStringContainsString('>Setujui</a>', $aksiHtml, "Teks tombol 'Setujui' tidak ditemukan di aksi untuk status 0.");
+                    $this->assertStringNotContainsString('>Batalkan</a>', $aksiHtml, "Teks tombol 'Batalkan' seharusnya TIDAK ada di aksi untuk status 0.");
+                } else { // Teks "Batalkan" untuk status 1 atau 2 (atau lainnya)
+                    $this->assertStringContainsString('>Batalkan</a>', $aksiHtml, "Teks tombol 'Batalkan' tidak ditemukan di aksi untuk status {$baptis->status}.");
+                    $this->assertStringNotContainsString('>Setujui</a>', $aksiHtml, "Teks tombol 'Setujui' seharusnya TIDAK ada di aksi untuk status {$baptis->status}.");
+                }
+                
+                // 3.2. Tombol Tolak (Modal Trigger)
+                if ($baptis->status != 2) { // Muncul jika status BUKAN Ditolak (2)
+                    $this->assertStringContainsString("data-target=\"#rejectModal{$baptis->baptis_id}\"", $aksiHtml, "Tombol 'Tolak' (modal trigger) seharusnya ada di aksi untuk status {$baptis->status}.");
+                    $this->assertStringContainsString('>Tolak</button>', $aksiHtml, "Teks tombol 'Tolak' seharusnya ada di aksi untuk status {$baptis->status}.");
+                    // Check for modal form elements
+                    $this->assertStringContainsString("id=\"rejectModal{$baptis->baptis_id}\"", $aksiHtml, "Modal penolakan tidak ditemukan di aksi untuk status {$baptis->status}.");
+                    $this->assertStringContainsString("action=\"{$rejectFormActionUrl}\"", $aksiHtml, "Action URL form penolakan tidak ditemukan di aksi untuk status {$baptis->status}.");
+                } else { // Tidak muncul jika status Ditolak (2)
+                    $this->assertStringNotContainsString("data-target=\"#rejectModal{$baptis->baptis_id}\"", $aksiHtml, "Tombol 'Tolak' (modal trigger) seharusnya TIDAK ada di aksi untuk status {$baptis->status}.");
+                }
+
+                // 4. Assert 'export_pdf' column
+                $exportUrl = url("/pengelolaan-informasi/pendaftaran/{$baptis->baptis_id}/export-pdf?jenis=baptis");
+                $this->assertEquals($exportUrl, $responseBaptis['export_pdf'], "URL export PDF tidak cocok untuk Baptis ID {$baptis->baptis_id}.");
+            }
         }
     }
 
     public function test_list_pendaftaran_sidi()
     {
-        KatekisasiModelFactory::new()->count(3)->create();
+        // Create records with specific statuses to test different action buttons
+        $sidiMenunggu = KatekisasiModelFactory::new()->create(['status' => 0]); // 0: Menunggu Konfirmasi
+        $sidiDisetujui = KatekisasiModelFactory::new()->create(['status' => 1]); // 1: Disetujui
+        $sidiDitolak = KatekisasiModelFactory::new()->create(['status' => 2]);   // 2: Ditolak
+
+        $allSidiRecords = collect([$sidiMenunggu, $sidiDisetujui, $sidiDitolak]);
 
         $response = $this->postJson('/pengelolaan-informasi/pendaftaran/list?jenis=sidi');
 
@@ -101,24 +184,95 @@ class PendaftaranControllerTest extends TestCase
             'recordsFiltered',
             'data' => [
                 '*' => [
-                    'pendaftaran_id',
+                    'pendaftaran_id', // Maps to katekisasi_id
                     'nama_lengkap',
                     'jenis_pendaftaran',
-                    'status',
-                    'aksi_status',
-                    'aksi'
+                    'status',          // HTML badge for status
+                    'aksi_status',     // HTML for "Lihat", "Ubah", "Hapus" buttons
+                    'aksi',            // HTML for "Setujui/Batalkan", "Tolak" buttons + Modal
+                    'export_pdf'       // URL string for PDF export
                 ]
             ]
         ]);
-        $response->assertJsonCount(3, 'data');
-        if (count($response->json('data')) > 0) {
-            $response->assertJsonPath('data.0.jenis_pendaftaran', 'sidi');
+        $response->assertJsonCount($allSidiRecords->count(), 'data');
+        
+        $responseData = $response->json('data');
+
+        $statusBadgeMap = [
+            0 => '<span class="text-warning font-weight-bold"><em><span class="badge badge-warning"><i class="fas fa-exclamation nav-icon"></i> Menunggu</span></em></span>',
+            1 => '<span class="text-success font-weight-bold"><em><span class="badge badge-success"><i class="fas fa-thumbs-up nav-icon"></i> Disetujui</span></em></span>',
+            2 => '<span class="text-danger font-weight-bold"><em><span class="badge badge-danger"><i class="fas fa-ban nav-icon"></i> Ditolak</span></em></span>',
+        ];
+
+        foreach ($allSidiRecords as $sidi) {
+            $responseSidi = collect($responseData)->firstWhere('pendaftaran_id', $sidi->katekisasi_id);
+
+            $this->assertNotNull($responseSidi, "Data Sidi dengan ID {$sidi->katekisasi_id} tidak ditemukan dalam respons.");
+
+            if ($responseSidi) {
+                $this->assertEquals($sidi->katekisasi_id, $responseSidi['pendaftaran_id']);
+                $this->assertEquals($sidi->nama_lengkap, $responseSidi['nama_lengkap']);
+                $this->assertEquals('sidi', $responseSidi['jenis_pendaftaran']);
+                $this->assertEquals(url("/pengelolaan-informasi/pendaftaran/{$sidi->katekisasi_id}/export-pdf?jenis=sidi"), $responseSidi['export_pdf']);
+
+                // 1. Assert 'status' column (HTML Badge)
+                if (isset($statusBadgeMap[$sidi->status])) {
+                    $this->assertEquals($statusBadgeMap[$sidi->status], $responseSidi['status'], "HTML badge di 'status' tidak cocok untuk status {$sidi->status}.");
+                } else {
+                    $this->fail("Status badge HTML tidak terdefinisi untuk status: {$sidi->status}");
+                }
+
+                // 2. Assert 'aksi_status' column (Lihat, Ubah, Hapus buttons)
+                $aksiStatusHtml = $responseSidi['aksi_status'];
+                $showUrl = url("/pengelolaan-informasi/pendaftaran/{$sidi->katekisasi_id}?jenis=sidi");
+                $editUrl = url("/pengelolaan-informasi/pendaftaran/{$sidi->katekisasi_id}/edit?jenis=sidi");
+                $deleteUrl = url("/pengelolaan-informasi/pendaftaran/{$sidi->katekisasi_id}?jenis=sidi");
+
+                $this->assertStringContainsString("href=\"{$showUrl}\"", $aksiStatusHtml, "Tombol 'Lihat' URL tidak ditemukan di aksi_status untuk status {$sidi->status}.");
+                $this->assertStringContainsString('>Lihat</a>', $aksiStatusHtml, "Teks tombol 'Lihat' tidak ditemukan di aksi_status untuk status {$sidi->status}.");
+                $this->assertStringContainsString("href=\"{$editUrl}\"", $aksiStatusHtml, "Tombol 'Ubah' URL seharusnya selalu ada di aksi_status.");
+                $this->assertStringContainsString('>Ubah</a>', $aksiStatusHtml, "Teks tombol 'Ubah' seharusnya selalu ada di aksi_status.");
+                $this->assertStringContainsString("action=\"{$deleteUrl}\"", $aksiStatusHtml, "Form 'Hapus' action seharusnya selalu ada di aksi_status.");
+                $this->assertStringContainsString("method=\"POST\"", $aksiStatusHtml, "Form 'Hapus' method POST tidak ditemukan di aksi_status."); // Escaped double quotes for POST
+                $this->assertStringContainsString("<input type=\"hidden\" name=\"_method\" value=\"DELETE\">", $aksiStatusHtml, "Input _method DELETE tidak ditemukan di aksi_status."); // Escaped double quotes
+                $this->assertStringContainsString('>Hapus</button>', $aksiStatusHtml, "Teks tombol 'Hapus' seharusnya selalu ada di aksi_status.");
+
+                // 3. Assert 'aksi' column (Setujui/Batalkan, Tolak buttons + Modal)
+                $aksiHtml = $responseSidi['aksi'];
+                $validateUrl = url("/pengelolaan-informasi/pendaftaran/updateValidation/{$sidi->katekisasi_id}?jenis=sidi");
+                $rejectFormActionUrl = url("/pengelolaan-informasi/pendaftaran/rejectPendaftaran/{$sidi->katekisasi_id}?jenis=sidi");
+
+                $this->assertStringContainsString("href=\"{$validateUrl}\"", $aksiHtml, "Tombol 'Setujui/Batalkan' URL tidak ditemukan di aksi untuk status {$sidi->status}.");
+                if ($sidi->status == 0) { // Teks "Setujui"
+                    $this->assertStringContainsString('>Setujui</a>', $aksiHtml, "Teks tombol 'Setujui' tidak ditemukan di aksi untuk status 0.");
+                    $this->assertStringNotContainsString('>Batalkan</a>', $aksiHtml, "Teks tombol 'Batalkan' seharusnya TIDAK ada di aksi untuk status 0.");
+                } else { // Teks "Batalkan" untuk status 1 atau 2 (atau lainnya)
+                    $this->assertStringContainsString('>Batalkan</a>', $aksiHtml, "Teks tombol 'Batalkan' tidak ditemukan di aksi untuk status {$sidi->status}.");
+                    $this->assertStringNotContainsString('>Setujui</a>', $aksiHtml, "Teks tombol 'Setujui' seharusnya TIDAK ada di aksi untuk status {$sidi->status}.");
+                }
+                
+                // 3.2. Tombol Tolak (Modal Trigger)
+                if ($sidi->status != 2) { // Muncul jika status BUKAN Ditolak (2)
+                    $this->assertStringContainsString("data-target=\"#rejectModal{$sidi->katekisasi_id}\"", $aksiHtml, "Tombol 'Tolak' (modal trigger) seharusnya ada di aksi untuk status {$sidi->status}.");
+                    $this->assertStringContainsString('>Tolak</button>', $aksiHtml, "Teks tombol 'Tolak' seharusnya ada di aksi untuk status {$sidi->status}.");
+                    // Check for modal form elements
+                    $this->assertStringContainsString("id=\"rejectModal{$sidi->katekisasi_id}\"", $aksiHtml, "Modal penolakan tidak ditemukan di aksi untuk status {$sidi->status}.");
+                    $this->assertStringContainsString("action=\"{$rejectFormActionUrl}\"", $aksiHtml, "Action URL form penolakan tidak ditemukan di aksi untuk status {$sidi->status}.");
+                } else { // Tidak muncul jika status Ditolak (2)
+                    $this->assertStringNotContainsString("data-target=\"#rejectModal{$sidi->katekisasi_id}\"", $aksiHtml, "Tombol 'Tolak' (modal trigger) seharusnya TIDAK ada di aksi untuk status {$sidi->status}.");
+                }
+            }
         }
     }
 
     public function test_list_pendaftaran_pernikahan()
     {
-        PernikahanModelFactory::new()->count(3)->create();
+        // Create records with specific statuses to test different action buttons
+        $pernikahanMenunggu = PernikahanModelFactory::new()->create(['status' => 0]); // 0: Menunggu Konfirmasi
+        $pernikahanDisetujui = PernikahanModelFactory::new()->create(['status' => 1]); // 1: Disetujui
+        $pernikahanDitolak = PernikahanModelFactory::new()->create(['status' => 2]);   // 2: Ditolak
+
+        $allPernikahanRecords = collect([$pernikahanMenunggu, $pernikahanDisetujui, $pernikahanDitolak]);
 
         $response = $this->postJson('/pengelolaan-informasi/pendaftaran/list?jenis=pernikahan');
 
@@ -129,18 +283,82 @@ class PendaftaranControllerTest extends TestCase
             'recordsFiltered',
             'data' => [
                 '*' => [
-                    'pendaftaran_id',
-                    'nama_lengkap_pria',
+                    'pendaftaran_id',    // Maps to pernikahan_id
+                    'nama_lengkap_pria', // Specific to pernikahan
                     'jenis_pendaftaran',
-                    'status',
-                    'aksi_status',
-                    'aksi'
+                    'status',            // HTML badge for status
+                    'aksi_status',       // HTML for "Lihat", "Ubah", "Hapus" buttons
+                    'aksi',              // HTML for "Setujui/Batalkan", "Tolak" buttons + Modal
+                    'export_pdf'         // URL string for PDF export
                 ]
             ]
         ]);
-        $response->assertJsonCount(3, 'data');
-        if (count($response->json('data')) > 0) {
-            $response->assertJsonPath('data.0.jenis_pendaftaran', 'pernikahan');
+        $response->assertJsonCount($allPernikahanRecords->count(), 'data');
+        
+        $responseData = $response->json('data');
+
+        $statusBadgeMap = [
+            0 => '<span class="text-warning font-weight-bold"><em><span class="badge badge-warning"><i class="fas fa-exclamation nav-icon"></i> Menunggu</span></em></span>',
+            1 => '<span class="text-success font-weight-bold"><em><span class="badge badge-success"><i class="fas fa-thumbs-up nav-icon"></i> Disetujui</span></em></span>',
+            2 => '<span class="text-danger font-weight-bold"><em><span class="badge badge-danger"><i class="fas fa-ban nav-icon"></i> Ditolak</span></em></span>',
+        ];
+
+        foreach ($allPernikahanRecords as $pernikahan) {
+            $responsePernikahan = collect($responseData)->firstWhere('pendaftaran_id', $pernikahan->pernikahan_id);
+
+            $this->assertNotNull($responsePernikahan, "Data Pernikahan dengan ID {$pernikahan->pernikahan_id} tidak ditemukan dalam respons.");
+
+            if ($responsePernikahan) {
+                $this->assertEquals($pernikahan->pernikahan_id, $responsePernikahan['pendaftaran_id']);
+                $this->assertEquals($pernikahan->nama_lengkap_pria, $responsePernikahan['nama_lengkap_pria']);
+                $this->assertEquals('pernikahan', $responsePernikahan['jenis_pendaftaran']);
+                $this->assertEquals(url("/pengelolaan-informasi/pendaftaran/{$pernikahan->pernikahan_id}/export-pdf?jenis=pernikahan"), $responsePernikahan['export_pdf']);
+
+                // 1. Assert 'status' column (HTML Badge)
+                if (isset($statusBadgeMap[$pernikahan->status])) {
+                    $this->assertEquals($statusBadgeMap[$pernikahan->status], $responsePernikahan['status'], "HTML badge di 'status' tidak cocok untuk status {$pernikahan->status}.");
+                } else {
+                    $this->fail("Status badge HTML tidak terdefinisi untuk status: {$pernikahan->status}");
+                }
+
+                // 2. Assert 'aksi_status' column (Lihat, Ubah, Hapus buttons)
+                $aksiStatusHtml = $responsePernikahan['aksi_status'];
+                $showUrl = url("/pengelolaan-informasi/pendaftaran/{$pernikahan->pernikahan_id}?jenis=pernikahan");
+                $editUrl = url("/pengelolaan-informasi/pendaftaran/{$pernikahan->pernikahan_id}/edit?jenis=pernikahan");
+                $deleteUrl = url("/pengelolaan-informasi/pendaftaran/{$pernikahan->pernikahan_id}?jenis=pernikahan");
+
+                $this->assertStringContainsString("href=\"{$showUrl}\"", $aksiStatusHtml, "Tombol 'Lihat' URL tidak ditemukan di aksi_status untuk status {$pernikahan->status}.");
+                $this->assertStringContainsString('>Lihat</a>', $aksiStatusHtml, "Teks tombol 'Lihat' tidak ditemukan di aksi_status untuk status {$pernikahan->status}.");
+                $this->assertStringContainsString("href=\"{$editUrl}\"", $aksiStatusHtml, "Tombol 'Ubah' URL seharusnya selalu ada di aksi_status.");
+                $this->assertStringContainsString('>Ubah</a>', $aksiStatusHtml, "Teks tombol 'Ubah' seharusnya selalu ada di aksi_status.");
+                $this->assertStringContainsString("action=\"{$deleteUrl}\"", $aksiStatusHtml, "Form 'Hapus' action seharusnya selalu ada di aksi_status.");
+                $this->assertStringContainsString("method=\"POST\"", $aksiStatusHtml, "Form 'Hapus' method POST tidak ditemukan di aksi_status."); // Escaped double quotes for POST
+                $this->assertStringContainsString("<input type=\"hidden\" name=\"_method\" value=\"DELETE\">", $aksiStatusHtml, "Input _method DELETE tidak ditemukan di aksi_status."); // Escaped double quotes
+                $this->assertStringContainsString('>Hapus</button>', $aksiStatusHtml, "Teks tombol 'Hapus' seharusnya selalu ada di aksi_status.");
+
+                // 3. Assert 'aksi' column (Setujui/Batalkan, Tolak buttons + Modal)
+                $aksiHtml = $responsePernikahan['aksi'];
+                $validateUrl = url("/pengelolaan-informasi/pendaftaran/updateValidation/{$pernikahan->pernikahan_id}?jenis=pernikahan");
+                $rejectFormActionUrl = url("/pengelolaan-informasi/pendaftaran/rejectPendaftaran/{$pernikahan->pernikahan_id}?jenis=pernikahan");
+
+                $this->assertStringContainsString("href=\"{$validateUrl}\"", $aksiHtml, "Tombol 'Setujui/Batalkan' URL tidak ditemukan di aksi untuk status {$pernikahan->status}.");
+                if ($pernikahan->status == 0) {
+                    $this->assertStringContainsString('>Setujui</a>', $aksiHtml, "Teks tombol 'Setujui' tidak ditemukan di aksi untuk status 0.");
+                    $this->assertStringNotContainsString('>Batalkan</a>', $aksiHtml, "Teks tombol 'Batalkan' seharusnya TIDAK ada di aksi untuk status 0.");
+                } else {
+                    $this->assertStringContainsString('>Batalkan</a>', $aksiHtml, "Teks tombol 'Batalkan' tidak ditemukan di aksi untuk status {$pernikahan->status}.");
+                    $this->assertStringNotContainsString('>Setujui</a>', $aksiHtml, "Teks tombol 'Setujui' seharusnya TIDAK ada di aksi untuk status {$pernikahan->status}.");
+                }
+                
+                if ($pernikahan->status != 2) {
+                    $this->assertStringContainsString("data-target=\"#rejectModal{$pernikahan->pernikahan_id}\"", $aksiHtml, "Tombol 'Tolak' (modal trigger) seharusnya ada di aksi untuk status {$pernikahan->status}.");
+                    $this->assertStringContainsString('>Tolak</button>', $aksiHtml, "Teks tombol 'Tolak' seharusnya ada di aksi untuk status {$pernikahan->status}.");
+                    $this->assertStringContainsString("id=\"rejectModal{$pernikahan->pernikahan_id}\"", $aksiHtml, "Modal penolakan tidak ditemukan di aksi untuk status {$pernikahan->status}.");
+                    $this->assertStringContainsString("action=\"{$rejectFormActionUrl}\"", $aksiHtml, "Action URL form penolakan tidak ditemukan di aksi untuk status {$pernikahan->status}.");
+                } else {
+                    $this->assertStringNotContainsString("data-target=\"#rejectModal{$pernikahan->pernikahan_id}\"", $aksiHtml, "Tombol 'Tolak' (modal trigger) seharusnya TIDAK ada di aksi untuk status {$pernikahan->status}.");
+                }
+            }
         }
     }
 

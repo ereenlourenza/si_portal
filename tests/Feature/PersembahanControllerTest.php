@@ -56,7 +56,7 @@ class PersembahanControllerTest extends TestCase
     {
         $this->actingAs($this->adminUser);
 
-        PersembahanModel::factory()->count(3)->create();
+        $persembahans = PersembahanModel::factory()->count(3)->create();
 
         $response = $this->postJson('/pengelolaan-informasi/persembahan/list');
 
@@ -72,11 +72,49 @@ class PersembahanControllerTest extends TestCase
                     'persembahan_nama',
                     'nomor_rekening',
                     'atas_nama',
-                    'barcode',
+                    'barcode', // Ini bisa berupa nama file atau tag HTML <img>
                     'aksi',
                 ]
             ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($persembahans->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($persembahans as $persembahan) {
+            // Cari data persembahan yang sesuai dalam respons berdasarkan persembahan_id
+            $responsePersembahan = collect($responseData)->firstWhere('persembahan_id', $persembahan->persembahan_id);
+
+            $this->assertNotNull($responsePersembahan, "Persembahan dengan ID {$persembahan->persembahan_id} tidak ditemukan dalam respons.");
+
+            if ($responsePersembahan) {
+                $this->assertEquals($persembahan->persembahan_id, $responsePersembahan['persembahan_id']);
+                $this->assertEquals($persembahan->persembahan_nama, $responsePersembahan['persembahan_nama']);
+                $this->assertEquals($persembahan->nomor_rekening, $responsePersembahan['nomor_rekening']);
+                $this->assertEquals($persembahan->atas_nama, $responsePersembahan['atas_nama']);
+
+                // Untuk kolom 'barcode', periksa apakah itu tag img yang berisi URL yang benar
+                // atau jika itu hanya nama file, sesuaikan.
+                // Asumsi controller mengembalikan tag <img> untuk barcode.
+                if ($persembahan->barcode) {
+                    $this->assertStringContainsString(Storage::url($persembahan->barcode), $responsePersembahan['barcode']);
+                    $this->assertStringContainsString('<img', $responsePersembahan['barcode']);
+                } else {
+                    // Handle kasus jika barcode mungkin tidak ada atau direpresentasikan berbeda
+                    $this->assertStringContainsString('Tidak Ada Barcode', $responsePersembahan['barcode']); // Atau sesuaikan dengan output Anda
+                }
+
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/persembahan/' . $persembahan->persembahan_id), $responsePersembahan['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/persembahan/' . $persembahan->persembahan_id . '/edit'), $responsePersembahan['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/persembahan/'.$persembahan->persembahan_id), $responsePersembahan['aksi']);
+            }
+        }
     }
 
     public function test_create()

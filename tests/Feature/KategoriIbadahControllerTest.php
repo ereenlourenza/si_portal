@@ -56,18 +56,52 @@ class KategoriIbadahControllerTest extends TestCase
 
     public function test_list_returns_json()
     {
-        $kategori = KategoriIbadahModel::factory()->create([
-            'kategoriibadah_kode' => 'IBD01',
-            'kategoriibadah_nama' => 'Ibadah Umum'
-        ]);
+        // Buat beberapa data kategori untuk pengujian
+        $kategoris = KategoriIbadahModel::factory()->count(3)->create();
 
         $response = $this->postJson('/pengelolaan-informasi/kategoriibadah/list');
 
         $response->assertStatus(200);
-        $response->assertJsonFragment([
-            'kategoriibadah_kode' => 'IBD01',
-            'kategoriibadah_nama' => 'Ibadah Umum',
+        // Perbarui struktur JSON untuk mencerminkan output DataTables yang sebenarnya
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'DT_RowIndex',
+                    'kategoriibadah_id',
+                    'kategoriibadah_kode',
+                    'kategoriibadah_nama',
+                    'aksi', // Kolom aksi yang ditambahkan oleh DataTables
+                ]
+            ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($kategoris->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($kategoris as $kategori) {
+            // Cari data kategori yang sesuai dalam respons berdasarkan kategoriibadah_id
+            $responseKategori = collect($responseData)->firstWhere('kategoriibadah_id', $kategori->kategoriibadah_id);
+
+            $this->assertNotNull($responseKategori, "Kategori Ibadah dengan ID {$kategori->kategoriibadah_id} tidak ditemukan dalam respons.");
+
+            if ($responseKategori) {
+                $this->assertEquals($kategori->kategoriibadah_id, $responseKategori['kategoriibadah_id']);
+                $this->assertEquals($kategori->kategoriibadah_kode, $responseKategori['kategoriibadah_kode']);
+                $this->assertEquals($kategori->kategoriibadah_nama, $responseKategori['kategoriibadah_nama']);
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/kategoriibadah/' . $kategori->kategoriibadah_id), $responseKategori['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/kategoriibadah/' . $kategori->kategoriibadah_id . '/edit'), $responseKategori['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/kategoriibadah/'.$kategori->kategoriibadah_id), $responseKategori['aksi']);
+            }
+        }
     }
 
     public function test_create_returns_view()

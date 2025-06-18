@@ -40,9 +40,10 @@ class TataIbadahControllerTest extends TestCase // Changed class name
     {
         $this->actingAs($this->adminUser);
 
-        TataIbadahModel::factory()->count(3)->create(); // Changed model
+        // Store the created tata ibadah to iterate and compare later
+        $tataIbadahs = TataIbadahModel::factory()->count(3)->create(); 
 
-        $response = $this->postJson('/pengelolaan-informasi/tataibadah/list'); // Changed route
+        $response = $this->postJson('/pengelolaan-informasi/tataibadah/list'); 
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -52,15 +53,53 @@ class TataIbadahControllerTest extends TestCase // Changed class name
             'data' => [
                 '*' => [
                     'DT_RowIndex',
-                    'tataibadah_id', // Changed field
-                    'tanggal',       // Changed field
-                    'judul',         // Changed field
-                    'deskripsi',     // Changed field
-                    'file',          // Changed field
+                    'tataibadah_id', 
+                    'tanggal',       
+                    'judul',         
+                    'deskripsi',     
+                    'file',          // This might be an HTML link or filename
                     'aksi',
                 ]
             ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($tataIbadahs->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($tataIbadahs as $tataIbadah) {
+            // Cari data tata ibadah yang sesuai dalam respons berdasarkan tataibadah_id
+            $responseTataIbadah = collect($responseData)->firstWhere('tataibadah_id', $tataIbadah->tataibadah_id);
+
+            $this->assertNotNull($responseTataIbadah, "Tata Ibadah dengan ID {$tataIbadah->tataibadah_id} tidak ditemukan dalam respons.");
+
+            if ($responseTataIbadah) {
+                $this->assertEquals($tataIbadah->tataibadah_id, $responseTataIbadah['tataibadah_id']);
+                $this->assertEquals($tataIbadah->tanggal, $responseTataIbadah['tanggal']); // Assuming tanggal is returned as Y-m-d
+                $this->assertEquals($tataIbadah->judul, $responseTataIbadah['judul']);
+                $this->assertEquals($tataIbadah->deskripsi, $responseTataIbadah['deskripsi']);
+
+                // Untuk kolom 'file', periksa apakah itu tag <a> yang berisi URL yang benar
+                // atau jika itu hanya nama file, sesuaikan.
+                // Asumsi controller mengembalikan tag <a> untuk file jika ada.
+                if ($tataIbadah->file) {
+                    $this->assertStringContainsString(Storage::url('dokumen/tataibadah/' . $tataIbadah->file), $responseTataIbadah['file']);
+                    $this->assertStringContainsString('<a href', $responseTataIbadah['file']);
+                } else {
+                    // Handle kasus jika file mungkin tidak ada atau direpresentasikan berbeda
+                    // Misalnya, jika controller mengembalikan string kosong atau placeholder
+                    $this->assertEquals('Tidak Ada File', $responseTataIbadah['file']); // Sesuaikan dengan output aktual Anda
+                }
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/tataibadah/' . $tataIbadah->tataibadah_id), $responseTataIbadah['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/tataibadah/' . $tataIbadah->tataibadah_id . '/edit'), $responseTataIbadah['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/tataibadah/'.$tataIbadah->tataibadah_id), $responseTataIbadah['aksi']);
+            }
+        }
     }
 
     public function test_create()

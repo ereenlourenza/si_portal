@@ -56,7 +56,7 @@ class RuanganControllerTest extends TestCase
     {
         $this->actingAs($this->adminUser);
 
-        RuanganModel::factory()->count(3)->create();
+        $ruangans = RuanganModel::factory()->count(3)->create();
 
         $response = $this->postJson('/pengelolaan-informasi/ruangan/list');
 
@@ -76,6 +76,41 @@ class RuanganControllerTest extends TestCase
                 ]
             ]
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount(3, 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($ruangans as $index => $ruangan) {
+            // Cari data ruangan yang sesuai dalam respons berdasarkan ruangan_id
+            // Urutan data dari factory dan dari DataTables mungkin tidak selalu sama,
+            // jadi lebih baik mencari berdasarkan ID unik jika memungkinkan,
+            // atau jika urutannya dijamin sama, Anda bisa menggunakan $responseData[$index]
+            $responseRuangan = collect($responseData)->firstWhere('ruangan_id', $ruangan->ruangan_id);
+
+            $this->assertNotNull($responseRuangan, "Ruangan dengan ID {$ruangan->ruangan_id} tidak ditemukan dalam respons.");
+
+            if ($responseRuangan) {
+                $this->assertEquals($ruangan->ruangan_nama, $responseRuangan['ruangan_nama']);
+                $this->assertEquals($ruangan->deskripsi, $responseRuangan['deskripsi']);
+                $this->assertEquals($ruangan->ruangan_id, $responseRuangan['ruangan_id']);
+
+                // Untuk kolom 'foto', karena berisi HTML, kita bisa cek apakah nama file foto ada di dalamnya
+                if ($ruangan->foto) {
+                    $this->assertStringContainsString(Storage::url('images/ruangan/' . $ruangan->foto), $responseRuangan['foto']);
+                } else {
+                    $this->assertStringContainsString('Tidak Ada Foto', $responseRuangan['foto']);
+                }
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/ruangan/' . $ruangan->ruangan_id), $responseRuangan['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/ruangan/' . $ruangan->ruangan_id . '/edit'), $responseRuangan['aksi']);
+                // Untuk tombol hapus, form action juga akan berisi URL ini
+                $this->assertStringContainsString(url('/pengelolaan-informasi/ruangan/'.$ruangan->ruangan_id), $responseRuangan['aksi']);
+            }
+        }
     }
 
     public function test_create()

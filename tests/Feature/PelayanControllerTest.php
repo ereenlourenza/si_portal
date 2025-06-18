@@ -64,22 +64,92 @@ class PelayanControllerTest extends TestCase
         $kategori = KategoriPelayanModel::factory()->create();
         $pelkat = PelkatModel::factory()->create();
 
-        PelayanModel::factory()->create([
+        // Buat beberapa data pelayan untuk pengujian
+        $pelayans = PelayanModel::factory()->count(3)->create([
             'kategoripelayan_id' => $kategori->kategoripelayan_id,
             'pelkat_id' => $pelkat->pelkat_id,
-            'masa_jabatan_mulai' => 2022,
-            'masa_jabatan_selesai' => 2024
+            // Factory akan mengisi 'nama', 'foto', 'keterangan', 'masa_jabatan_mulai', 'masa_jabatan_selesai'
         ]);
 
         $response = $this->postJson('/pengelolaan-informasi/pelayan/list');
         $response->assertStatus(200);
+
+        // Sesuaikan struktur JSON ini dengan output aktual dari controller Anda
+        // Ini adalah asumsi struktur DataTables standar dengan tambahan minYear dan maxYear
         $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
             'data' => [
-                ['pelayan_id', 'kategoripelayan', 'pelkat', 'masa_jabatan', 'aksi']
+                '*' => [
+                    'DT_RowIndex',
+                    'pelayan_id',
+                    'nama',
+                    'foto', // Asumsi ini adalah nama file atau path, atau HTML img tag
+                    'keterangan',
+                    'kategoripelayan_id',
+                    'kategoripelayan' => [
+                        'kategoripelayan_id',
+                        'kategoripelayan_kode',
+                        'kategoripelayan_nama',
+                    ],
+                    'pelkat_id',
+                    'pelkat' => [
+                        'pelkat_id',
+                        // 'pelkat_kode', // Jika ada
+                        'pelkat_nama',
+                    ],
+                    'masa_jabatan_mulai',
+                    'masa_jabatan_selesai',
+                    'masa_jabatan', // String yang diformat, misal "2022 - 2024"
+                    'aksi',
+                ]
             ],
-            'minYear',
-            'maxYear'
+            'minYear', // Field kustom
+            'maxYear'  // Field kustom
         ]);
+
+        // Memastikan jumlah data yang dikembalikan sesuai
+        $response->assertJsonCount($pelayans->count(), 'data');
+
+        // Membandingkan data aktual
+        $responseData = $response->json('data');
+
+        foreach ($pelayans as $pelayan) {
+            // Cari data pelayan yang sesuai dalam respons berdasarkan pelayan_id
+            $responsePelayan = collect($responseData)->firstWhere('pelayan_id', $pelayan->pelayan_id);
+
+            $this->assertNotNull($responsePelayan, "Pelayan dengan ID {$pelayan->pelayan_id} tidak ditemukan dalam respons.");
+
+            if ($responsePelayan) {
+                $this->assertEquals($pelayan->pelayan_id, $responsePelayan['pelayan_id']);
+                $this->assertEquals($pelayan->nama, $responsePelayan['nama']);
+                $this->assertEquals($pelayan->keterangan, $responsePelayan['keterangan']);
+
+                // Penanganan untuk 'foto' (sesuaikan jika controller mengembalikan HTML)
+                if (str_contains($responsePelayan['foto'], '<img')) {
+                    $this->assertStringContainsString(Storage::url($pelayan->foto), $responsePelayan['foto']);
+                } else {
+                    $this->assertEquals($pelayan->foto, $responsePelayan['foto']);
+                }
+
+                $this->assertEquals($pelayan->kategoripelayan_id, $responsePelayan['kategoripelayan_id']);
+                $this->assertEquals($pelayan->kategoripelayan->kategoripelayan_nama, $responsePelayan['kategoripelayan']['kategoripelayan_nama']);
+
+                $this->assertEquals($pelayan->pelkat_id, $responsePelayan['pelkat_id']);
+                $this->assertEquals($pelayan->pelkat->pelkat_nama, $responsePelayan['pelkat']['pelkat_nama']);
+
+                $this->assertEquals($pelayan->masa_jabatan_mulai, $responsePelayan['masa_jabatan_mulai']);
+                $this->assertEquals($pelayan->masa_jabatan_selesai, $responsePelayan['masa_jabatan_selesai']);
+                $this->assertEquals($pelayan->masa_jabatan_mulai . ' - ' . $pelayan->masa_jabatan_selesai, $responsePelayan['masa_jabatan']);
+
+
+                // Untuk kolom 'aksi', kita bisa cek apakah URL yang benar ada di dalamnya
+                $this->assertStringContainsString(url('/pengelolaan-informasi/pelayan/' . $pelayan->pelayan_id), $responsePelayan['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/pelayan/' . $pelayan->pelayan_id . '/edit'), $responsePelayan['aksi']);
+                $this->assertStringContainsString(url('/pengelolaan-informasi/pelayan/'.$pelayan->pelayan_id), $responsePelayan['aksi']); // Untuk delete
+            }
+        }
     }
 
     public function test_create_returns_view()
