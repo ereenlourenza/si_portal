@@ -20,7 +20,7 @@ return new class extends Migration
             $table->time('waktu_selesai');
             $table->unsignedBigInteger('ruangan_id')->index(); // Foreign Key ke kategori galeri
             $table->string('keperluan');
-            $table->boolean('status')->default(0);
+            $table->tinyInteger('status')->default(0)->comment('0: Menunggu, 1: Disetujui, 2: Ditolak');
             $table->text('alasan_penolakan')->nullable();
             $table->timestamps();
 

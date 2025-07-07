@@ -13,6 +13,11 @@ class PeminjamanRuanganModel extends Model
     protected $table = 't_peminjamanruangan'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'peminjamanruangan_id'; //mendefinisikan primary key dari tabel yang digunakan
 
+    // Definisikan konstanta untuk status
+    const STATUS_PENDING = 0;
+    const STATUS_DISETUJUI = 1;
+    const STATUS_DITOLAK = 2;
+
     protected $fillable = ['peminjam_nama','peminjam_telepon','tanggal','waktu_mulai','waktu_selesai','ruangan_id','keperluan','status','alasan_penolakan'];
 
     public function ruangan(): BelongsTo{

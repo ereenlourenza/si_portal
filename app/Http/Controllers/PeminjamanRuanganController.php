@@ -54,9 +54,9 @@ class PeminjamanRuanganController extends Controller
                         Carbon::parse($peminjamanruangan->waktu_selesai)->format('H:i');
             })
             ->editColumn('status', function ($peminjamanruangan) {
-                if ($peminjamanruangan->status == 1) {
+                if ($peminjamanruangan->status == PeminjamanRuanganModel::STATUS_DISETUJUI) {
                     return '<span class="badge badge-success"><em><i class="fas fa-thumbs-up nav-icon"></i> Disetujui</span></em>';
-                } elseif ($peminjamanruangan->status == 2) {
+                } elseif ($peminjamanruangan->status == PeminjamanRuanganModel::STATUS_DITOLAK) {
                     return '<span class="badge badge-danger"><em><i class="fas fa-ban nav-icon"></i> Ditolak</span></em>';
                 } else {
                     return '<span class="badge badge-warning"><em><i class="fas fa-exclamation nav-icon"></i> Menunggu</span></em>';
@@ -71,10 +71,10 @@ class PeminjamanRuanganController extends Controller
 
             })
             ->addColumn('aksi', function ($peminjamanruangan) { // menambahkan kolom aksi
-                $btn = '<a href="'.url('/pengelolaan-informasi/peminjamanruangan/updateValidation/' . $peminjamanruangan->peminjamanruangan_id ).'" class="btn btn-dark btn-sm">'.($peminjamanruangan->status == 0 ? 'Setujui' : 'Batalkan' ).'</a> ';
+                $btn = '<a href="'.url('/pengelolaan-informasi/peminjamanruangan/updateValidation/' . $peminjamanruangan->peminjamanruangan_id ).'" class="btn btn-dark btn-sm">'.($peminjamanruangan->status == PeminjamanRuanganModel::STATUS_PENDING ? 'Setujui' : 'Batalkan' ).'</a> ';
 
                 // Hanya tampilkan tombol "Tolak" jika status belum ditolak (status != 2)
-                if ($peminjamanruangan->status != 2) {
+                if ($peminjamanruangan->status != PeminjamanRuanganModel::STATUS_DITOLAK) {
                     $btn .= '<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#rejectModal'.$peminjamanruangan->peminjamanruangan_id.'">Tolak</button>';
 
                     // Modal Form untuk Input Alasan Penolakan
@@ -117,9 +117,9 @@ class PeminjamanRuanganController extends Controller
         }
 
         // Jika statusnya 0 (belum disetujui), maka kita menyetujui peminjaman ini
-        if ($peminjamanruangan->status == 0) {
+        if ($peminjamanruangan->status == PeminjamanRuanganModel::STATUS_PENDING) {
             // Setujui peminjaman ini
-            $peminjamanruangan->update(['status' => 1]);
+            $peminjamanruangan->update(['status' => PeminjamanRuanganModel::STATUS_DISETUJUI]);
 
             // Cari peminjaman lain yang bentrok
             $bentrokPeminjaman = PeminjamanRuanganModel::where('tanggal', $peminjamanruangan->tanggal)
@@ -133,13 +133,13 @@ class PeminjamanRuanganController extends Controller
                                 ->where('waktu_selesai', '>=', $peminjamanruangan->waktu_selesai);
                         });
                 })
-                ->where('status', 0) // Pastikan hanya menolak yang belum disetujui/tidak diproses
+                ->where('status', PeminjamanRuanganModel::STATUS_PENDING) // Pastikan hanya menolak yang belum disetujui/tidak diproses
                 ->get();
 
             // Update semua yang bentrok menjadi ditolak
             foreach ($bentrokPeminjaman as $bentrok) {
                 $bentrok->update([
-                    'status' => 2, // Ditolak
+                    'status' => PeminjamanRuanganModel::STATUS_DITOLAK,
                     'alasan_penolakan' => 'Bentrok dengan peminjaman yang telah disetujui'
                 ]);
             }
@@ -157,7 +157,7 @@ class PeminjamanRuanganController extends Controller
         }
 
         // Jika sebelumnya sudah disetujui, ubah status kembali ke belum disetujui
-        $peminjamanruangan->update(['status' => 0]);
+        $peminjamanruangan->update(['status' => PeminjamanRuanganModel::STATUS_PENDING]);
 
         // log aktivitas
         simpanLogAktivitas('Peminjaman Ruangan', 'cancel validation', "Batalkan validasi data: \n"
@@ -187,7 +187,7 @@ class PeminjamanRuanganController extends Controller
 
         // Ubah status menjadi 2 (Ditolak) dan simpan alasan
         $peminjamanruangan->update([
-            'status' => 2,
+            'status' => PeminjamanRuanganModel::STATUS_DITOLAK,
             'alasan_penolakan' => $request->alasan_penolakan
         ]);
 
@@ -233,7 +233,7 @@ class PeminjamanRuanganController extends Controller
             'waktu_selesai' => 'required|date_format:H:i',
             'ruangan_id' => 'required|integer',
             'keperluan' => 'required|string',
-            'status' => 'nullable|boolean',
+            'status' => 'nullable|integer',
             'alasan_penolakan' => 'nullable|string',
         ]);
         
@@ -248,7 +248,7 @@ class PeminjamanRuanganController extends Controller
                 'waktu_selesai'  => $request['waktu_selesai'],
                 'ruangan_id'  => $request['ruangan_id'],
                 'keperluan'  => $request['keperluan'],
-                'status'  => $request['status'] ?? 0,
+                'status'  => $request['status'] ?? PeminjamanRuanganModel::STATUS_PENDING,
                 'alasan_penolakan'  => $request['alasan_penolakan'] ?? null,
             ]);
 
