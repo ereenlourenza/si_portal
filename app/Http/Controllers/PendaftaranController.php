@@ -159,14 +159,12 @@ class PendaftaranController extends Controller
         if (!$pendaftaran) {
             return redirect('pengelolaan-informasi/pendaftaran')->with('error_pendaftaran', 'Data tidak ditemukan');
         }
-
-         // Ubah status & simpan pesan sukses yang sesuai
-        $pendaftaran->status = $pendaftaran->status == 0 ? 1 : 0;
+         // Ubah status menjadi Disetujui
+        $pendaftaran->status = BaptisModel::STATUS_DISETUJUI;
+        $pendaftaran->alasan_penolakan = null; // Hapus alasan penolakan jika ada
         $pendaftaran->save();
 
-        $pesan = $pendaftaran->status == 1 
-            ? 'Pendaftaran sakramen telah disetujui.' 
-            : 'Persetujuan pendaftaran sakramen telah dibatalkan.';
+        $pesan = 'Pendaftaran sakramen berhasil disetujui';
 
         if ($jenis == 'baptis') {
 
@@ -241,9 +239,9 @@ class PendaftaranController extends Controller
             'alasan_penolakan' => 'required|string|max:255'
         ]);
 
-        // Ubah status menjadi 2 (Ditolak) dan simpan alasan
+        // Ubah status menjadi Ditolak dan simpan alasan
         $pendaftaran->update([
-            'status' => 2,
+            'status' => BaptisModel::STATUS_DITOLAK,
             'alasan_penolakan' => $request->alasan_penolakan
         ]);
 

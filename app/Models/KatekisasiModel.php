@@ -12,6 +12,11 @@ class KatekisasiModel extends Model
     protected $table = 't_katekisasi';
     protected $primaryKey = 'katekisasi_id';
 
+    // Definisikan konstanta untuk status
+    const STATUS_PENDING = 0;
+    const STATUS_DISETUJUI = 1;
+    const STATUS_DITOLAK = 2;
+
     protected $fillable = [
         'nama_lengkap', 
         'tempat_lahir', 

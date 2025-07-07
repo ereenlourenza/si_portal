@@ -12,6 +12,11 @@ class PernikahanModel extends Model
     protected $table = 't_pernikahan';
     protected $primaryKey = 'pernikahan_id';
 
+    // Definisikan konstanta untuk status
+    const STATUS_PENDING = 0;
+    const STATUS_DISETUJUI = 1;
+    const STATUS_DITOLAK = 2;
+
     protected $fillable = [
         'nama_lengkap_pria', 
         'nama_lengkap_pria', 

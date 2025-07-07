@@ -49,7 +49,7 @@ return new class extends Migration
             $table->string('sp_gereja_asal')->nullable();
             $table->string('foto');
             $table->string('biaya');
-            $table->boolean('status')->default(0);
+            $table->tinyInteger('status')->default(0)->comment('0: Menunggu, 1: Disetujui, 2: Ditolak');
             $table->text('alasan_penolakan')->nullable();
             $table->timestamps();
         });

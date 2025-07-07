@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('dilayani');
             $table->string('surat_nikah_ortu');
             $table->string('akta_kelahiran_anak');
-            $table->boolean('status')->default(0);
+            $table->tinyInteger('status')->default(0)->comment('0: Menunggu, 1: Disetujui, 2: Ditolak');
             $table->text('alasan_penolakan')->nullable();
             $table->timestamps();
         });
