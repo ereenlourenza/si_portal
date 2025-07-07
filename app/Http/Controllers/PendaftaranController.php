@@ -45,19 +45,16 @@ class PendaftaranController extends Controller
     
         if ($jenis == 'baptis') {
             $pendaftarans = BaptisModel::select(
-                'baptis_id as pendaftaran_id','nama_lengkap','tempat_lahir','tanggal_lahir','jenis_kelamin','nama_ayah','nama_ibu','tempat_pernikahan', 'tanggal_pernikahan', 'tempat_sidi_ayah', 'tanggal_sidi_ayah', 'tempat_sidi_ibu', 'tanggal_sidi_ibu', 'alamat', 'nomor_telepon', 'tanggal_baptis', 'dilayani', 'surat_nikah_ortu', 'akta_kelahiran_anak','status','alasan_penolakan',
-                DB::raw('"baptis" as jenis_pendaftaran')
-            );
+                'baptis_id as pendaftaran_id','nama_lengkap','tempat_lahir','tanggal_lahir','jenis_kelamin','nama_ayah','nama_ibu','tempat_pernikahan', 'tanggal_pernikahan', 'tempat_sidi_ayah', 'tanggal_sidi_ayah', 'tempat_sidi_ibu', 'tanggal_sidi_ibu', 'alamat', 'nomor_telepon', 'tanggal_baptis', 'dilayani', 'surat_nikah_ortu', 'akta_kelahiran_anak','status','alasan_penolakan'
+            )->addSelect(DB::raw("'baptis' as jenis_pendaftaran"));
         } elseif ($jenis == 'sidi') {
             $pendaftarans = KatekisasiModel::select(
-                'katekisasi_id as pendaftaran_id', 'nama_lengkap', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'alamat_katekumen', 'nomor_telepon_katekumen', 'pendidikan_terakhir', 'pekerjaan', 'is_baptis', 'tempat_baptis', 'no_surat_baptis', 'tanggal_surat_baptis', 'dilayani', 'nama_ayah', 'nama_ibu', 'alamat_ortu', 'nomor_telepon_ortu', 'akta_kelahiran', 'surat_baptis', 'pas_foto', 'status', 'alasan_penolakan',
-                DB::raw('"sidi" as jenis_pendaftaran')
-            );
+                'katekisasi_id as pendaftaran_id', 'nama_lengkap', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'alamat_katekumen', 'nomor_telepon_katekumen', 'pendidikan_terakhir', 'pekerjaan', 'is_baptis', 'tempat_baptis', 'no_surat_baptis', 'tanggal_surat_baptis', 'dilayani', 'nama_ayah', 'nama_ibu', 'alamat_ortu', 'nomor_telepon_ortu', 'akta_kelahiran', 'surat_baptis', 'pas_foto', 'status', 'alasan_penolakan'
+            )->addSelect(DB::raw("'sidi' as jenis_pendaftaran"));
         } elseif ($jenis == 'pernikahan') {
             $pendaftarans = PernikahanModel::select(
-                'pernikahan_id as pendaftaran_id', 'nama_lengkap_pria', 'nama_lengkap_pria', 'tempat_lahir_pria', 'tanggal_lahir_pria', 'tempat_sidi_pria', 'tanggal_sidi_pria', 'pekerjaan_pria', 'alamat_pria', 'nomor_telepon_pria', 'nama_ayah_pria', 'nama_ibu_pria', 'nama_lengkap_wanita', 'nama_lengkap_wanita', 'tempat_lahir_wanita', 'tanggal_lahir_wanita', 'tempat_sidi_wanita', 'tanggal_sidi_wanita', 'pekerjaan_wanita', 'alamat_wanita', 'nomor_telepon_wanita', 'nama_ayah_wanita', 'nama_ibu_wanita', 'tanggal_pernikahan', 'waktu_pernikahan', 'dilayani', 'ktp', 'kk', 'surat_sidi', 'akta_kelahiran', 'sk_nikah', 'sk_asalusul', 'sp_mempelai', 'sk_ortu', 'akta_perceraian_kematian', 'si_kawin_komandan', 'sp_gereja_asal', 'foto', 'biaya', 'status', 'alasan_penolakan',
-                DB::raw('"pernikahan" as jenis_pendaftaran')
-            );
+                'pernikahan_id as pendaftaran_id', 'nama_lengkap_pria', 'nama_lengkap_pria', 'tempat_lahir_pria', 'tanggal_lahir_pria', 'tempat_sidi_pria', 'tanggal_sidi_pria', 'pekerjaan_pria', 'alamat_pria', 'nomor_telepon_pria', 'nama_ayah_pria', 'nama_ibu_pria', 'nama_lengkap_wanita', 'nama_lengkap_wanita', 'tempat_lahir_wanita', 'tanggal_lahir_wanita', 'tempat_sidi_wanita', 'tanggal_sidi_wanita', 'pekerjaan_wanita', 'alamat_wanita', 'nomor_telepon_wanita', 'nama_ayah_wanita', 'nama_ibu_wanita', 'tanggal_pernikahan', 'waktu_pernikahan', 'dilayani', 'ktp', 'kk', 'surat_sidi', 'akta_kelahiran', 'sk_nikah', 'sk_asalusul', 'sp_mempelai', 'sk_ortu', 'akta_perceraian_kematian', 'si_kawin_komandan', 'sp_gereja_asal', 'foto', 'biaya', 'status', 'alasan_penolakan'
+            )->addSelect(DB::raw("'pernikahan' as jenis_pendaftaran"));
         } else {
             return response()->json(['error' => 'Jenis pendaftaran tidak valid'], 400);
         }
